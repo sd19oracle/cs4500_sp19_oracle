@@ -1,0 +1,28 @@
+{
+  "name": "cs4500_sp19_oracle",
+  "scripts": {},
+  "env": {
+    "DBHOSTNAME": {
+      "required": true
+    },
+    "DBPASSWORD": {
+      "required": true
+    },
+    "DBSCHEMA": "oracle-staging",
+    "DBUSERNAME": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [],
+  "buildpacks": [
+    {
+      "url": "heroku/java"
+    }
+  ],
+  "stack": "heroku-18"
+}
