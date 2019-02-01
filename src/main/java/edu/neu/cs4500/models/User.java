@@ -1,15 +1,27 @@
 package edu.neu.cs4500.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 /**
  * Created by Michael Goodnow on 2019-01-23.
  */
 
+@Entity
+@Table(name="users")
 public class User {
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String username;
 	private String password;
 	private String firstName;
 	private String lastName;
+
+	public User() {
+	}
 
 	public User(Integer id, String username, String password, String firstName, String lastName) {
 		this.id = id;
