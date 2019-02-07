@@ -18,7 +18,6 @@ public class ServiceSpecificQuestion {
     @ManyToOne
     @JsonIgnore
     private Service service;
-
     @OneToMany(mappedBy="question")
     @JsonIgnore
     private List<ServiceSpecificAnswer> answers;
