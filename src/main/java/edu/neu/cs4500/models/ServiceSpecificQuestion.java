@@ -1,13 +1,26 @@
 package edu.neu.cs4500.models;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.*;
 import java.util.List;
 
+@Entity
+@Table(name="service_specific_question")
 public class ServiceSpecificQuestion {
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Integer id;
     private String title;
     private String type;
     private String chioce;
+    @ManyToOne
+    @JsonIgnore
+    private Service service;
+
+    @OneToMany(mappedBy="question")
+    @JsonIgnore
     private List<ServiceSpecificAnswer> answers;
 
     public Integer getId() {
@@ -48,5 +61,13 @@ public class ServiceSpecificQuestion {
 
     public void setAnswers(List<ServiceSpecificAnswer> answers) {
         this.answers = answers;
+    }
+
+    public Service getService() {
+        return service;
+    }
+
+    public void setService(Service service) {
+        this.service = service;
     }
 }
