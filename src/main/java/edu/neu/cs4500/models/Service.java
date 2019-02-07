@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.List;
 
 
 @Entity
@@ -18,6 +19,8 @@ public class Service {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String serviceName;
+	private List<ServiceSpecificQuestion> questions;
+
 	public Integer getId() {
 		return id;
 	}
@@ -30,4 +33,13 @@ public class Service {
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
 	}
+
+	public List<ServiceSpecificQuestion> getQuestions() {
+		return questions;
+	}
+
+	public void setQuestions(List<ServiceSpecificQuestion> questions) {
+		this.questions = questions;
+	}
+
 }
