@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -23,6 +24,7 @@ public class User {
   private String firstName;
   private String lastName;
   private String role;
+  @OneToMany(mappedBy = "user")
   private List<ServiceSpecificAnswer> answers;
 
   public User() {
