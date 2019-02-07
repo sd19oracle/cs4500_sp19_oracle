@@ -1,9 +1,27 @@
 package edu.neu.cs4500.models;
 
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "service_specific_answer")
 public class ServiceSpecificAnswer {
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String answer;
+  @ManyToOne
+  @JsonIgnore
   private ServiceSpecificQuestion question;
+  @ManyToOne
+  @JsonIgnore
   private User user;
 
   public Integer getId() {
