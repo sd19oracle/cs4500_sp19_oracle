@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
+import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 
 @RestController
@@ -18,7 +19,7 @@ public class ServiceSpecificAnswerService {
   @Autowired
   ServiceSpecificAnswerRepository serviceSpecificAnswerRepository;
   // for Admin view all services' answers
-  @GetMapping("api/servicesSpecificAnswers/allAnswers")
+  @GetMapping("api/servicesSpecificAnswers")
   public List<ServiceSpecificAnswer> findAllServiceSpecificAnswer() {
     return serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
   }
@@ -30,7 +31,7 @@ public class ServiceSpecificAnswerService {
   }
 
   // for Admin find one provider's all answers
-  @GetMapping("api/servicesSpecificAnswers/{ProviderID}")
+  @GetMapping("api/servicesSpecificAnswers/{ProviderID}/allAnswers")
   public List<ServiceSpecificAnswer> findOneProviderAllAnswers(
           @PathVariable("ProviderID") Integer id) {
     return serviceSpecificAnswerRepository.findALLServiceSpecificAnswerByProviderId(id);
