@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 
@@ -33,7 +34,7 @@ public class ServiceSpecificQuestionService {
 
   // for Admin find one service's all questions
   @GetMapping("api/servicesSpecificQuestions/byService/{serviceID}")
-  public List<ServiceSpecificQuestion> findOneProviderAllQuestions(
+  public List<ServiceSpecificQuestion> findOneServiceAllQuestions(
           @PathVariable("serviceID") Integer id) {
     List<ServiceSpecificQuestion> list =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
@@ -62,11 +63,23 @@ public class ServiceSpecificQuestionService {
     }
     return temp;
   }
+
   // Admin add a question
-  @PostMapping("api/servicesSpecificQuestions/}")
+  @PostMapping("api/servicesSpecificQuestions")
   public ServiceSpecificQuestion createAQuestion(
           @RequestBody ServiceSpecificQuestion oneQuestion) {
     return serviceSpecificQuestionRepository.save(oneQuestion);
+  }
+
+  // Admin add an answer for A question
+  @PostMapping("api/serviceSpecificQuestions/question/{questionId}/addAnAnswer")
+  public ServiceSpecificQuestion createAnswerForAQuestion(
+          @RequestBody ServiceSpecificAnswer oneAnswer,
+          @PathVariable("questionId") Integer id
+  ) {
+    ServiceSpecificQuestion findQ =
+            serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
+    return findQ;
   }
 
   // to update a question
@@ -97,9 +110,23 @@ public class ServiceSpecificQuestionService {
     return serviceSpecificQuestionRepository.save(findQuestion);
   }
 
+  // To update the choice of a Question
+  @PutMapping("api/servicesSpecificQuestions/question/{questionId}/addChoice/{choice}")
+  public ServiceSpecificQuestion updateChoiceForAQuestion(
+          @PathVariable("questionId") Integer id,
+          @PathVariable("choice") String choice
+  )
+  {
+    serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id).setChoice(choice);
+    return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
+  }
+
+
   // to delete one question by given question id
   @DeleteMapping("api/servicesSpecificQuestions/{questionId}")
   public void deleteOneAnswer( @PathVariable("questionId") Integer id) {
     serviceSpecificQuestionRepository.deleteById(id);
   }
+
+
 }
