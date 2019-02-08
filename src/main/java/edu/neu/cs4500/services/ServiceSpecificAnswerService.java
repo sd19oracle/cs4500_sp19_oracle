@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.persistence.PreUpdate;
+
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 
@@ -78,9 +80,8 @@ public class ServiceSpecificAnswerService {
   }
 
 
-  // Admin help add an answer for a provider (for some case this provider cannot add answer
-  // and asks help from admin users)
-  @PostMapping("api/servicesSpecificAnswers/}")
+  // Admin add an answer
+  @PostMapping("api/servicesSpecificAnswers")
   public ServiceSpecificAnswer createAnAnswer(
           @RequestBody ServiceSpecificAnswer oneAnswer) {
     return serviceSpecificAnswerRepository.save(oneAnswer);
