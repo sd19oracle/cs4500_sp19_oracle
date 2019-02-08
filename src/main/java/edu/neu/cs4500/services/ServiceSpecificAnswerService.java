@@ -31,7 +31,7 @@ public class ServiceSpecificAnswerService {
 
   // for Admin find one provider's all answers
   @GetMapping("api/servicesSpecificAnswers/{ProviderID}")
-  public List<ServiceSpecificAnswer> findOneProviderAllAnwsers(
+  public List<ServiceSpecificAnswer> findOneProviderAllAnswers(
           @PathVariable("ProviderID") Integer id) {
     return serviceSpecificAnswerRepository.findALLServiceSpecificAnswerByProviderId(id);
   }
@@ -39,7 +39,7 @@ public class ServiceSpecificAnswerService {
   // Admin help add an answer for a provider (for some case this provider cannot add answer
   // and asks help from admin users)
   @PostMapping("api/servicesSpecificAnswers/}")
-  public ServiceSpecificAnswer createAnAnswerForAProvider(
+  public ServiceSpecificAnswer createAnAnswer(
           @RequestBody ServiceSpecificAnswer oneAnswer) {
     return serviceSpecificAnswerRepository.save(oneAnswer);
   }
