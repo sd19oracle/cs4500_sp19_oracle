@@ -1,4 +1,5 @@
 package edu.neu.cs4500.services;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
-import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 
 @RestController
@@ -34,7 +34,14 @@ public class ServiceSpecificAnswerService {
   @GetMapping("api/servicesSpecificAnswers/{ProviderID}/allAnswers")
   public List<ServiceSpecificAnswer> findOneProviderAllAnswers(
           @PathVariable("ProviderID") Integer id) {
-    return serviceSpecificAnswerRepository.findALLServiceSpecificAnswerByProviderId(id);
+    List<ServiceSpecificAnswer> list = serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
+    List<ServiceSpecificAnswer> temp = new ArrayList<>();
+    for (ServiceSpecificAnswer a: list) {
+      if (a.getUser().getId().equals(id)) {
+        temp.add(a);
+      }
+    }
+    return temp;
   }
 
   // Admin help add an answer for a provider (for some case this provider cannot add answer

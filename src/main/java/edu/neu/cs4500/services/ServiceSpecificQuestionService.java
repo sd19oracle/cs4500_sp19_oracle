@@ -1,4 +1,5 @@
 package edu.neu.cs4500.services;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,15 @@ public class ServiceSpecificQuestionService {
   @GetMapping("api/servicesSpecificQuestions/{serviceID}/allQuestions")
   public List<ServiceSpecificQuestion> findOneProviderAllQuestions(
           @PathVariable("serviceID") Integer id) {
-    return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionByServiceId(id);
+    List<ServiceSpecificQuestion> list =
+            serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
+    List<ServiceSpecificQuestion> temp = new ArrayList<>();
+    for (ServiceSpecificQuestion question: list) {
+      if (question.getService().getId().equals(id)) {
+        temp.add(question);
+      }
+    }
+    return temp;
   }
 
   // Admin add a question
