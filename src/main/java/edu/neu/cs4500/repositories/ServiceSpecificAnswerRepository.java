@@ -16,4 +16,8 @@ public interface ServiceSpecificAnswerRepository extends CrudRepository<User, In
   @Query(value = "SELECT serviceSpecificAnswer FROM ServiceSpecificAnswer serviceSpecificAnswer "
           + "WHERE serviceSpecificAnswer.id=:id")
   public ServiceSpecificAnswer findServiceSpecificAnswerById(@Param("id") Integer id);
+
+  @Query(value = "SELECT serviceSpecificAnswer FROM ServiceSpecificAnswer serviceSpecificAnswer "
+          + "WHERE serviceSpecificAnswer.user=:ProviderId")
+  public List<ServiceSpecificAnswer> findALLServiceSpecificAnswerByProviderId(@Param("ProviderId") Integer id);
 }
