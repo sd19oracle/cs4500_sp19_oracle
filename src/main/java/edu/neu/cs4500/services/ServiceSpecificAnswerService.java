@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
-import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 
 @RestController
@@ -39,28 +38,26 @@ public class ServiceSpecificAnswerService {
 
   // Admin help add an answer for a provider (for some case this provider cannot add answer
   // and asks help from admin users)
-  @PostMapping("api/servicesSpecificAnswers/{providerId}/{QId}")
+  @PostMapping("api/servicesSpecificAnswers/}")
   public ServiceSpecificAnswer createAnAnswerForAProvider(
           @RequestBody ServiceSpecificAnswer oneAnswer) {
     return serviceSpecificAnswerRepository.save(oneAnswer);
   }
 
+  // to update an answer
+  @PutMapping("api/servicesSpecificAnswers/{answerId}")
+  public ServiceSpecificAnswer updateAnswer(
+          @PathVariable("answerId") Integer id,
+          @RequestBody ServiceSpecificAnswer updateAnswer) {
+    ServiceSpecificAnswer findAnswer =
+            serviceSpecificAnswerRepository.findServiceSpecificAnswerById(id);
+    findAnswer.setAnswer(updateAnswer.getAnswer());
+    return serviceSpecificAnswerRepository.save(findAnswer);
+  }
 
-//  @PostMapping("/api/categories")
-//  public ServiceCategory createServiceCategory(@RequestBody ServiceCategory serviceCategory) {
-//    return serviceRepository.save(serviceCategory);
-//  }
-//  @PutMapping("/api/categories/{serviceCategoryId}")
-//  public ServiceCategory updateServiceCategory(
-//          @PathVariable("serviceCategoryId") Integer id,
-//          @RequestBody ServiceCategory serviceUpdates) {
-//    ServiceCategory serviceCategory = serviceRepository.findServiceCategoryById(id);
-//    serviceCategory.setServiceCategoryName(serviceUpdates.getServiceCategoryName());
-//    return serviceRepository.save(serviceCategory);
-//  }
-//  @DeleteMapping("/api/categories/{serviceCategoryId}")
-//  public void deleteServiceCategory(
-//          @PathVariable("serviceCategoryId") Integer id) {
-//    serviceRepository.deleteById(id);
-//  }
+  // to delete one answer
+  @DeleteMapping("api/servicesSpecificAnswers/{answerId}")
+  public void deleteOneAnswer( @PathVariable("answerId") Integer id) {
+    serviceSpecificAnswerRepository.deleteById(id);
+  }
 }
