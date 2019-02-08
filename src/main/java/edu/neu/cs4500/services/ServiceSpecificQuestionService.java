@@ -79,6 +79,7 @@ public class ServiceSpecificQuestionService {
   ) {
     ServiceSpecificQuestion findQ =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
+    findQ.addServiceSpecificAnswer(oneAnswer);
     return findQ;
   }
 
@@ -128,5 +129,15 @@ public class ServiceSpecificQuestionService {
     serviceSpecificQuestionRepository.deleteById(id);
   }
 
+  @DeleteMapping("api/servicesSpecificQuestions/question/{questionId}/answer/{answerId}")
+  public void deleteOneAnswerOfAQuestion(
+          @PathVariable("questionId") Integer qId,
+          @PathVariable("answerId") Integer aId
+  )
+  {
+    ServiceSpecificQuestion findQ =
+            serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(qId);
+    findQ.removeServiceSpecificAnswer(aId);
+  }
 
 }
