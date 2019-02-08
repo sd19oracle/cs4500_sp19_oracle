@@ -19,7 +19,7 @@ public class ServiceSpecificQuestionService {
   ServiceSpecificQuestionRepository serviceSpecificQuestionRepository;
 
   // for Admin to view all service questions
-  @GetMapping("api/servicesSpecificQuestions/allQuestions")
+  @GetMapping("api/servicesSpecificQuestions")
   public List<ServiceSpecificQuestion> findAllServiceSpecificAnswer() {
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
   }
@@ -31,7 +31,7 @@ public class ServiceSpecificQuestionService {
   }
 
   // for Admin find one service's all questions
-  @GetMapping("api/servicesSpecificQuestions/{serviceID}")
+  @GetMapping("api/servicesSpecificQuestions/{serviceID}/allQuestions")
   public List<ServiceSpecificQuestion> findOneProviderAllQuestions(
           @PathVariable("serviceID") Integer id) {
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionByServiceId(id);
@@ -46,7 +46,7 @@ public class ServiceSpecificQuestionService {
 
   // to update a question
   @PutMapping("api/servicesSpecificQuestions/{QuestionId}")
-  public ServiceSpecificQuestion updateAnswer(
+  public ServiceSpecificQuestion updateQuestion(
           @PathVariable("QuestionId") Integer id,
           @RequestBody ServiceSpecificQuestion updateQuestion) {
     ServiceSpecificQuestion findQuestion =
