@@ -14,7 +14,7 @@ public class ServiceSpecificQuestion {
     private Integer id;
     private String title;
     private String type;
-    private String chioce;
+    private String choice;
     @ManyToOne
     @JsonIgnore
     private Service service;
@@ -46,12 +46,12 @@ public class ServiceSpecificQuestion {
         this.type = type;
     }
 
-    public String getChioce() {
-        return chioce;
+    public String getChoice() {
+        return choice;
     }
 
-    public void setChioce(String chioce) {
-        this.chioce = chioce;
+    public void setChoice(String choice) {
+        this.choice = choice;
     }
 
     public List<ServiceSpecificAnswer> getAnswers() {
