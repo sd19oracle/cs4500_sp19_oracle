@@ -44,6 +44,39 @@ public class ServiceSpecificAnswerService {
     return temp;
   }
 
+  // for Admin find one provider's one answer for one question
+  @GetMapping("api/servicesSpecificAnswers/{ProviderID}/byQuestion/{questionID}")
+  public ServiceSpecificAnswer findOneProviderOneQuestion(
+          @PathVariable("ProviderID") Integer id,
+          @PathVariable("questionID") Integer qId) {
+    List<ServiceSpecificAnswer> list =
+            serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
+    ServiceSpecificAnswer answer = null;
+    for (ServiceSpecificAnswer a: list) {
+      if (a.getUser().getId().equals(id) && a.getQuestion().getId().equals(qId)) {
+        answer = a;
+      }
+    }
+    return answer;
+  }
+
+  // for Admin find one provider's all answers for one service
+  @GetMapping("api/servicesSpecificAnswers/{ProviderID}/byService/{serviceID}")
+  public List<ServiceSpecificAnswer> findOneProviderAllAnswersForAService(
+          @PathVariable("ProviderID") Integer id,
+          @PathVariable("serviceID") Integer sId) {
+    List<ServiceSpecificAnswer> list =
+            serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
+    List<ServiceSpecificAnswer> temp = new ArrayList<>();
+    for (ServiceSpecificAnswer a: list) {
+      if (a.getUser().getId().equals(id) && a.getQuestion().getService().getId().equals(sId)) {
+        temp.add(a);
+      }
+    }
+    return temp;
+  }
+
+
   // Admin help add an answer for a provider (for some case this provider cannot add answer
   // and asks help from admin users)
   @PostMapping("api/servicesSpecificAnswers/}")

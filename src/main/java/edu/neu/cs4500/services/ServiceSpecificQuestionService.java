@@ -45,7 +45,7 @@ public class ServiceSpecificQuestionService {
     }
     return temp;
   }
-
+  
   // Admin add a question
   @PostMapping("api/servicesSpecificQuestions/}")
   public ServiceSpecificQuestion createAQuestion(
