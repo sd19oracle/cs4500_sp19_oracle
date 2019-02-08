@@ -45,7 +45,23 @@ public class ServiceSpecificQuestionService {
     }
     return temp;
   }
-  
+
+  // for Admin find all questions by question type
+  @GetMapping("api/servicesSpecificQuestions/allQuestions/{type}")
+  public List<ServiceSpecificQuestion> findAllQuestionsByType(
+          @PathVariable("type") String type
+  )
+  {
+    List<ServiceSpecificQuestion> list =
+            serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
+    List<ServiceSpecificQuestion> temp = new ArrayList<>();
+    for (ServiceSpecificQuestion question: list) {
+      if (question.getType().equals(type)) {
+        temp.add(question);
+      }
+    }
+    return temp;
+  }
   // Admin add a question
   @PostMapping("api/servicesSpecificQuestions/}")
   public ServiceSpecificQuestion createAQuestion(
