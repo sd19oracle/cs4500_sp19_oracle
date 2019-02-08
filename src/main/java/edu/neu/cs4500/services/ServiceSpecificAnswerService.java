@@ -23,7 +23,17 @@ public class ServiceSpecificAnswerService {
     return serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
   }
 
-//  @GetMapping("api/servicesSpecificAnswers/{userID}")
-//  public ServiceSpecificAnswer find
+  // for Admin find one answer by answer id
+  @GetMapping("api/servicesSpecificAnswers/{answerID}")
+  public ServiceSpecificAnswer findOneAnswer(@PathVariable("answerID") Integer id) {
+    return serviceSpecificAnswerRepository.findServiceSpecificAnswerById(id);
+  }
+
+  // for Admin find one provider's all answers
+  @GetMapping("api/serviceSpecficiAnswer/{ProviderID}")
+  public List<ServiceSpecificAnswer> findOneProviderAllAnwsers(
+          @PathVariable("ProviderID") Integer id) {
+    return serviceSpecificAnswerRepository.findALLServiceSpecificAnswerByProviderId(id);
+  }
 
 }
