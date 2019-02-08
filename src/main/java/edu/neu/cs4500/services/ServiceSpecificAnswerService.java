@@ -18,10 +18,12 @@ public class ServiceSpecificAnswerService {
   @Autowired
   ServiceSpecificAnswerRepository serviceSpecificAnswerRepository;
   // for Admin view all services' answers
-  @GetMapping("api/service/allAnswers")
+  @GetMapping("api/servicesSpecificAnswers/allAnswers")
   public List<ServiceSpecificAnswer> findAllServiceSpecificAnswer() {
     return serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
   }
 
+//  @GetMapping("api/servicesSpecificAnswers/{userID}")
+//  public ServiceSpecificAnswer find
 
 }
