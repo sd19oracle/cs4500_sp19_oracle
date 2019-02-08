@@ -60,6 +60,15 @@ public class ServiceSpecificAnswerService {
     ServiceSpecificAnswer findAnswer =
             serviceSpecificAnswerRepository.findServiceSpecificAnswerById(id);
     findAnswer.setAnswer(updateAnswer.getAnswer());
+    if (updateAnswer.getUser() != null) {
+      findAnswer.setUser(updateAnswer.getUser());
+    }
+    if (updateAnswer.getQuestion() != null) {
+      findAnswer.setQuestion(updateAnswer.getQuestion());
+    }
+    if (updateAnswer.getId() != null) {
+      findAnswer.setId(updateAnswer.getId());
+    }
     return serviceSpecificAnswerRepository.save(findAnswer);
   }
 

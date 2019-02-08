@@ -61,17 +61,22 @@ public class ServiceSpecificQuestionService {
     ServiceSpecificQuestion findQuestion =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
     findQuestion.setTitle(updateQuestion.getTitle());
-
     findQuestion.setType(updateQuestion.getType());
 
     // optional
-
     if (updateQuestion.getChoice() != null) {
       findQuestion.setChoice(updateQuestion.getChoice());
     }
 
     if (updateQuestion.getAnswers().size() > 0) {
       findQuestion.setAnswers(updateQuestion.getAnswers());
+    }
+
+    if (updateQuestion.getService() != null) {
+      findQuestion.setService(updateQuestion.getService());
+    }
+    if (updateQuestion.getId() != null) {
+      findQuestion.setId(updateQuestion.getId());
     }
     return serviceSpecificQuestionRepository.save(findQuestion);
   }
