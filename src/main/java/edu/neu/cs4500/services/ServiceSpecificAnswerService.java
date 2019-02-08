@@ -13,5 +13,15 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 
+@RestController
 public class ServiceSpecificAnswerService {
+  @Autowired
+  ServiceSpecificAnswerRepository serviceSpecificAnswerRepository;
+  // for Admin view all services' answers
+  @GetMapping("api/service/allAnswers")
+  public List<ServiceSpecificAnswer> findAllServiceSpecificAnswer() {
+    return serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
+  }
+
+
 }
