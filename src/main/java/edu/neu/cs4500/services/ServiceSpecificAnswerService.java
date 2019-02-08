@@ -23,7 +23,41 @@ public class ServiceSpecificAnswerService {
     return serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
   }
 
-//  @GetMapping("api/servicesSpecificAnswers/{userID}")
-//  public ServiceSpecificAnswer find
+  // for Admin find one answer by answer id
+  @GetMapping("api/servicesSpecificAnswers/{answerID}")
+  public ServiceSpecificAnswer findOneAnswer(@PathVariable("answerID") Integer id) {
+    return serviceSpecificAnswerRepository.findServiceSpecificAnswerById(id);
+  }
 
+  // for Admin find one provider's all answers
+  @GetMapping("api/servicesSpecificAnswers/{ProviderID}")
+  public List<ServiceSpecificAnswer> findOneProviderAllAnswers(
+          @PathVariable("ProviderID") Integer id) {
+    return serviceSpecificAnswerRepository.findALLServiceSpecificAnswerByProviderId(id);
+  }
+
+  // Admin help add an answer for a provider (for some case this provider cannot add answer
+  // and asks help from admin users)
+  @PostMapping("api/servicesSpecificAnswers/}")
+  public ServiceSpecificAnswer createAnAnswer(
+          @RequestBody ServiceSpecificAnswer oneAnswer) {
+    return serviceSpecificAnswerRepository.save(oneAnswer);
+  }
+
+  // to update an answer
+  @PutMapping("api/servicesSpecificAnswers/{answerId}")
+  public ServiceSpecificAnswer updateAnswer(
+          @PathVariable("answerId") Integer id,
+          @RequestBody ServiceSpecificAnswer updateAnswer) {
+    ServiceSpecificAnswer findAnswer =
+            serviceSpecificAnswerRepository.findServiceSpecificAnswerById(id);
+    findAnswer.setAnswer(updateAnswer.getAnswer());
+    return serviceSpecificAnswerRepository.save(findAnswer);
+  }
+
+  // to delete one answer
+  @DeleteMapping("api/servicesSpecificAnswers/{answerId}")
+  public void deleteOneAnswer( @PathVariable("answerId") Integer id) {
+    serviceSpecificAnswerRepository.deleteById(id);
+  }
 }
