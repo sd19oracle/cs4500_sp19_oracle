@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
+import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 
 @RestController
@@ -30,10 +31,36 @@ public class ServiceSpecificAnswerService {
   }
 
   // for Admin find one provider's all answers
-  @GetMapping("api/serviceSpecficiAnswer/{ProviderID}")
+  @GetMapping("api/servicesSpecificAnswers/{ProviderID}")
   public List<ServiceSpecificAnswer> findOneProviderAllAnwsers(
           @PathVariable("ProviderID") Integer id) {
     return serviceSpecificAnswerRepository.findALLServiceSpecificAnswerByProviderId(id);
   }
 
+  // Admin help add an answer for a provider (for some case this provider cannot add answer
+  // and asks help from admin users)
+  @PostMapping("api/servicesSpecificAnswers/{providerId}/{QId}")
+  public ServiceSpecificAnswer createAnAnswerForAProvider(
+          @RequestBody ServiceSpecificAnswer oneAnswer) {
+    return serviceSpecificAnswerRepository.save(oneAnswer);
+  }
+
+
+//  @PostMapping("/api/categories")
+//  public ServiceCategory createServiceCategory(@RequestBody ServiceCategory serviceCategory) {
+//    return serviceRepository.save(serviceCategory);
+//  }
+//  @PutMapping("/api/categories/{serviceCategoryId}")
+//  public ServiceCategory updateServiceCategory(
+//          @PathVariable("serviceCategoryId") Integer id,
+//          @RequestBody ServiceCategory serviceUpdates) {
+//    ServiceCategory serviceCategory = serviceRepository.findServiceCategoryById(id);
+//    serviceCategory.setServiceCategoryName(serviceUpdates.getServiceCategoryName());
+//    return serviceRepository.save(serviceCategory);
+//  }
+//  @DeleteMapping("/api/categories/{serviceCategoryId}")
+//  public void deleteServiceCategory(
+//          @PathVariable("serviceCategoryId") Integer id) {
+//    serviceRepository.deleteById(id);
+//  }
 }

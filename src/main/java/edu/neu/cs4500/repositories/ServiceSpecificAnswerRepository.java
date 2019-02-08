@@ -7,9 +7,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
-import edu.neu.cs4500.models.User;
 
-public interface ServiceSpecificAnswerRepository extends CrudRepository<User, Integer> {
+public interface ServiceSpecificAnswerRepository extends CrudRepository<ServiceSpecificAnswer, Integer> {
   // for all answers from all providers
   @Query(value = "SELECT serviceSpecificAnswer FROM ServiceSpecificAnswer serviceSpecificAnswer")
   public List<ServiceSpecificAnswer> findAllServiceSpecificAnswers();

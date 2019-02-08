@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface ServiceSpecificQuestionRepository extends CrudRepository<ServiceSpecificQuestion, Integer> {
-    // for all questions
+    // for view all questions
     @Query(value="SELECT serviceSpecificQuestion FROM ServiceSpecificQuestion serviceSpecificQuestion")
     public List<ServiceSpecificQuestion> findAllServiceSpecificQuestion();
 
@@ -20,4 +20,6 @@ public interface ServiceSpecificQuestionRepository extends CrudRepository<Servic
     // for one service's all questions
     @Query(value="SELECT serviceSpecificQuestion FROM ServiceSpecificQuestion serviceSpecificQuestion WHERE serviceSpecificQuestion.service=:ServiceId")
     public List<ServiceSpecificQuestion> findAllServiceSpecificQuestionByServiceId(@Param("ServiceId") Integer id);
+
+
 }
