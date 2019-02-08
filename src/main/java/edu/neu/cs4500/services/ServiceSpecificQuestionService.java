@@ -32,7 +32,7 @@ public class ServiceSpecificQuestionService {
   }
 
   // for Admin find one service's all questions
-  @GetMapping("api/servicesSpecificQuestions/{serviceID}/allQuestions")
+  @GetMapping("api/servicesSpecificQuestions/byService/{serviceID}")
   public List<ServiceSpecificQuestion> findOneProviderAllQuestions(
           @PathVariable("serviceID") Integer id) {
     List<ServiceSpecificQuestion> list =
@@ -47,7 +47,7 @@ public class ServiceSpecificQuestionService {
   }
 
   // for Admin find all questions by question type
-  @GetMapping("api/servicesSpecificQuestions/allQuestions/{type}")
+  @GetMapping("api/servicesSpecificQuestions/byType/{type}")
   public List<ServiceSpecificQuestion> findAllQuestionsByType(
           @PathVariable("type") String type
   )
