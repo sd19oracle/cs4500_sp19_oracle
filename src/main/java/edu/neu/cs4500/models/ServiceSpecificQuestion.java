@@ -69,4 +69,14 @@ public class ServiceSpecificQuestion {
     public void setService(Service service) {
         this.service = service;
     }
+
+    public void addServiceSpecificAnswer(ServiceSpecificAnswer answer) {this.answers.add(answer);}
+
+    public void removeServiceSpecificAnswer(Integer id) {
+        for(ServiceSpecificAnswer a : answers) {
+            if(a.getId().equals(id)) {
+                answers.remove(a);
+            }
+        }
+    }
 }
