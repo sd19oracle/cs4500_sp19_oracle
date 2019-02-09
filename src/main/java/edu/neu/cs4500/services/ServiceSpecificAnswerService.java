@@ -58,8 +58,10 @@ public class ServiceSpecificAnswerService {
             serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
     ServiceSpecificAnswer answer = null;
     for (ServiceSpecificAnswer a: list) {
-      if (a.getUser().getId().equals(id) && a.getQuestion().getId().equals(qId)) {
-        answer = a;
+      if (a.getUser()!= null && a.getQuestion() != null) {
+        if (a.getUser().getId().equals(id) && a.getQuestion().getId().equals(qId)) {
+          answer = a;
+        }
       }
     }
     return answer;
