@@ -1,4 +1,6 @@
 package edu.neu.cs4500.services;
+import net.bytebuddy.asm.Advice;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
 import edu.neu.cs4500.models.Service;
 import edu.neu.cs4500.repositories.ServiceRepository;
+import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 
 @RestController
@@ -23,6 +26,8 @@ public class ServiceSpecificQuestionService {
   ServiceSpecificQuestionRepository serviceSpecificQuestionRepository;
   @Autowired
   ServiceRepository serviceRepository;
+  @Autowired
+  ServiceSpecificAnswerRepository serviceSpecificAnswerRepository;
 
   // for Admin to view all service questions
   @GetMapping("api/servicesSpecificQuestions")
@@ -148,6 +153,7 @@ public class ServiceSpecificQuestionService {
     ServiceSpecificQuestion findQ =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(qId);
     findQ.removeServiceSpecificAnswer(aId);
+    serviceSpecificAnswerRepository.deleteById(aId);
   }
 
 }
