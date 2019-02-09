@@ -76,8 +76,10 @@ public class ServiceSpecificAnswerService {
             serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
     List<ServiceSpecificAnswer> temp = new ArrayList<>();
     for (ServiceSpecificAnswer a: list) {
-      if (a.getUser().getId().equals(id) && a.getQuestion().getService().getId().equals(sId)) {
-        temp.add(a);
+      if (a.getUser()!= null && a.getQuestion() != null) {
+        if (a.getUser().getId().equals(id) && a.getQuestion().getService().getId().equals(sId)) {
+          temp.add(a);
+        }
       }
     }
     return temp;
