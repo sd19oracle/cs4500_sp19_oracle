@@ -39,8 +39,10 @@ public class ServiceSpecificAnswerService {
     List<ServiceSpecificAnswer> list = serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
     List<ServiceSpecificAnswer> temp = new ArrayList<>();
     for (ServiceSpecificAnswer a: list) {
-      if (a.getUser().getId().equals(id)) {
-        temp.add(a);
+      if (a.getUser() != null) {
+        if (a.getUser().getId().equals(id)) {
+          temp.add(a);
+        }
       }
     }
     return temp;
