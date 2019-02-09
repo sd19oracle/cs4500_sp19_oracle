@@ -39,4 +39,9 @@ public class Service {
 		this.questions = questions;
 	}
 
+  public void addQuestion(ServiceSpecificQuestion oneQuestion) {
+		if (!questions.contains(oneQuestion)) {
+		  questions.add(oneQuestion);
+    }
+  }
 }
