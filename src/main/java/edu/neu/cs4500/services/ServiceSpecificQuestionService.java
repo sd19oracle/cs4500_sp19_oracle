@@ -13,12 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
+import edu.neu.cs4500.models.Service;
+import edu.neu.cs4500.repositories.ServiceRepository;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 
 @RestController
 public class ServiceSpecificQuestionService {
   @Autowired
   ServiceSpecificQuestionRepository serviceSpecificQuestionRepository;
+  @Autowired
+  ServiceRepository serviceRepository;
 
   // for Admin to view all service questions
   @GetMapping("api/servicesSpecificQuestions")
@@ -65,9 +69,13 @@ public class ServiceSpecificQuestionService {
   }
 
   // Admin add a question
-  @PostMapping("api/servicesSpecificQuestions")
+  @PostMapping("api/servicesSpecificQuestions/{serviceId}")
   public ServiceSpecificQuestion createAQuestion(
+          @PathVariable("serviceId") Integer id,
           @RequestBody ServiceSpecificQuestion oneQuestion) {
+    Service findService = serviceRepository.findServiceById(id);
+    findService.addQuestion(oneQuestion);
+    oneQuestion.setService(findService);
     return serviceSpecificQuestionRepository.save(oneQuestion);
   }
 
@@ -80,6 +88,7 @@ public class ServiceSpecificQuestionService {
     ServiceSpecificQuestion findQ =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
     findQ.addServiceSpecificAnswer(oneAnswer);
+    oneAnswer.setQuestion(findQ);
     return findQ;
   }
 
