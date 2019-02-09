@@ -99,7 +99,7 @@ public class ServiceSpecificQuestionService {
       findQuestion.setChoice(updateQuestion.getChoice());
     }
 
-    if (updateQuestion.getAnswers().size() > 0) {
+    if (updateQuestion.getAnswers() != null) {
       findQuestion.setAnswers(updateQuestion.getAnswers());
     }
 

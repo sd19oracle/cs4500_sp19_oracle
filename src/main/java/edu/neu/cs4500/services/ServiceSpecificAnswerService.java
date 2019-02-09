@@ -14,12 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.PreUpdate;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
+import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
+import edu.neu.cs4500.repositories.UserRepository;
+
 
 @RestController
 public class ServiceSpecificAnswerService {
   @Autowired
   ServiceSpecificAnswerRepository serviceSpecificAnswerRepository;
+  @Autowired
+  UserRepository userRepository;
   // for Admin view all services' answers
   @GetMapping("api/servicesSpecificAnswers")
   public List<ServiceSpecificAnswer> findAllServiceSpecificAnswer() {
@@ -39,8 +44,10 @@ public class ServiceSpecificAnswerService {
     List<ServiceSpecificAnswer> list = serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
     List<ServiceSpecificAnswer> temp = new ArrayList<>();
     for (ServiceSpecificAnswer a: list) {
-      if (a.getUser().getId().equals(id)) {
-        temp.add(a);
+      if (a.getUser() != null) {
+        if (a.getUser().getId().equals(id)) {
+          temp.add(a);
+        }
       }
     }
     return temp;
@@ -56,8 +63,10 @@ public class ServiceSpecificAnswerService {
             serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
     ServiceSpecificAnswer answer = null;
     for (ServiceSpecificAnswer a: list) {
-      if (a.getUser().getId().equals(id) && a.getQuestion().getId().equals(qId)) {
-        answer = a;
+      if (a.getUser()!= null && a.getQuestion() != null) {
+        if (a.getUser().getId().equals(id) && a.getQuestion().getId().equals(qId)) {
+          answer = a;
+        }
       }
     }
     return answer;
@@ -72,8 +81,10 @@ public class ServiceSpecificAnswerService {
             serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
     List<ServiceSpecificAnswer> temp = new ArrayList<>();
     for (ServiceSpecificAnswer a: list) {
-      if (a.getUser().getId().equals(id) && a.getQuestion().getService().getId().equals(sId)) {
-        temp.add(a);
+      if (a.getUser()!= null && a.getQuestion() != null) {
+        if (a.getUser().getId().equals(id) && a.getQuestion().getService().getId().equals(sId)) {
+          temp.add(a);
+        }
       }
     }
     return temp;
@@ -81,9 +92,15 @@ public class ServiceSpecificAnswerService {
 
 
   // Admin add an answer
-  @PostMapping("api/servicesSpecificAnswers")
+  @PostMapping("api/servicesSpecificAnswers/{providerId}")
   public ServiceSpecificAnswer createAnAnswer(
+          @PathVariable("providerId") Integer id,
           @RequestBody ServiceSpecificAnswer oneAnswer) {
+    User findUser = userRepository.findUserById(id);
+    if (findUser != null) {
+      oneAnswer.setUser(findUser);
+      findUser.addAnswer(oneAnswer);
+    }
     return serviceSpecificAnswerRepository.save(oneAnswer);
   }
 
