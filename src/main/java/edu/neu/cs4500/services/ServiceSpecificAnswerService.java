@@ -14,12 +14,17 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.persistence.PreUpdate;
 
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
+import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
+import edu.neu.cs4500.repositories.UserRepository;
+
 
 @RestController
 public class ServiceSpecificAnswerService {
   @Autowired
   ServiceSpecificAnswerRepository serviceSpecificAnswerRepository;
+  @Autowired
+  UserRepository userRepository;
   // for Admin view all services' answers
   @GetMapping("api/servicesSpecificAnswers")
   public List<ServiceSpecificAnswer> findAllServiceSpecificAnswer() {
@@ -87,9 +92,15 @@ public class ServiceSpecificAnswerService {
 
 
   // Admin add an answer
-  @PostMapping("api/servicesSpecificAnswers")
+  @PostMapping("api/servicesSpecificAnswers/{providerId}")
   public ServiceSpecificAnswer createAnAnswer(
+          @PathVariable("providerId") Integer id,
           @RequestBody ServiceSpecificAnswer oneAnswer) {
+    User findUser = userRepository.findUserById(id);
+    if (findUser != null) {
+      oneAnswer.setUser(findUser);
+      findUser.addAnswer(oneAnswer);
+    }
     return serviceSpecificAnswerRepository.save(oneAnswer);
   }
 

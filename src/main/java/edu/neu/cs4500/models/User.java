@@ -93,4 +93,9 @@ public class User {
   public void setAnswers(List<ServiceSpecificAnswer> answers) {
     this.answers = answers;
   }
+  public void addAnswer(ServiceSpecificAnswer answer) {
+    if (!this.answers.contains(answer)) {
+      this.answers.add(answer);
+    }
+  }
 }
