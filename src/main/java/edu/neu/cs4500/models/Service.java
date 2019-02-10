@@ -50,9 +50,17 @@ public class Service {
 		this.questions = questions;
 	}
 
-  public void addQuestion(ServiceSpecificQuestion oneQuestion) {
+	public void addQuestion(ServiceSpecificQuestion oneQuestion) {
 		if (!questions.contains(oneQuestion)) {
-		  questions.add(oneQuestion);
-    }
-  }
+			questions.add(oneQuestion);
+		}
+	}
+	
+	public List<User> getProviders() {
+		return providers;
+	}
+
+	public void setProviders(List<User> providers) {
+		this.providers = providers;
+	}
 }
