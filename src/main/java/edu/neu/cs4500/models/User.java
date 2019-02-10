@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 /**
@@ -27,6 +28,8 @@ public class User {
   @OneToMany(mappedBy = "user")
   private List<ServiceSpecificAnswer> answers;
 
+  @ManyToMany(mappedBy = "providers")
+  private List<Service> services;
   public User() {
   }
 
@@ -93,9 +96,18 @@ public class User {
   public void setAnswers(List<ServiceSpecificAnswer> answers) {
     this.answers = answers;
   }
+
   public void addAnswer(ServiceSpecificAnswer answer) {
     if (!this.answers.contains(answer)) {
       this.answers.add(answer);
     }
+  }
+  
+  public List<Service> getServices() {
+    return services;
+  }
+
+  public void setServices(List<Service> services) {
+    this.services = services;
   }
 }
