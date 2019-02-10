@@ -1,10 +1,17 @@
 package edu.neu.cs4500.models;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "service_categories")
@@ -13,6 +20,15 @@ public class ServiceCategory {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
   private String serviceCategoryName;
+
+  @ManyToMany
+  @JsonIgnore
+  @JoinTable(
+    name="CATEGORIES_SERVICES",
+    joinColumns=@JoinColumn(name="CATEGORY_ID", referencedColumnName="ID"),
+    inverseJoinColumns=@JoinColumn(name="SERVICE_ID", referencedColumnName="ID")
+  )
+  private List<Service> services;
 
   public Integer getId() {
     return id;
@@ -28,5 +44,13 @@ public class ServiceCategory {
 
   public void setServiceCategoryName(String serviceCategoryName) {
     this.serviceCategoryName = serviceCategoryName;
+  }
+
+  public List<Service> getServices() {
+    return services;
+  }
+
+  public void setServices(List<Service> services) {
+    this.services = services;
   }
 }

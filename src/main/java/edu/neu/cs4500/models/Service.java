@@ -29,6 +29,9 @@ public class Service {
 	)
 	private List<User> providers;
 
+	@ManyToMany(mappedBy = "services")
+	private List<ServiceCategory> serviceCategories;
+
 	public Integer getId() {
 		return id;
 	}
@@ -62,5 +65,13 @@ public class Service {
 
 	public void setProviders(List<User> providers) {
 		this.providers = providers;
+	}
+
+	public List<ServiceCategory> getServiceCategories() {
+		return serviceCategories;
+	}
+
+	public void setServiceCategories(List<ServiceCategory> serviceCategories) {
+		this.serviceCategories = serviceCategories;
 	}
 }
