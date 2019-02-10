@@ -5,6 +5,9 @@
 package edu.neu.cs4500.models;
 
 import javax.persistence.*;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.List;
 
 
@@ -17,6 +20,14 @@ public class Service {
 	private String serviceName;
 	@OneToMany(mappedBy="service")
 	private List<ServiceSpecificQuestion> questions;
+	@ManyToMany
+	@JsonIgnore
+	@JoinTable(
+		name="PROVIDERS_SERVICES",
+		joinColumns=@JoinColumn(name="SERVICE_ID", referencedColumnName="ID"),
+		inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+	)
+	private List<User> providers;
 
 	public Integer getId() {
 		return id;
@@ -39,9 +50,17 @@ public class Service {
 		this.questions = questions;
 	}
 
-  public void addQuestion(ServiceSpecificQuestion oneQuestion) {
+	public void addQuestion(ServiceSpecificQuestion oneQuestion) {
 		if (!questions.contains(oneQuestion)) {
-		  questions.add(oneQuestion);
-    }
-  }
+			questions.add(oneQuestion);
+		}
+	}
+	
+	public List<User> getProviders() {
+		return providers;
+	}
+
+	public void setProviders(List<User> providers) {
+		this.providers = providers;
+	}
 }
