@@ -11,6 +11,6 @@ import edu.neu.cs4500.models.ServiceCategory;
 public interface ServiceCategoryRepository extends CrudRepository<ServiceCategory, Integer> {
 	@Query(value="SELECT serviceCategory FROM ServiceCategory serviceCategory")
 	public List<ServiceCategory> findAllServiceCategories();
-	@Query(value="SELECT serviceCategory FROM ServiceCategory serviceCategory WHERE serviceCategory.id=:id")
-	public ServiceCategory findServiceCategoryById(@Param("id") Integer id);
+	@Query(value="SELECT serviceCategory FROM ServiceCategory serviceCategory WHERE id=:servicecategoryid")
+	public ServiceCategory findServiceCategoryById(@Param("servicecategoryid") Integer id);
 }

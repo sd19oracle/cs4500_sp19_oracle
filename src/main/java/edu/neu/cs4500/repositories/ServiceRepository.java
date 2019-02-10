@@ -11,6 +11,6 @@ import edu.neu.cs4500.models.Service;
 public interface ServiceRepository extends CrudRepository<Service, Integer> {
 	@Query(value="SELECT service FROM Service service")
 	public List<Service> findAllServices();
-	@Query(value="SELECT service FROM Service service WHERE service.id=:id")
-	public Service findServiceById(@Param("id") Integer id);
+	@Query(value="SELECT service FROM Service service WHERE id=:serviceid")
+	public Service findServiceById(@Param("serviceid") Integer id);
 }
