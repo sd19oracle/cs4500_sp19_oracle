@@ -17,14 +17,14 @@ public class FrequentlyAskedQuestion {
     private Integer id;
     private String title;
     private String question;
-    //@OneToMany(mappedBy="frequentlyAskedQuestion")
-    //private List<FrequentlyAskedAnswer> answers;
-    //public List<FrequentlyAskedAnswer> getAnswers() {
-    //    return answers;
-    //}
-    //public void setAnswers(List<FrequentlyAskedAnswer> answers) {
-    //    this.answers = answers;
-    //}
+    @OneToMany(mappedBy="frequentlyAskedQuestion")
+    private List<FrequentlyAskedAnswer> answers;
+    public List<FrequentlyAskedAnswer> getAnswers() {
+        return answers;
+    }
+    public void setAnswers(List<FrequentlyAskedAnswer> answers) {
+        this.answers = answers;
+    }
     public Integer getId() {
         return id;
     }
