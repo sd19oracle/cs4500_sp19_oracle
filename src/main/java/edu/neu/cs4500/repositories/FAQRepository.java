@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 
 import edu.neu.cs4500.models.FrequentlyAskedQuestion;
 
-public interface FrequentlyAskedQuestionRepository extends CrudRepository<FrequentlyAskedQuestion, Integer> {
+public interface FAQRepository extends CrudRepository<FrequentlyAskedQuestion, Integer> {
 	  // Lists all the FAQs in the table
 	  @Query(value = "SELECT frequentlyAskedQuestion FROM FrequentlyAskedQuestion frequentlyAskedQuestion")
 	  public List<FrequentlyAskedQuestion> findAllFrequentlyAskedQuestions();

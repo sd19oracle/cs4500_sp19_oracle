@@ -8,7 +8,7 @@
     "DBPASSWORD": {
       "required": true
     },
-    "DBSCHEMA": "oracle-staging",
+    "DBSCHEMA": "oracle_staging",
     "DBUSERNAME": {
       "required": true
     }
