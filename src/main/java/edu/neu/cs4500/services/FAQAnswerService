@@ -1,4 +1,4 @@
-package com.example.cs4500sp19s2jga.services;
+package edu.neu.cs4500.services;
 
 import java.util.List;
 
@@ -8,21 +8,21 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.cs4500sp19s2jga.models.FrequentlyAskedQuestion;
-import com.example.cs4500sp19s2jga.repository.FAQRepository;
+import edu.neu.cs4500.models.FrequentlyAskedAnswer;
+import edu.neu.cs4500.repositories.FAQAnswerRepository;
 
 @RestController
 @CrossOrigin(origins="*")
-public class FAQService {
+public class FAQAnswerService {
 	@Autowired
-	FAQRepository repository;
-	@GetMapping("/api/faqs")
-	public List<FrequentlyAskedQuestion> findAllFrequentlyAskedQuestions() {
-		return repository.findAllFrequentlyAskedQuestions();
+	FAQAnswerRepository repository;
+	@GetMapping("/api/faq-answers")
+	public List<FrequentlyAskedAnswer> findAllFrequentlyAskedQuestions() {
+		return repository.findAllFrequentlyAskedAnswers();
 	}
-	@GetMapping("/api/faqs/{id}")
-	public FrequentlyAskedQuestion findFrequentlyAskedQuestionById(
+	@GetMapping("/api/faq-answers/{id}")
+	public FrequentlyAskedAnswer findFrequentlyAskedQuestionById(
 			@PathVariable("id") Integer id) {
-		return repository.findFrequentlyAskedQuestionById(id);
+		return repository.findFrequentlyAskedAnswerById(id);
 	}
 }

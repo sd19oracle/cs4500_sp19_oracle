@@ -1,4 +1,4 @@
-package edu.neu.cs4500.repository;
+package edu.neu.cs4500.repositories;
 
 import java.util.List;
 
