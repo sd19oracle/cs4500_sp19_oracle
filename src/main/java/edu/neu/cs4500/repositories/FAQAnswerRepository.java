@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 
-import com.example.cs4500sp19s2jga.models.FrequentlyAskedAnswer;
+import edu.neu.cs4500.models.FrequentlyAskedAnswer;
 
 public interface FAQAnswerRepository
     extends CrudRepository<FrequentlyAskedAnswer, Integer> {
