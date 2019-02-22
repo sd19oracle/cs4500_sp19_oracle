@@ -1,20 +1,31 @@
 package edu.neu.cs4500.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.LinkedList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.LinkedHashMap;
 import java.util.TreeMap;
+
+
+class byUserId implements Comparator<User>{
+
+  @Override
+  public int compare(User e1, User e2) {
+    if(e1.getId().compareTo(e1.getId()) > 0){
+      return 1;
+    } else {
+      return -1;
+    }
+  }
+}
 
 public class ServiceSearch {
   public static List<User> searchForProviders(Service service, SearchCriteria criteria) {
     List<User> results = new ArrayList<>();
     List<User> listOfProviders = service.getProviders();
-    TreeMap<User, Integer> scoreBoard = new TreeMap<>();
+    TreeMap<User, Integer> scoreBoard = new TreeMap<>(new byUserId());
     for (User user: listOfProviders) {
       scoreBoard.put(user, 0);
     }
@@ -75,7 +86,7 @@ public class ServiceSearch {
     });
 
     // put data from sorted list to hashmap
-    TreeMap<User, Integer> temp = new TreeMap<>();
+    TreeMap<User, Integer> temp = new TreeMap<>(new byUserId());
     for (Map.Entry<User, Integer> aa : list) {
       temp.put(aa.getKey(), aa.getValue());
     }
