@@ -95,6 +95,6 @@ public class Estimate {
                 accumulateDiscount = accumulateDiscount + this.baseprice * discount.getDiscount();
             }
         }
-        return accumulateDiscount
+        return accumulateDiscount;
     }
 }
