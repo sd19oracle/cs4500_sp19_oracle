@@ -54,7 +54,7 @@ public class ServiceSearch {
 
     HashMap<User, Integer> sortedHash = sortByValue(scoreBoard);
     for (User user : sortedHash.keySet()) {
-      results.add(user);
+      results.add(0, user);
     }
     return results;
   }
