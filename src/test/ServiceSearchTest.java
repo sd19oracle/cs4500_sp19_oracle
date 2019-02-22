@@ -67,6 +67,9 @@ public class ServiceSearchTest {
     criteria1.setListPredicate(new ArrayList<>(Arrays.asList(predPet)));
   }
 
+  // Test for all score in the result, to check whether each provider's score in the treemap
+  // accord with our expectation. That test is a fundamental test for sorted result since
+  // all sort result based on the score.
   @Test
   public void testCorrectScore() {
     ServiceSpecificAnswer cust1Q2 = new ServiceSpecificAnswer();
@@ -109,6 +112,7 @@ public class ServiceSearchTest {
 
   }
 
+  // Test the result list contains all provider in the service
   @Test
   public void testCorrectList() {
     List<User> originalProvider = new ArrayList<>(Arrays.asList(provider1, provider2, provider3));
@@ -118,18 +122,22 @@ public class ServiceSearchTest {
     }
   }
 
-
+  // Test if there is no predicate in the criteria which means the client
+  // does not fill any answer. So, the list of user will displays on the client's
+  // interface based on the id. And all score for each provide should be 0.
   @Test
   public void testEmptyPredicateScore() {
     SearchCriteria criteria2 = new SearchCriteria();
     TreeMap<User, Integer> scoreResult = ServiceSearch.algorithm(service1.getProviders(), criteria2.getListPredicate());
+    List<User> returnProvider = ServiceSearch.searchForProviders(service1, criteria2);
+    List<User> originalProvider = new ArrayList<>(Arrays.asList(provider1, provider2, provider3));
     int p1Score = scoreResult.get(provider1);
     int p2Score = scoreResult.get(provider2);
     int p3Score = scoreResult.get(provider3);
     assertEquals(0, p1Score);
     assertEquals(0, p2Score);
     assertEquals(0, p3Score);
-
+    assertEquals(originalProvider, returnProvider);
   }
 
 
