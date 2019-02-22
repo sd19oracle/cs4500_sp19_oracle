@@ -114,7 +114,11 @@ public class ServiceSearchTest {
 
   @Test
   public void testCorrectList() {
-
+    List<User> originalProvider = new ArrayList<>(Arrays.asList(provider1, provider2, provider3));
+    List<User> returnProvider = ServiceSearch.searchForProviders(service1, criteria1);
+    for (User provider : returnProvider) {
+      assertEquals(true, originalProvider.contains(provider));
+    }
   }
 
 
