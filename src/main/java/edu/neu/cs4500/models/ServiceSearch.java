@@ -11,17 +11,17 @@ import java.util.TreeMap;
 /**
  * This is the class for searching the service providers by a Service type and a search criteria,
  * and there is an algorithm that returns the score board for all providers. There is a function
- * that checks the score board and will return a list of providers in a ascending order of their
+ * that checks the score board and will return a list of providers in a deceasing order of their
  * scores. When two providers have the same score, the one with lower id comes first in the list.
  */
 public class ServiceSearch {
 
   /**
-   * Returns a list of providers in a ascending order of their scores according to the
+   * Returns a list of providers in a deceasing order of their scores according to the
    * search criteria for the given service.
    * @param service The service type.
    * @param criteria The criteria given by users. (Users' preference)
-   * @return a list of providers in a ascending order of their scores
+   * @return a list of providers in a deceasing order of their scores
    */
   public static List<User> searchForProviders(Service service, SearchCriteria criteria) {
     List<User> listOfProviders = service.getProviders();
