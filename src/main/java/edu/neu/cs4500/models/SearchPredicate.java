@@ -4,7 +4,7 @@ public class SearchPredicate {
   private ServiceSpecificQuestion question;
   private ServiceSpecificAnswer answer;
   public SearchPredicate() {}
-  
+
   public SearchPredicate(ServiceSpecificQuestion question, ServiceSpecificAnswer answer) {
     this.question = question;
     this.answer = answer;
@@ -25,8 +25,4 @@ public class SearchPredicate {
   public void setAnswer(ServiceSpecificAnswer answer) {
     this.answer = answer;
   }
-
-
-
-
 }
