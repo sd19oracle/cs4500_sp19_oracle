@@ -118,6 +118,21 @@ public class ServiceSearchTest {
     }
   }
 
+
+  @Test
+  public void testEmptyPredicateScore() {
+    SearchCriteria criteria2 = new SearchCriteria();
+    TreeMap<User, Integer> scoreResult = ServiceSearch.algorithm(service1.getProviders(), criteria2.getListPredicate());
+    int p1Score = scoreResult.get(provider1);
+    int p2Score = scoreResult.get(provider2);
+    int p3Score = scoreResult.get(provider3);
+    assertEquals(0, p1Score);
+    assertEquals(0, p2Score);
+    assertEquals(0, p3Score);
+
+  }
+
+
   // Test if the order of the ranking is as expected when two providers have the same
   // score. The user who has a lower ID should appear earlier in the list.
   @Test
