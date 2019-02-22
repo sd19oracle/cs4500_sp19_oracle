@@ -8,12 +8,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.LinkedHashMap;
+import java.util.TreeMap;
 
 public class ServiceSearch {
   public static List<User> searchForProviders(Service service, SearchCriteria criteria) {
     List<User> results = new ArrayList<>();
     List<User> listOfProviders = service.getProviders();
-    HashMap<User, Integer> scoreBoard = new HashMap<>();
+    TreeMap<User, Integer> scoreBoard = new TreeMap<>();
     for (User user: listOfProviders) {
       scoreBoard.put(user, 0);
     }
@@ -52,14 +53,14 @@ public class ServiceSearch {
       }
     }
 
-    HashMap<User, Integer> sortedHash = sortByValue(scoreBoard);
+    TreeMap<User, Integer> sortedHash = sortByValue(scoreBoard);
     for (User user : sortedHash.keySet()) {
       results.add(0, user);
     }
     return results;
   }
 
-  static HashMap<User, Integer> sortByValue(HashMap<User, Integer> hm) {
+  static TreeMap<User, Integer> sortByValue(TreeMap<User, Integer> hm) {
     // Create a list from elements of HashMap
     List<Map.Entry<User, Integer> > list =
             new LinkedList<Map.Entry<User, Integer> >(hm.entrySet());
@@ -74,7 +75,7 @@ public class ServiceSearch {
     });
 
     // put data from sorted list to hashmap
-    HashMap<User, Integer> temp = new LinkedHashMap<User, Integer>();
+    TreeMap<User, Integer> temp = new TreeMap<>();
     for (Map.Entry<User, Integer> aa : list) {
       temp.put(aa.getKey(), aa.getValue());
     }
