@@ -8,35 +8,46 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.TreeMap;
 
-
-
-
+/**
+ * This is the class for searching the service providers by a Service type and a search criteria,
+ * and there is an algorithm that returns the score board for all providers. There is a function
+ * that checks the score board and will return a list of providers in a ascending order of their
+ * scores. When two providers have the same score, the one with lower id comes first in the list.
+ */
 public class ServiceSearch {
 
-  static class byUserId implements Comparator<User> {
-    @Override
-    public int compare(User u1, User u2) {
-      if (u1.getId().compareTo(u2.getId()) > 0) {
-        return -1;
-      } else if (u1.getId().compareTo(u2.getId()) == 0){
-        return 0;
-      } else {
-        return 1;
-      }
-    }
+  /**
+   * Returns a list of providers in a ascending order of their scores according to the
+   * search criteria for the given service.
+   * @param service The service type.
+   * @param criteria The criteria given by users. (Users' preference)
+   * @return a list of providers in a ascending order of their scores
+   */
+  public static List<User> searchForProviders(Service service, SearchCriteria criteria) {
+    List<User> listOfProviders = service.getProviders();
+    TreeMap<User, Integer> scoreBoard = algorithm(listOfProviders, criteria.getListPredicate());
+    List<User> sorted = sortByValue(scoreBoard);
+
+    return sorted;
   }
 
-  public static List<User> searchForProviders(Service service, SearchCriteria criteria) {
-    List<User> results = new ArrayList<>();
-    List<User> listOfProviders = service.getProviders();
+  /**
+   * The algorithm to calculate the score board for given providers and a list of search predicates.
+   * There are three types of question for now, which are MINMAX, MULTIPLECHOICE, TRUEFALSE.
+   * (This function should be private, but we make it public for testing!!!)
+   * @param providers the providers
+   * @param expectations a list of expectations (predicates)
+   * @return The score board for the given provider by comparing with provider's answers with answers
+   * from the predicates.
+   */
+  public static TreeMap<User, Integer> algorithm(List<User> providers,
+                                                 List<SearchPredicate> expectations) {
     TreeMap<User, Integer> scoreBoard = new TreeMap<>(new byUserId());
-    for (User user: listOfProviders) {
+    for (User user: providers) {
       scoreBoard.put(user, 0);
     }
 
-    List<SearchPredicate> listOfPredicates = criteria.getListPredicate();
-
-    for (SearchPredicate predicate : listOfPredicates) {
+    for (SearchPredicate predicate : expectations) {
       ServiceSpecificQuestion question = predicate.getQuestion();
       List<ServiceSpecificAnswer> listOfProvAnswers = question.getAnswers();
       for (ServiceSpecificAnswer providerAnswer : listOfProvAnswers) {
@@ -67,11 +78,23 @@ public class ServiceSearch {
         }
       }
     }
-
-    List<User> sorted = sortByValue(scoreBoard);
-
-    return sorted;
+    return scoreBoard;
   }
+
+
+  static class byUserId implements Comparator<User> {
+    @Override
+    public int compare(User u1, User u2) {
+      if (u1.getId().compareTo(u2.getId()) > 0) {
+        return -1;
+      } else if (u1.getId().compareTo(u2.getId()) == 0){
+        return 0;
+      } else {
+        return 1;
+      }
+    }
+  }
+
 
   static List<User> sortByValue(TreeMap<User, Integer> hm) {
     // Create a list from elements of HashMap
