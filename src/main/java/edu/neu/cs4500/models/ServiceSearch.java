@@ -9,19 +9,23 @@ import java.util.List;
 import java.util.TreeMap;
 
 
-class byUserId implements Comparator<User>{
 
-  @Override
-  public int compare(User e1, User e2) {
-    if(e1.getId().compareTo(e1.getId()) > 0){
-      return 1;
-    } else {
-      return -1;
-    }
-  }
-}
 
 public class ServiceSearch {
+
+  static class byUserId implements Comparator<User> {
+    @Override
+    public int compare(User u1, User u2) {
+      if (u1.getId().compareTo(u2.getId()) > 0) {
+        return -1;
+      } else if (u1.getId().compareTo(u2.getId()) == 0){
+        return 0;
+      } else {
+        return 1;
+      }
+    }
+  }
+
   public static List<User> searchForProviders(Service service, SearchCriteria criteria) {
     List<User> results = new ArrayList<>();
     List<User> listOfProviders = service.getProviders();
@@ -64,14 +68,12 @@ public class ServiceSearch {
       }
     }
 
-    TreeMap<User, Integer> sortedHash = sortByValue(scoreBoard);
-    for (User user : sortedHash.keySet()) {
-      results.add(0, user);
-    }
-    return results;
+    List<User> sorted = sortByValue(scoreBoard);
+
+    return sorted;
   }
 
-  static TreeMap<User, Integer> sortByValue(TreeMap<User, Integer> hm) {
+  static List<User> sortByValue(TreeMap<User, Integer> hm) {
     // Create a list from elements of HashMap
     List<Map.Entry<User, Integer> > list =
             new LinkedList<Map.Entry<User, Integer> >(hm.entrySet());
@@ -85,12 +87,13 @@ public class ServiceSearch {
       }
     });
 
-    // put data from sorted list to hashmap
-    TreeMap<User, Integer> temp = new TreeMap<>(new byUserId());
+    // put data from sorted list to a new list in reversed order
+    // cause we want to higher grade providers
+    List<User> sortedUsers = new ArrayList<>();
     for (Map.Entry<User, Integer> aa : list) {
-      temp.put(aa.getKey(), aa.getValue());
+      sortedUsers.add(0, aa.getKey());
     }
-    return temp;
+    return sortedUsers;
   }
 }
 
