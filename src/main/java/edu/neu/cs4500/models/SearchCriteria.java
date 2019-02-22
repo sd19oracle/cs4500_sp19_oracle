@@ -24,5 +24,4 @@ public class SearchCriteria {
   public void addListPredicate(SearchPredicate predicate) {
     this.listPredicate.add(predicate);
   }
-
 }

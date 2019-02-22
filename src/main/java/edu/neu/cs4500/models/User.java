@@ -110,4 +110,21 @@ public class User {
   public void setServices(List<Service> services) {
     this.services = services;
   }
+
+  @Override
+  public boolean equals(Object user) {
+    if (user == this) {
+      return true;
+    }
+    if (!(user instanceof User)) {
+      return false;
+    }
+    User tempUser = (User)user;
+    return tempUser.getId().equals(this.id);
+  }
+
+  @Override
+  public int hashCode() {
+    return this.id;
+  }
 }
