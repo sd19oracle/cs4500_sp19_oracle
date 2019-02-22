@@ -31,12 +31,9 @@ public class ServiceSearchTest {
   private User customer1 = new User();
   private ServiceSpecificAnswer cust1Q1 = new ServiceSpecificAnswer();
 
-
   private List<ServiceSpecificAnswer> ansQ1 = new ArrayList<>();
-  private SearchPredicate predicate1 = new SearchPredicate();
+  private SearchPredicate predPet = new SearchPredicate();
   private SearchCriteria criteria1 = new SearchCriteria();
-
-
 
   @BeforeEach
   public void setUp() {
@@ -65,9 +62,9 @@ public class ServiceSearchTest {
     service1.setProviders(new ArrayList<>(Arrays.asList(provider1, provider2, provider3)));
 
     cust1Q1.setAnswer("TRUE");
-    predicate1.setQuestion(q1);
-    predicate1.setAnswer(cust1Q1);
-    criteria1.setListPredicate(new ArrayList<>(Arrays.asList(predicate1)));
+    predPet.setQuestion(q1);
+    predPet.setAnswer(cust1Q1);
+    criteria1.setListPredicate(new ArrayList<>(Arrays.asList(predPet)));
   }
 
   @Test
@@ -99,7 +96,7 @@ public class ServiceSearchTest {
 
     predicate2.setQuestion(q2);
     predicate2.setAnswer(cust1Q2);
-    criteria2.setListPredicate(new ArrayList<>(Arrays.asList(predicate1, predicate2)));
+    criteria2.setListPredicate(new ArrayList<>(Arrays.asList(predPet, predicate2)));
 
     TreeMap<User, Integer> scoreResult = ServiceSearch.algorithm(service1.getProviders(), criteria2.getListPredicate());
 
@@ -121,17 +118,44 @@ public class ServiceSearchTest {
     }
   }
 
-
-
+  // Test if the order of the ranking is as expected when two providers have the same
+  // score. The user who has a lower ID should appear earlier in the list.
   @Test
-  public void testRandom() {
-    List<User> actualRanking = ServiceSearch.searchForProviders(service1, criteria1);
-    List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider2, provider1, provider3));
+  public void testOrderRanking1() {
+    // initialize a question
+    ServiceSpecificQuestion qDuration = new ServiceSpecificQuestion();
+    qDuration.setId(2);
+    qDuration.setType("MINMAX");
+    qDuration.setTitle("How much time (minutes) do you need to do the cleaning?");
+    qDuration.setService(service1);
+    // initialize all providers' answers for the question
+    ServiceSpecificAnswer a1Ava = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a2Ava = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a3Ava = new ServiceSpecificAnswer();
+    a1Ava.setAnswer("30,45");
+    a1Ava.setUser(provider1);
+    a2Ava.setAnswer("10,20");
+    a2Ava.setUser(provider2);
+    a3Ava.setAnswer("50,65");
+    a3Ava.setUser(provider3);
+    // set all answers to the question
+    qDuration.setAnswers(new ArrayList<>(Arrays.asList(a1Ava, a2Ava, a3Ava)));
+    // initialize a predicate for criterion - duration
+    SearchPredicate predDuration = new SearchPredicate();
+    predDuration.setQuestion(qDuration);
+    ServiceSpecificAnswer custAnsAva = new ServiceSpecificAnswer();
+    custAnsAva.setAnswer("50,55");
+    predDuration.setAnswer(custAnsAva);
+    // set up criteria
+    SearchCriteria criteriaPetAndDuration = new SearchCriteria();
+    criteriaPetAndDuration.setListPredicate(new ArrayList<>(Arrays.asList(predPet, predDuration)));
+    List<User> actualRanking = ServiceSearch.searchForProviders(service1, criteriaPetAndDuration);
+    // provider2 wins predPet (predicate - pet)
+    // provider3 wins predDuration (predicate - duration)
+    List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider2, provider3, provider1));
 
     for (int i = 0; i < actualRanking.size(); i++) {
       assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
     }
   }
-
-
 }
