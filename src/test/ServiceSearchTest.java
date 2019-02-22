@@ -2,7 +2,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.omg.Messaging.SYNC_WITH_TRANSPORT;
+
+import java.util.*;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,10 +30,12 @@ public class ServiceSearchTest {
 
   private User customer1 = new User();
   private ServiceSpecificAnswer cust1Q1 = new ServiceSpecificAnswer();
-  private List<ServiceSpecificAnswer> ansQ1 = new ArrayList<>(Arrays.asList(a1q1, a2q1, a3q1));
 
+
+  private List<ServiceSpecificAnswer> ansQ1 = new ArrayList<>();
   private SearchPredicate predicate1 = new SearchPredicate();
   private SearchCriteria criteria1 = new SearchCriteria();
+
 
 
   @BeforeEach
@@ -55,6 +58,7 @@ public class ServiceSearchTest {
     q1.setTitle("Do you have pets?");
     q1.setType("TRUEFALSE");
     q1.setService(service1);
+    ansQ1 = new ArrayList<>(Arrays.asList(a1q1, a2q1, a3q1));
     q1.setAnswers(ansQ1);
 
     service1.setQuestions(questionsToService1);
@@ -67,6 +71,59 @@ public class ServiceSearchTest {
   }
 
   @Test
+  public void testCorrectScore() {
+    ServiceSpecificAnswer cust1Q2 = new ServiceSpecificAnswer();
+    SearchPredicate predicate2 = new SearchPredicate();
+    SearchCriteria criteria2 = new SearchCriteria();
+    List<ServiceSpecificAnswer> ansQ2 = new ArrayList<>();
+
+    ServiceSpecificQuestion q2 = new ServiceSpecificQuestion();
+    ServiceSpecificAnswer a1q2 = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a2q2 = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a3q2 = new ServiceSpecificAnswer();
+
+    a1q2.setAnswer("1");
+    a1q2.setUser(provider1);
+    a2q2.setAnswer("1");
+    a2q2.setUser(provider2);
+    a3q2.setAnswer("2");
+    a3q2.setUser(provider3);
+    ansQ2 = new ArrayList<>(Arrays.asList(a1q2, a2q2, a3q2));
+
+    q2.setId(1);
+    q2.setTitle("How many rooms do you have?");
+    q2.setType("MUTIPLECHOICE");
+    q2.setService(service1);
+    q2.setAnswers(ansQ2);
+    cust1Q2.setAnswer("1");
+
+    predicate2.setQuestion(q2);
+    predicate2.setAnswer(cust1Q2);
+    criteria2.setListPredicate(new ArrayList<>(Arrays.asList(predicate1, predicate2)));
+
+    TreeMap<User, Integer> scoreResult = ServiceSearch.algorithm(service1.getProviders(), criteria2.getListPredicate());
+
+    int p1Score = scoreResult.get(provider1);
+    int p2Score = scoreResult.get(provider2);
+    int p3Score = scoreResult.get(provider3);
+    assertEquals(1, p1Score);
+    assertEquals(2, p2Score);
+    assertEquals(0, p3Score);
+
+  }
+
+  @Test
+  public void testCorrectList() {
+    List<User> originalProvider = new ArrayList<>(Arrays.asList(provider1, provider2, provider3));
+    List<User> returnProvider = ServiceSearch.searchForProviders(service1, criteria1);
+    for (User provider : returnProvider) {
+      assertEquals(true, originalProvider.contains(provider));
+    }
+  }
+
+
+
+  @Test
   public void testRandom() {
     List<User> actualRanking = ServiceSearch.searchForProviders(service1, criteria1);
     List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider2, provider1, provider3));
@@ -75,4 +132,6 @@ public class ServiceSearchTest {
       assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
     }
   }
+
+
 }
