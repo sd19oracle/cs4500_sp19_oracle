@@ -118,7 +118,6 @@ public class ServiceSearchTest {
     List<User> returnProvider = ServiceSearch.searchForProviders(service1, criteria1);
     for (User provider : returnProvider) {
       assertEquals(true, originalProvider.contains(provider));
-      System.out.println(provider);
     }
   }
 
