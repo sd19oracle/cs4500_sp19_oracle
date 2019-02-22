@@ -3,11 +3,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeMap;
 
 import edu.neu.cs4500.models.SearchCriteria;
 import edu.neu.cs4500.models.SearchPredicate;
@@ -33,6 +32,8 @@ public class ServiceSearchTest {
 
   private List<ServiceSpecificAnswer> ansQ1 = new ArrayList<>();
   private SearchPredicate predPet = new SearchPredicate();
+  private SearchPredicate predDuration = new SearchPredicate();
+  private SearchPredicate predContact = new SearchPredicate();
   private SearchCriteria criteria1 = new SearchCriteria();
 
   @BeforeEach
@@ -122,6 +123,41 @@ public class ServiceSearchTest {
   // score. The user who has a lower ID should appear earlier in the list.
   @Test
   public void testOrderRanking1() {
+    setUpPredicateDuration();
+    // set up criteria consisting of pet and duration questions
+    SearchCriteria criteriaPetAndDuration = new SearchCriteria();
+    criteriaPetAndDuration.setListPredicate(new ArrayList<>(Arrays.asList(predPet, predDuration)));
+    List<User> actualRanking = ServiceSearch.searchForProviders(service1, criteriaPetAndDuration);
+    // provider2 wins predPet (predicate - pet)
+    // provider3 wins predDuration (predicate - duration)
+    List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider2, provider3, provider1));
+
+    for (int i = 0; i < actualRanking.size(); i++) {
+      assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
+    }
+  }
+
+  // Test when all providers have the same score, the ranking of the provider should be
+  // as if they are listed by user ID (ascending).
+  @Test
+  public void testOrderRanking2() {
+    // set up the predicates for all providers to have one and only one point
+    setUpPredicateDuration();
+    setUpPredicateContact();
+    // set up criteria consisting of pet, duration, and way of contact
+    SearchCriteria criteriaPetAndDurationAndContact = new SearchCriteria();
+    criteriaPetAndDurationAndContact.setListPredicate(
+            new ArrayList<>(Arrays.asList(predPet, predDuration, predContact)));
+    List<User> actualRanking = ServiceSearch.searchForProviders(service1, criteriaPetAndDurationAndContact);
+    List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider1, provider2, provider3));
+
+    for (int i = 0; i < actualRanking.size(); i++) {
+      assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
+    }
+  }
+
+  // Initialize a predicate asking the amount of time needed for cleaning.
+  private void setUpPredicateDuration() {
     // initialize a question
     ServiceSpecificQuestion qDuration = new ServiceSpecificQuestion();
     qDuration.setId(2);
@@ -141,21 +177,36 @@ public class ServiceSearchTest {
     // set all answers to the question
     qDuration.setAnswers(new ArrayList<>(Arrays.asList(a1Ava, a2Ava, a3Ava)));
     // initialize a predicate for criterion - duration
-    SearchPredicate predDuration = new SearchPredicate();
     predDuration.setQuestion(qDuration);
     ServiceSpecificAnswer custAnsAva = new ServiceSpecificAnswer();
     custAnsAva.setAnswer("50,55");
     predDuration.setAnswer(custAnsAva);
-    // set up criteria
-    SearchCriteria criteriaPetAndDuration = new SearchCriteria();
-    criteriaPetAndDuration.setListPredicate(new ArrayList<>(Arrays.asList(predPet, predDuration)));
-    List<User> actualRanking = ServiceSearch.searchForProviders(service1, criteriaPetAndDuration);
-    // provider2 wins predPet (predicate - pet)
-    // provider3 wins predDuration (predicate - duration)
-    List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider2, provider3, provider1));
+  }
 
-    for (int i = 0; i < actualRanking.size(); i++) {
-      assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
-    }
+  // Initialize a predicate asking the best way of contact.
+  private void setUpPredicateContact() {
+    // initialize a question
+    ServiceSpecificQuestion qContact = new ServiceSpecificQuestion();
+    qContact.setId(3);
+    qContact.setType("MUTIPLECHOICE");
+    qContact.setTitle("How would you like us to contact you?");
+    qContact.setService(service1);
+    // initialize all providers' answers for the question
+    ServiceSpecificAnswer a1Contact = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a2Contact = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a3Contact = new ServiceSpecificAnswer();
+    a1Contact.setAnswer("email");
+    a1Contact.setUser(provider1);
+    a2Contact.setAnswer("app");
+    a2Contact.setUser(provider2);
+    a3Contact.setAnswer("phone");
+    a3Contact.setUser(provider3);
+    // set all answers to the question
+    qContact.setAnswers(new ArrayList<>(Arrays.asList(a1Contact, a2Contact, a3Contact)));
+    // initialize a predicate for criterion - duration
+    predContact.setQuestion(qContact);
+    ServiceSpecificAnswer custAnsContact = new ServiceSpecificAnswer();
+    custAnsContact.setAnswer("email");
+    predContact.setAnswer(custAnsContact);
   }
 }
