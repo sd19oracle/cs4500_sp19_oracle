@@ -14,6 +14,12 @@ public class SubscriptionDiscount {
     private Frequency frequency;
     private boolean flat;
 
+    public SubscriptionDiscount(float discount, Frequency frequency, boolean flat) {
+        this.discount = discount;
+        this.frequency = frequency;
+        this.flat = flat;
+    }
+
     public Integer getId() {
         return id;
     }

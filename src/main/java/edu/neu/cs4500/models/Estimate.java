@@ -1,5 +1,6 @@
 package edu.neu.cs4500.models;
 
+import java.util.HashMap;
 import java.util.List;
 
 //import javax.persistence.*;
@@ -79,5 +80,21 @@ public class Estimate {
 
     public void setDeliveryFrequency(Frequency deliveryFrequency) {
         this.deliveryFrequency = deliveryFrequency;
+    }
+
+    /**
+     * Calculate subscription discount of the estimate, for a given discount.
+     */
+    public float getDiscount(List<SubscriptionDiscount> discounts) {
+        float accumulateDiscount = 0.0f;
+        for (SubscriptionDiscount discount : discounts) {
+            if (discount.getFrequency() == this.subscriptionFrequency && discount.isFlat()) {
+                accumulateDiscount += discount.getDiscount();
+            }
+            if (discount.getFrequency() == this.subscriptionFrequency && !!discount.isFlat()) {
+                accumulateDiscount = accumulateDiscount + this.baseprice * discount.getDiscount();
+            }
+        }
+        return accumulateDiscount
     }
 }
