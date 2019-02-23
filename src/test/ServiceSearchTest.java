@@ -34,6 +34,8 @@ public class ServiceSearchTest {
   private List<ServiceSpecificAnswer> ansQ1 = new ArrayList<>();
   private SearchPredicate predPet = new SearchPredicate();
   private SearchCriteria criteria1 = new SearchCriteria();
+  private SearchPredicate nonProviderPred = new SearchPredicate();
+  private SearchCriteria nonProviderCri = new SearchCriteria();
 
   @BeforeEach
   public void setUp() {
@@ -172,5 +174,50 @@ public class ServiceSearchTest {
     for (int i = 0; i < actualRanking.size(); i++) {
       assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
     }
+  }
+
+
+  @Test
+  public void testScoreBoardNonProviderFulfill() {
+    setNonProviderInstance();
+    // get the actual score board
+    TreeMap<User, Integer> scoreBoard =
+            ServiceSearch.algorithm(service1.getProviders(), nonProviderCri.getListPredicate());
+    // all providers' score should be 0
+    for (User u: scoreBoard.keySet()) {
+      assertEquals(new Integer(0), scoreBoard.get(u));
+    }
+  }
+
+  private void setNonProviderInstance() {
+    // create a question
+    ServiceSpecificQuestion qLanguage = new ServiceSpecificQuestion();
+    qLanguage.setId(2);
+    qLanguage.setType("MULTIPLECHOICE");
+    qLanguage.setType("What's your primary language?");
+    qLanguage.setChoice("A.English,B.Chinese,C.Japanese,D.Korean");
+    qLanguage.setService(service1);
+    // create 3 answers for 3 providers
+    ServiceSpecificAnswer a1Ava = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a2Ava = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a3Ava = new ServiceSpecificAnswer();
+    a1Ava.setAnswer("A");
+    a1Ava.setUser(provider1);
+    a2Ava.setAnswer("B");
+    a2Ava.setUser(provider2);
+    a3Ava.setAnswer("C");
+    a3Ava.setUser(provider3);
+    // set answers to the question
+    qLanguage.setAnswers(new ArrayList<>(Arrays.asList(a1Ava, a2Ava, a3Ava)));
+
+    // set the question in the predicate
+    nonProviderPred.setQuestion(qLanguage);
+    // create a customer answer
+    ServiceSpecificAnswer custAnsAva = new ServiceSpecificAnswer();
+    custAnsAva.setAnswer("D");
+    // set the answer in the predicate
+    nonProviderPred.setAnswer(custAnsAva);
+    // set up criteria
+    nonProviderCri.setListPredicate(new ArrayList<>(Arrays.asList(nonProviderPred)));
   }
 }
