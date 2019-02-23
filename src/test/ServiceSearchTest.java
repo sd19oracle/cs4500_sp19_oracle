@@ -176,7 +176,8 @@ public class ServiceSearchTest {
     }
   }
 
-
+  // This is to test if the score board is calculated correctly when no provider fulfills any
+  // predicates. All providers' score should be 0.
   @Test
   public void testScoreBoardNonProviderFulfill() {
     setNonProviderInstance();
@@ -186,6 +187,20 @@ public class ServiceSearchTest {
     // all providers' score should be 0
     for (User u: scoreBoard.keySet()) {
       assertEquals(new Integer(0), scoreBoard.get(u));
+    }
+  }
+
+  // This is to test if the sorted providers list is correctly returned. When all providers have
+  // the same score of 0, the list should be in a ascending order of providers' user id.
+  @Test
+  public void testListNonProviderFulfill() {
+    setNonProviderInstance();
+    // get the actual list
+    List<User> actualRanking = ServiceSearch.searchForProviders(service1, nonProviderCri);
+    // expected list
+    List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider1, provider2, provider3));
+    for (int i = 0; i < actualRanking.size(); i++) {
+      assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
     }
   }
 
