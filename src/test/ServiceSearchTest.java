@@ -27,7 +27,6 @@ public class ServiceSearchTest {
   private User provider2 = new User();
   private User provider3 = new User();
 
-  private User customer1 = new User();
   private ServiceSpecificAnswer cust1Q1 = new ServiceSpecificAnswer();
 
   private List<ServiceSpecificAnswer> ansQ1 = new ArrayList<>();
@@ -179,6 +178,52 @@ public class ServiceSearchTest {
     for (int i = 0; i < actualRanking.size(); i++) {
       assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
     }
+  }
+
+  // Test when providers have distinct scores, they are ranked distinctly based on
+  // the primary way of ranking (score)
+  @Test
+  public void testOrderRanking3() {
+    // after the follow set up
+    // provider2 has 2 points | provider1 has 1 point | provider3 has 0 point
+    setUpPredicateDurationProvider2Wins();
+    setUpPredicateContact();
+    // set up criteria consisting of pet, duration, and way of contact
+    SearchCriteria criteriaPetAndDurationAndContact = new SearchCriteria();
+    criteriaPetAndDurationAndContact.setListPredicate(
+            new ArrayList<>(Arrays.asList(predPet, predDuration, predContact)));
+    List<User> actualRanking = ServiceSearch.searchForProviders(service1, criteriaPetAndDurationAndContact);
+    List<User> expectedRanking = new ArrayList<>(Arrays.asList(provider2, provider1, provider3));
+
+    for (int i = 0; i < actualRanking.size(); i++) {
+      assertEquals(expectedRanking.get(i).getId(), actualRanking.get(i).getId());
+    }
+  }
+
+  private void setUpPredicateDurationProvider2Wins() {
+    // initialize a question
+    ServiceSpecificQuestion qDuration = new ServiceSpecificQuestion();
+    qDuration.setId(2);
+    qDuration.setType("MINMAX");
+    qDuration.setTitle("How much time (minutes) do you need to do the cleaning?");
+    qDuration.setService(service1);
+    // initialize all providers' answers for the question
+    ServiceSpecificAnswer a1Ava = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a2Ava = new ServiceSpecificAnswer();
+    ServiceSpecificAnswer a3Ava = new ServiceSpecificAnswer();
+    a1Ava.setAnswer("30,45");
+    a1Ava.setUser(provider1);
+    a2Ava.setAnswer("10,20");
+    a2Ava.setUser(provider2);
+    a3Ava.setAnswer("50,65");
+    a3Ava.setUser(provider3);
+    // set all answers to the question
+    qDuration.setAnswers(new ArrayList<>(Arrays.asList(a1Ava, a2Ava, a3Ava)));
+    // initialize a predicate for criterion - duration
+    predDuration.setQuestion(qDuration);
+    ServiceSpecificAnswer custAnsAva = new ServiceSpecificAnswer();
+    custAnsAva.setAnswer("15,20");
+    predDuration.setAnswer(custAnsAva);
   }
 
   // Initialize a predicate asking the amount of time needed for cleaning.
