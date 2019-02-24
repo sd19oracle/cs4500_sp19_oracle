@@ -37,4 +37,15 @@ public class SubscriptionEstimateDiscountTest {
 
         assertEquals(0.0f, estimate1.getDiscount(discountList));
     }
+
+    @Test
+    public void testZeroPctDiscount() {
+        discount0_pct.setDiscount(0.0f);
+        discount0_pct.setFlat(false);
+        discount0_pct.setFrequency(Frequency.MONTHLY);
+
+        discountList.add(discount0_pct);
+
+        assertEquals(0.0f, estimate1.getDiscount(discountList));
+    }
 }
