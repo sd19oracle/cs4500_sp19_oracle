@@ -20,6 +20,10 @@ public class SubscriptionDiscount {
         this.flat = flat;
     }
 
+    public SubscriptionDiscount() {
+    
+    }
+    
     public Integer getId() {
         return id;
     }

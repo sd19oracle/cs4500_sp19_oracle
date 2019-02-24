@@ -29,6 +29,10 @@ public class Estimate {
         this.subscriptionFrequency = subscriptionFrequency;
         this.deliveryFrequency = deliveryFrequency;
     }
+
+    public Estimate() {
+        
+    }
             
     public Integer getId() {
         return id;
