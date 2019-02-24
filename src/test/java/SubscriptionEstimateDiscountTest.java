@@ -60,4 +60,16 @@ public class SubscriptionEstimateDiscountTest {
 
         assertEquals(10.0f, estimate1.getDiscount(discountList));
     }
+
+    @Test
+    public void testNonMatchingSubscriptionFrequency() {
+        discount2.setDiscount(10.0f);
+        discount2.setFlat(true);
+        discount2.setFrequency(Frequency.DAILY);
+
+        discountList.add(discount2);
+
+        assertEquals(0.0f, estimate1.getDiscount(discountList));
+    }
+
 }
