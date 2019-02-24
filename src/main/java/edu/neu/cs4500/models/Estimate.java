@@ -1,7 +1,7 @@
 package edu.neu.cs4500.models;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 //import javax.persistence.*;
 
@@ -14,22 +14,22 @@ public class Estimate {
     private Integer id;
 
     private float estimate;
-    private float baseprice;
+    private float basePrice;
     private Frequency baseFrequency;
     private boolean subscription;
     private Frequency subscriptionFrequency;
     private Frequency deliveryFrequency;
 
-    public Estimate(float estimate, float baseprice, Frequency baseFrequency, 
+    public Estimate(float estimate, float basePrice, Frequency baseFrequency,
             boolean subscription, Frequency subscriptionFrequency, Frequency deliveryFrequency) {
         this.estimate = estimate;
-        this.baseprice = baseprice;
+        this.basePrice = basePrice;
         this.baseFrequency = baseFrequency;
         this.subscription = subscription;
         this.subscriptionFrequency = subscriptionFrequency;
         this.deliveryFrequency = deliveryFrequency;
     }
-            
+
     public Integer getId() {
         return id;
     }
@@ -38,8 +38,8 @@ public class Estimate {
         return estimate;
     }
 
-    public float getBaseprice() {
-        return baseprice;
+    public float getBasePrice() {
+        return basePrice;
     }
 
     public Frequency getBaseFrequency() {
@@ -62,8 +62,8 @@ public class Estimate {
         this.estimate = estimate;
     }
 
-    public void setBaseprice(float baseprice) {
-        this.baseprice = baseprice;
+    public void setBasePrice(float basePrice) {
+        this.basePrice = basePrice;
     }
 
     public void setBaseFrequency(Frequency baseFrequency) {
@@ -92,9 +92,27 @@ public class Estimate {
                 accumulateDiscount += discount.getDiscount();
             }
             if (discount.getFrequency() == this.subscriptionFrequency && !!discount.isFlat()) {
-                accumulateDiscount = accumulateDiscount + this.baseprice * discount.getDiscount();
+                accumulateDiscount = accumulateDiscount + this.basePrice * discount.getDiscount();
             }
         }
         return accumulateDiscount;
     }
+
+    public float getFees(List<DeliveryFee> fees) {
+    	float acc = 0f;
+
+    	List<DeliveryFee> applicableFees = fees
+				.stream()
+				.filter(fee -> fee.getFrequency() == this.deliveryFrequency)
+				.collect(Collectors.toList());
+
+    	for (DeliveryFee fee : applicableFees) {
+    		if (fee.isFlat()) {
+    			acc += fee.getFee();
+			} else {
+    			acc += this.basePrice * fee.getFee();
+			}
+		}
+    	return acc;
+	}
 }
