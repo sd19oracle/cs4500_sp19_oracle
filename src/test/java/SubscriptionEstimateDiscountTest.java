@@ -18,6 +18,7 @@ public class SubscriptionEstimateDiscountTest {
     private SubscriptionDiscount discount1 = new SubscriptionDiscount();
     private SubscriptionDiscount discount2 = new SubscriptionDiscount();
     private SubscriptionDiscount discount3 = new SubscriptionDiscount();
+    private SubscriptionDiscount discount4 = new SubscriptionDiscount();
 
     @BeforeEach
     public void init() {
@@ -72,4 +73,20 @@ public class SubscriptionEstimateDiscountTest {
         assertEquals(0.0f, estimate1.getDiscount(discountList));
     }
 
+    // Testing multiple discounts 
+    @Test
+    public void testMultipleDiscountsSum() {
+        discount3.setDiscount(10.0f);
+        discount3.setFlat(true);
+        discount3.setFrequency(Frequency.MONTHLY);
+
+        discount4.setDiscount(20.0f);
+        discount4.setFlat(true);
+        discount4.setFrequency(Frequency.MONTHLY);
+
+        discountList.add(discount3);
+        discountList.add(discount4);
+
+        assertEquals(30.0f, estimate1.getDiscount(discountList));
+    }
 }
