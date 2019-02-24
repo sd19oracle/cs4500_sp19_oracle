@@ -22,7 +22,7 @@ public class SubscriptionEstimateDiscountTest {
     @BeforeEach
     public void init() {
         estimate1.setBaseprice(200.00f);
-        estimate1.setBaseFrequency(Frequency.MONTHLY);
+        estimate1.setSubscriptionFrequency(Frequency.MONTHLY);
         discountList.clear();
     }
 
@@ -47,5 +47,17 @@ public class SubscriptionEstimateDiscountTest {
         discountList.add(discount0_pct);
 
         assertEquals(0.0f, estimate1.getDiscount(discountList));
+    }
+
+    // Testing matching and nonmatching subscription frequencies
+    @Test
+    public void testMatchingSubscriptionFrequency() {
+        discount1.setDiscount(10.0f);
+        discount1.setFlat(true);
+        discount1.setFrequency(Frequency.MONTHLY);
+
+        discountList.add(discount1);
+
+        assertEquals(10.0f, estimate1.getDiscount(discountList));
     }
 }
