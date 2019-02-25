@@ -30,6 +30,10 @@ public class Estimate {
         this.deliveryFrequency = deliveryFrequency;
     }
 
+    public Estimate() {
+        
+    }
+            
     public Integer getId() {
         return id;
     }
@@ -88,11 +92,11 @@ public class Estimate {
     public float getDiscount(List<SubscriptionDiscount> discounts) {
         float accumulateDiscount = 0.0f;
         for (SubscriptionDiscount discount : discounts) {
-            if (discount.getFrequency() == this.subscriptionFrequency && discount.isFlat()) {
+            if (discount.getFrequency().equals(this.subscriptionFrequency) && discount.isFlat()) {
                 accumulateDiscount += discount.getDiscount();
             }
-            if (discount.getFrequency() == this.subscriptionFrequency && !!discount.isFlat()) {
-                accumulateDiscount = accumulateDiscount + this.basePrice * discount.getDiscount();
+            if (discount.getFrequency().equals(this.subscriptionFrequency) && !discount.isFlat()) {
+                accumulateDiscount = accumulateDiscount + this.baseprice * 0.01f * discount.getDiscount();
             }
         }
         return accumulateDiscount;
