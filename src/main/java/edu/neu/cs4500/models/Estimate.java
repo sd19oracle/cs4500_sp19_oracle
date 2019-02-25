@@ -96,7 +96,7 @@ public class Estimate {
                 accumulateDiscount += discount.getDiscount();
             }
             if (discount.getFrequency().equals(this.subscriptionFrequency) && !discount.isFlat()) {
-                accumulateDiscount = accumulateDiscount + this.baseprice * 0.01f * discount.getDiscount();
+                accumulateDiscount = accumulateDiscount + this.basePrice * 0.01f * discount.getDiscount();
             }
         }
         return accumulateDiscount;
