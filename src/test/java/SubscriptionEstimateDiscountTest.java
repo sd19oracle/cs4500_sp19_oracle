@@ -22,7 +22,7 @@ public class SubscriptionEstimateDiscountTest {
 
     @BeforeEach
     public void init() {
-        estimate1.setBaseprice(200.00f);
+        estimate1.setBasePrice(200.00f);
         estimate1.setSubscriptionFrequency(Frequency.MONTHLY);
         discountList.clear();
     }
@@ -73,7 +73,7 @@ public class SubscriptionEstimateDiscountTest {
         assertEquals(0.0f, estimate1.getDiscount(discountList));
     }
 
-    // Testing multiple discounts 
+    // Testing multiple discounts
     @Test
     public void testMultipleDiscountsSum() {
         discount3.setDiscount(10.0f);

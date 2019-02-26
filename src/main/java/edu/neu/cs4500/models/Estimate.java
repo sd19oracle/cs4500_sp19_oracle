@@ -1,57 +1,36 @@
 package edu.neu.cs4500.models;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
-//import javax.persistence.*;
-
-//@Entity
-//@Table(name="estimates")
 public class Estimate {
 
-    //@Id
-    //@GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Integer id;
-
-    private float estimate;
-    private float baseprice;
-    private Frequency baseFrequency;
-    private boolean subscription;
+    private float basePrice;
     private Frequency subscriptionFrequency;
     private Frequency deliveryFrequency;
+	List<DeliveryFee> fees;
 
-    public Estimate(float estimate, float baseprice, Frequency baseFrequency, 
-            boolean subscription, Frequency subscriptionFrequency, Frequency deliveryFrequency) {
-        this.estimate = estimate;
-        this.baseprice = baseprice;
-        this.baseFrequency = baseFrequency;
-        this.subscription = subscription;
+    public Estimate(
+			float basePrice,
+			Frequency subscriptionFrequency,
+			Frequency deliveryFrequency,
+			List<DeliveryFee> fees) {
+        this.basePrice = basePrice;
         this.subscriptionFrequency = subscriptionFrequency;
         this.deliveryFrequency = deliveryFrequency;
+        this.fees = fees;
     }
 
     public Estimate() {
-        
-    }
-            
-    public Integer getId() {
-        return id;
+
     }
 
-    public float getEstimate() {
-        return estimate;
+    public float getEstimate(List<SubscriptionDiscount> discounts) {
+        return this.basePrice + this.getFees() - this.getDiscount(discounts);
     }
 
-    public float getBaseprice() {
-        return baseprice;
-    }
-
-    public Frequency getBaseFrequency() {
-        return baseFrequency;
-    }
-
-    public boolean getSubscription() {
-        return subscription;
+    public float getBasePrice() {
+        return basePrice;
     }
 
     public Frequency getSubscriptionFrequency() {
@@ -62,20 +41,8 @@ public class Estimate {
         return deliveryFrequency;
     }
 
-    public void setEstimate(float estimate) {
-        this.estimate = estimate;
-    }
-
-    public void setBaseprice(float baseprice) {
-        this.baseprice = baseprice;
-    }
-
-    public void setBaseFrequency(Frequency baseFrequency) {
-        this.baseFrequency = baseFrequency;
-    }
-
-    public void setSubscription(boolean subscription) {
-        this.subscription = subscription;
+    public void setBasePrice(float basePrice) {
+        this.basePrice = basePrice;
     }
 
     public void setSubscriptionFrequency(Frequency subscriptionFrequency) {
@@ -96,9 +63,27 @@ public class Estimate {
                 accumulateDiscount += discount.getDiscount();
             }
             if (discount.getFrequency().equals(this.subscriptionFrequency) && !discount.isFlat()) {
-                accumulateDiscount = accumulateDiscount + this.baseprice * 0.01f * discount.getDiscount();
+                accumulateDiscount = accumulateDiscount + this.basePrice * 0.01f * discount.getDiscount();
             }
         }
         return accumulateDiscount;
     }
+
+    public float getFees() {
+    	float acc = 0f;
+
+    	List<DeliveryFee> applicableFees = this.fees
+				.stream()
+				.filter(fee -> fee.getFrequency() == this.deliveryFrequency)
+				.collect(Collectors.toList());
+
+    	for (DeliveryFee fee : applicableFees) {
+    		if (fee.isFlat()) {
+    			acc += fee.getFee();
+			} else {
+    			acc += this.basePrice * fee.getFee();
+			}
+		}
+    	return acc;
+	}
 }
