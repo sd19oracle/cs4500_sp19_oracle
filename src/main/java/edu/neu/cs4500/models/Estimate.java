@@ -25,7 +25,7 @@ public class Estimate {
 
     }
 
-    public float getEstimate(List<DeliveryFee> fees, List<SubscriptionDiscount> discounts) {
+    public float getEstimate(List<SubscriptionDiscount> discounts) {
         return this.basePrice + this.getFees() - this.getDiscount(discounts);
     }
 

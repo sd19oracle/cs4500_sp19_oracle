@@ -41,4 +41,14 @@ public class DeliveryFeeEstimateTest {
 		assertEquals(30, this.estimate1.getFees());
 		assertEquals(20, this.estimate2.getFees());
 	}
+
+	@Test
+	void testEstimateSubtractsFees() {
+		this.fees.add(this.fee1);
+		this.fees.add(this.fee2);
+		this.fees.add(this.fee3);
+		this.fees.add(this.fee4);
+		assertEquals(100 + 30, this.estimate1.getEstimate(new ArrayList<>()));
+		assertEquals(300 + 20, this.estimate2.getEstimate(new ArrayList<>()));
+	}
 }
