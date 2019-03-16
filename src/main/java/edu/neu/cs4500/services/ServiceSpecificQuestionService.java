@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.neu.cs4500.models.PageInfo;
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
 import edu.neu.cs4500.models.Service;
@@ -83,6 +85,44 @@ public class ServiceSpecificQuestionService {
     return temp;
   }
 
+  @GetMapping("api/servicesSpecificQuestions/page/{num_item}")
+  public PageInfo findServicesQuestionsByItemNum(@PathVariable("num_item") int num_item) {
+    PageInfo pInfo = new PageInfo();
+    List<ServiceSpecificQuestion> allQuestion =
+            serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
+
+    double page_info = Math.ceil((double)allQuestion.size() / num_item);
+
+    if (num_item > allQuestion.size()) {
+      num_item = allQuestion.size();
+    }
+      List<ServiceSpecificQuestion> listQuestion = allQuestion.subList(0, num_item);
+
+    pInfo.setPage_num((int)page_info);
+    pInfo.setList_questions(listQuestion);
+    pInfo.setTotal_questions(allQuestion.size());
+
+    return pInfo;
+  }
+
+  @GetMapping("api/servicesSpecificQuestions/page/{num_item}/{page_num}")
+  public List<ServiceSpecificQuestion> findServicesQuestionsByPageNum(
+          @PathVariable("num_item") int num_item,
+          @PathVariable("page_num") int page_num) {
+    List<ServiceSpecificQuestion> allQuestion =
+            serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
+    int start = num_item * (page_num - 1);
+    int end = num_item * page_num;
+
+    if (end > allQuestion.size()) {
+      end = allQuestion.size();
+    }
+
+    return allQuestion.subList(start, end);
+  }
+
+
+
   @PostMapping("api/servicesSpecificQuestions/filter")
   public List<ServiceSpecificQuestion> findServiceQuestionsByFilter(
           @RequestBody ServiceSpecificQuestion filterQuestion) {
@@ -102,6 +142,7 @@ public class ServiceSpecificQuestionService {
     }
     return questions;
   }
+
 
   // Admin add a question
   // TODO: NEED TO DISTINGUISH THE SERVICE LATER
