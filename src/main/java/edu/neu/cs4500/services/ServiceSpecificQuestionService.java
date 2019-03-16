@@ -83,7 +83,7 @@ public class ServiceSpecificQuestionService {
     return temp;
   }
 
-  @PostMapping("api/servicesSpecificQuestions")
+  @PostMapping("api/servicesSpecificQuestions/filter")
   public List<ServiceSpecificQuestion> findServiceQuestionsByFilter(
           @RequestBody ServiceSpecificQuestion filterQuestion) {
     String title = filterQuestion.getTitle();
