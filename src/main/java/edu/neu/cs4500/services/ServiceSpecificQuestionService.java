@@ -42,6 +42,14 @@ public class ServiceSpecificQuestionService {
   // for Admin find one question by question id
   @GetMapping("api/servicesSpecificQuestions/{questionID}")
   public ServiceSpecificQuestion findOneQuestion(@PathVariable("questionID") Integer id) {
+//    return new ServiceSpecificQuestion("TEST", "TEST", "123");
+    return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
+  }
+  @PostMapping("api/servicesSpecificQuestions/{questionID}")
+  public ServiceSpecificQuestion findOneQuestion(
+          @RequestBody ServiceSpecificQuestion returnOne,
+          @PathVariable("questionID") Integer id) {
+//    return new ServiceSpecificQuestion("TEST", "TEST", "123");
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
   }
 
@@ -114,15 +122,36 @@ public class ServiceSpecificQuestionService {
   }
 
 
+
+  @PostMapping("api/servicesSpecificQuestions/filter")
+  public List<ServiceSpecificQuestion> findServiceQuestionsByFilter(
+          @RequestBody ServiceSpecificQuestion filterQuestion) {
+    String title = filterQuestion.getTitle();
+    String type = filterQuestion.getType();
+    String choice = filterQuestion.getChoice();
+    List<ServiceSpecificQuestion> questions =
+            serviceSpecificQuestionRepository.findServiceQuestionsByFilter(title, type, choice);
+    if (!choice.equals("")) {
+      List<ServiceSpecificQuestion> accurate = new ArrayList<>();
+      for (ServiceSpecificQuestion q: questions) {
+        if (q.getChoice() != null) {
+          accurate.add(q);
+        }
+      }
+      return accurate;
+    }
+    return questions;
+  }
+
+
   // Admin add a question
-  @PostMapping("api/servicesSpecificQuestions/{serviceId}")
+  // TODO: NEED TO DISTINGUISH THE SERVICE LATER
+  @PostMapping("api/servicesSpecificQuestions/")
   public ServiceSpecificQuestion createAQuestion(
-          @PathVariable("serviceId") Integer id,
           @RequestBody ServiceSpecificQuestion oneQuestion) {
-    Service findService = serviceRepository.findServiceById(id);
-    findService.addQuestion(oneQuestion);
-    oneQuestion.setService(findService);
+    System.out.println(oneQuestion);
     return serviceSpecificQuestionRepository.save(oneQuestion);
+
   }
 
   // Admin add an answer for A question
@@ -137,7 +166,6 @@ public class ServiceSpecificQuestionService {
     oneAnswer.setQuestion(findQ);
     return findQ;
   }
-
 
   // to update a question
   @PutMapping("api/servicesSpecificQuestions/{QuestionId}")
@@ -177,7 +205,6 @@ public class ServiceSpecificQuestionService {
     serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id).setChoice(choice);
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
   }
-
 
   // to delete one question by given question id
   @DeleteMapping("api/servicesSpecificQuestions/{questionId}")
