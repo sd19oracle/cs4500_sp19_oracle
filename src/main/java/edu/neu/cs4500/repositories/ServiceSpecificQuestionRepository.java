@@ -6,8 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
 
 import org.springframework.data.repository.query.Param;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
@@ -22,7 +20,7 @@ public interface ServiceSpecificQuestionRepository extends CrudRepository<Servic
   @Query(value = "SELECT serviceSpecificQuestion FROM ServiceSpecificQuestion " +
           "serviceSpecificQuestion WHERE serviceSpecificQuestion.id=:id")
   public ServiceSpecificQuestion findAllServiceSpecificQuestionById(@Param("id") Integer id);
-  
+
   @Query(value = "SELECT s FROM ServiceSpecificQuestion s "
           + "WHERE s.title LIKE CONCAT('%',:filterTitle,'%')"
           + "AND s.type LIKE CONCAT('%',:filterType,'%') "
