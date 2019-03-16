@@ -75,6 +75,26 @@ public class ServiceSpecificQuestionService {
     return temp;
   }
 
+  @PostMapping("api/servicesSpecificQuestions")
+  public List<ServiceSpecificQuestion> findServiceQuestionsByFilter(
+          @RequestBody ServiceSpecificQuestion filterQuestion) {
+    String title = filterQuestion.getTitle();
+    String type = filterQuestion.getType();
+    String choice = filterQuestion.getChoice();
+    List<ServiceSpecificQuestion> questions =
+            serviceSpecificQuestionRepository.findServiceQuestionsByFilter(title, type, choice);
+    if (!choice.equals("")) {
+      List<ServiceSpecificQuestion> accurate = new ArrayList<>();
+      for (ServiceSpecificQuestion q: questions) {
+        if (q.getChoice() != null) {
+          accurate.add(q);
+        }
+      }
+      return accurate;
+    }
+    return questions;
+  }
+
   // Admin add a question
   @PostMapping("api/servicesSpecificQuestions/{serviceId}")
   public ServiceSpecificQuestion createAQuestion(
@@ -98,7 +118,6 @@ public class ServiceSpecificQuestionService {
     oneAnswer.setQuestion(findQ);
     return findQ;
   }
-
 
   // to update a question
   @PutMapping("api/servicesSpecificQuestions/{QuestionId}")
@@ -138,7 +157,6 @@ public class ServiceSpecificQuestionService {
     serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id).setChoice(choice);
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
   }
-
 
   // to delete one question by given question id
   @DeleteMapping("api/servicesSpecificQuestions/{questionId}")
