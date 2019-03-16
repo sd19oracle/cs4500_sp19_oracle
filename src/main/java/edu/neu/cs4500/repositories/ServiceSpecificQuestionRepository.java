@@ -22,12 +22,7 @@ public interface ServiceSpecificQuestionRepository extends CrudRepository<Servic
   @Query(value = "SELECT serviceSpecificQuestion FROM ServiceSpecificQuestion " +
           "serviceSpecificQuestion WHERE serviceSpecificQuestion.id=:id")
   public ServiceSpecificQuestion findAllServiceSpecificQuestionById(@Param("id") Integer id);
-
-  @Transactional
-  @Modifying
-  @Query(value="DELETE FROM ServiceSpecificQuestion serviceSpecificQuestion WHERE serviceSpecificQuestion.id=:id" )
-  public void deleteById(@Param("id") Integer id);
-
+  
   @Query(value = "SELECT s FROM ServiceSpecificQuestion s "
           + "WHERE s.title LIKE CONCAT('%',:filterTitle,'%')"
           + "AND s.type LIKE CONCAT('%',:filterType,'%') "
