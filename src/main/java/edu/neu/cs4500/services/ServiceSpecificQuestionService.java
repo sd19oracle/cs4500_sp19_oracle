@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.neu.cs4500.models.PageInfo;
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
-import edu.neu.cs4500.repositories.ServiceRepository;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 
@@ -25,14 +24,10 @@ import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 public class ServiceSpecificQuestionService {
   @Autowired
   ServiceSpecificQuestionRepository serviceSpecificQuestionRepository;
-  @Autowired
-  ServiceRepository serviceRepository;
-  @Autowired
-  ServiceSpecificAnswerRepository serviceSpecificAnswerRepository;
 
   // for Admin to view all service questions
   @GetMapping("api/servicesSpecificQuestions")
-  public List<ServiceSpecificQuestion> findAllServiceSpecificAnswer() {
+  public List<ServiceSpecificQuestion> findAllServiceSpecificQuestion() {
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
   }
 
@@ -42,6 +37,7 @@ public class ServiceSpecificQuestionService {
 //    return new ServiceSpecificQuestion("TEST", "TEST", "123");
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
   }
+
   @PostMapping("api/servicesSpecificQuestions/{questionID}")
   public ServiceSpecificQuestion findOneQuestion(
           @RequestBody ServiceSpecificQuestion returnOne,
@@ -57,7 +53,7 @@ public class ServiceSpecificQuestionService {
     List<ServiceSpecificQuestion> list =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
     List<ServiceSpecificQuestion> temp = new ArrayList<>();
-    for (ServiceSpecificQuestion question: list) {
+    for (ServiceSpecificQuestion question : list) {
       if (question.getService().getId().equals(id)) {
         temp.add(question);
       }
@@ -69,12 +65,11 @@ public class ServiceSpecificQuestionService {
   @GetMapping("api/servicesSpecificQuestions/byType/{type}")
   public List<ServiceSpecificQuestion> findAllQuestionsByType(
           @PathVariable("type") String type
-  )
-  {
+  ) {
     List<ServiceSpecificQuestion> list =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
     List<ServiceSpecificQuestion> temp = new ArrayList<>();
-    for (ServiceSpecificQuestion question: list) {
+    for (ServiceSpecificQuestion question : list) {
       if (question.getType().equals(type)) {
         temp.add(question);
       }
@@ -88,14 +83,14 @@ public class ServiceSpecificQuestionService {
     List<ServiceSpecificQuestion> allQuestion =
             serviceSpecificQuestionRepository.findAllServiceSpecificQuestion();
 
-    double page_info = Math.ceil((double)allQuestion.size() / num_item);
+    double page_info = Math.ceil((double) allQuestion.size() / num_item);
 
     if (num_item > allQuestion.size()) {
       num_item = allQuestion.size();
     }
-      List<ServiceSpecificQuestion> listQuestion = allQuestion.subList(0, num_item);
+    List<ServiceSpecificQuestion> listQuestion = allQuestion.subList(0, num_item);
 
-    pInfo.setPage_num((int)page_info);
+    pInfo.setPage_num((int) page_info);
     pInfo.setList_questions(listQuestion);
     pInfo.setTotal_questions(allQuestion.size());
 
@@ -119,7 +114,6 @@ public class ServiceSpecificQuestionService {
   }
 
 
-
   @PostMapping("api/servicesSpecificQuestions/filter")
   public List<ServiceSpecificQuestion> findServiceQuestionsByFilter(
           @RequestBody ServiceSpecificQuestion filterQuestion) {
@@ -130,7 +124,7 @@ public class ServiceSpecificQuestionService {
             serviceSpecificQuestionRepository.findServiceQuestionsByFilter(title, type, choice);
     if (!choice.equals("")) {
       List<ServiceSpecificQuestion> accurate = new ArrayList<>();
-      for (ServiceSpecificQuestion q: questions) {
+      for (ServiceSpecificQuestion q : questions) {
         if (q.getChoice() != null) {
           accurate.add(q);
         }
@@ -139,7 +133,6 @@ public class ServiceSpecificQuestionService {
     }
     return questions;
   }
-
 
   // Admin add a question
   // TODO: NEED TO DISTINGUISH THE SERVICE LATER
@@ -197,28 +190,14 @@ public class ServiceSpecificQuestionService {
   public ServiceSpecificQuestion updateChoiceForAQuestion(
           @PathVariable("questionId") Integer id,
           @PathVariable("choice") String choice
-  )
-  {
+  ) {
     serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id).setChoice(choice);
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
   }
 
   // to delete one question by given question id
   @DeleteMapping("api/servicesSpecificQuestions/{questionId}")
-  public void deleteOneAnswer( @PathVariable("questionId") Integer id) {
+  public void deleteOneAnswer(@PathVariable("questionId") Integer id) {
     serviceSpecificQuestionRepository.deleteById(id);
   }
-
-  @DeleteMapping("api/servicesSpecificQuestions/question/{questionId}/answer/{answerId}")
-  public void deleteOneAnswerOfAQuestion(
-          @PathVariable("questionId") Integer qId,
-          @PathVariable("answerId") Integer aId
-  )
-  {
-    ServiceSpecificQuestion findQ =
-            serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(qId);
-    findQ.removeServiceSpecificAnswer(aId);
-    serviceSpecificAnswerRepository.deleteById(aId);
-  }
-
 }
