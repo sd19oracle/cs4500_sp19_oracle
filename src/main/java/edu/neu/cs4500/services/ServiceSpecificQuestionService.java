@@ -92,6 +92,7 @@ public class ServiceSpecificQuestionService {
 
     pInfo.setPage_num((int)page_info);
     pInfo.setList_questions(listQuestion);
+    pInfo.setTotal_questions(allQuestion.subList());
 
     return pInfo;
   }
