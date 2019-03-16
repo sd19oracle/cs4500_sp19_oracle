@@ -164,12 +164,12 @@ public class ServiceSpecificQuestionService {
     serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id).setChoice(choice);
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
   }
-
-  // to delete one question by given question id
-  @DeleteMapping("api/servicesSpecificQuestions/{questionId}")
-  public void deleteOneAnswer( @PathVariable("questionId") Integer id) {
-    serviceSpecificQuestionRepository.deleteById(id);
-  }
+//
+//  // to delete one question by given question id
+//  @DeleteMapping("api/servicesSpecificQuestions/{questionId}")
+//  public void deleteOneAnswer( @PathVariable("questionId") Integer id) {
+//    serviceSpecificQuestionRepository.deleteById(id);
+//  }
 
   @DeleteMapping("api/servicesSpecificQuestions/question/{questionId}/answer/{answerId}")
   public void deleteOneAnswerOfAQuestion(
