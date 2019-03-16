@@ -22,6 +22,17 @@ public class ServiceSpecificQuestion {
     @JsonIgnore
     private List<ServiceSpecificAnswer> answers;
 
+    public ServiceSpecificQuestion() {
+
+    }
+
+    public ServiceSpecificQuestion(String title, String type, String choice) {
+
+        this.title = title;
+        this.type = type;
+        this.choice = choice;
+    }
+
     public Integer getId() {
         return id;
     }

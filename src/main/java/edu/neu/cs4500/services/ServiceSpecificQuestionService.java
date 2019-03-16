@@ -40,6 +40,14 @@ public class ServiceSpecificQuestionService {
   // for Admin find one question by question id
   @GetMapping("api/servicesSpecificQuestions/{questionID}")
   public ServiceSpecificQuestion findOneQuestion(@PathVariable("questionID") Integer id) {
+//    return new ServiceSpecificQuestion("TEST", "TEST", "123");
+    return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
+  }
+  @PostMapping("api/servicesSpecificQuestions/{questionID}")
+  public ServiceSpecificQuestion findOneQuestion(
+          @RequestBody ServiceSpecificQuestion returnOne,
+          @PathVariable("questionID") Integer id) {
+//    return new ServiceSpecificQuestion("TEST", "TEST", "123");
     return serviceSpecificQuestionRepository.findAllServiceSpecificQuestionById(id);
   }
 
@@ -96,14 +104,13 @@ public class ServiceSpecificQuestionService {
   }
 
   // Admin add a question
-  @PostMapping("api/servicesSpecificQuestions/{serviceId}")
+  // TODO: NEED TO DISTINGUISH THE SERVICE LATER
+  @PostMapping("api/servicesSpecificQuestions/")
   public ServiceSpecificQuestion createAQuestion(
-          @PathVariable("serviceId") Integer id,
           @RequestBody ServiceSpecificQuestion oneQuestion) {
-    Service findService = serviceRepository.findServiceById(id);
-    findService.addQuestion(oneQuestion);
-    oneQuestion.setService(findService);
+    System.out.println(oneQuestion);
     return serviceSpecificQuestionRepository.save(oneQuestion);
+
   }
 
   // Admin add an answer for A question
