@@ -17,6 +17,7 @@ import edu.neu.cs4500.models.ServiceSpecificQuestion;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -131,4 +132,125 @@ public class ServiceSpecificQuestionServiceTest {
             .andExpect(jsonPath("$.[*].type",
                     containsInAnyOrder("MULTIPLECHOICE")));
   }
+
+  @Test
+  public void testFindServiceQuestionsByFilterTitleAndType() throws Exception {
+    List<ServiceSpecificQuestion> questions = Arrays.asList(q2);
+    when(serviceSpecificQuestionService
+            .findServiceQuestionsByFilter("How", "MINMAX", ""))
+            .thenReturn(questions);
+    this.mockMvc
+            .perform(post("/api/servicesSpecificQuestions/filter")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"How\", \"type\":\"MINMAX\", \"choice\":\"\" }")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[*].id",
+                    containsInAnyOrder(2)))
+            .andExpect(jsonPath("$.[*].type",
+                    containsInAnyOrder("MINMAX")));
+  }
+
+  @Test
+  public void testFindServiceQuestionsByFilterTypeAndChoice() throws Exception {
+    List<ServiceSpecificQuestion> questions = Arrays.asList(q1);
+    when(serviceSpecificQuestionService
+            .findServiceQuestionsByFilter("", "MULTIPLECHOICE", "2"))
+            .thenReturn(questions);
+    this.mockMvc
+            .perform(post("/api/servicesSpecificQuestions/filter")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"\", \"type\":\"MULTIPLECHOICE\", \"choice\":\"2\" }")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[*].id",
+                    containsInAnyOrder(1)))
+            .andExpect(jsonPath("$.[*].type",
+                    containsInAnyOrder("MULTIPLECHOICE")));
+  }
+
+  @Test
+  public void testFindServiceQuestionsByFilterTitleAndChoice() throws Exception {
+    List<ServiceSpecificQuestion> questions = Arrays.asList(q1);
+    when(serviceSpecificQuestionService
+            .findServiceQuestionsByFilter("clean?", "", "2"))
+            .thenReturn(questions);
+    this.mockMvc
+            .perform(post("/api/servicesSpecificQuestions/filter")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"clean?\", \"type\":\"\", \"choice\":\"2\" }")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[*].id",
+                    containsInAnyOrder(1)))
+            .andExpect(jsonPath("$.[*].type",
+                    containsInAnyOrder("MULTIPLECHOICE")));
+  }
+
+  @Test
+  public void testFindServiceQuestionsByFilterTitleAndTypeAndChoice() throws Exception {
+    List<ServiceSpecificQuestion> questions = Arrays.asList(q1);
+    when(serviceSpecificQuestionService
+            .findServiceQuestionsByFilter("clean?", "MULTIPLECHOICE", "2"))
+            .thenReturn(questions);
+    this.mockMvc
+            .perform(post("/api/servicesSpecificQuestions/filter")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"clean?\", \"type\":\"MULTIPLECHOICE\", \"choice\":\"2\" }")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.[*].id",
+                    containsInAnyOrder(1)))
+            .andExpect(jsonPath("$.[*].type",
+                    containsInAnyOrder("MULTIPLECHOICE")));
+  }
+
+  @Test
+  public void testFindServiceQuestionsByFilterNoMatchTitle() throws Exception {
+    List<ServiceSpecificQuestion> questions = Arrays.asList();
+    when(serviceSpecificQuestionService
+            .findServiceQuestionsByFilter("#@asd?", "", ""))
+            .thenReturn(questions);
+    this.mockMvc
+            .perform(post("/api/servicesSpecificQuestions/filter")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"#@asd?\", \"type\":\"\", \"choice\":\"\" }")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$",
+                    hasSize(0)));
+  }
+
+  @Test
+  public void testFindServiceQuestionsByFilterNoMatchType() throws Exception {
+    List<ServiceSpecificQuestion> questions = Arrays.asList();
+    when(serviceSpecificQuestionService
+            .findServiceQuestionsByFilter("", "ANY", ""))
+            .thenReturn(questions);
+    this.mockMvc
+            .perform(post("/api/servicesSpecificQuestions/filter")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"\", \"type\":\"ANY\", \"choice\":\"\" }")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$",
+                    hasSize(0)));
+  }
+
+  @Test
+  public void testFindServiceQuestionsByFilterNoMatchChoice() throws Exception {
+    List<ServiceSpecificQuestion> questions = Arrays.asList();
+    when(serviceSpecificQuestionService
+            .findServiceQuestionsByFilter("", "", "qwerty"))
+            .thenReturn(questions);
+    this.mockMvc
+            .perform(post("/api/servicesSpecificQuestions/filter")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"\", \"type\":\"\", \"choice\":\"qwerty\" }")
+                    .accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$",
+                    hasSize(0)));
+  }
+
 }
