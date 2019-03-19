@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.Arrays;
 import java.util.List;
 
+
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 
@@ -33,6 +34,9 @@ public class ServiceSpecificQuestionServiceTest {
   private ServiceSpecificQuestionRepository serviceSpecificQuestionService;
   ServiceSpecificQuestion q1 = new ServiceSpecificQuestion();
   ServiceSpecificQuestion q2 = new ServiceSpecificQuestion();
+  ServiceSpecificQuestion q3 = new ServiceSpecificQuestion();
+  ServiceSpecificQuestion q4 = new ServiceSpecificQuestion();
+  ServiceSpecificQuestion q5 = new ServiceSpecificQuestion();
 
   @Before
   public void setUpInitialTestCases() {
@@ -43,6 +47,15 @@ public class ServiceSpecificQuestionServiceTest {
     q2.setId(2);
     q2.setTitle("How long do you need to clean a small room?");
     q2.setType("MINMAX");
+    q3.setId(3);
+    q3.setTitle("How many people do you have?");
+    q3.setType("MINMAX");
+    q4.setId(4);
+    q4.setTitle("Can you work on the weekend?");
+    q4.setType("TRUEFALSE");
+    q5.setId(5);
+    q5.setTitle("Do you have a car?");
+    q5.setType("TRUEFALSE");
   }
 
   @Test
