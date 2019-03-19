@@ -1,5 +1,6 @@
 package edu.neu.cs4500.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,15 +16,14 @@ import java.util.List;
 
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(ServiceSpecificQuestionService.class)
@@ -35,6 +35,16 @@ public class ServiceSpecificQuestionServiceTest {
   ServiceSpecificQuestion q1 = new ServiceSpecificQuestion();
   ServiceSpecificQuestion q2 = new ServiceSpecificQuestion();
 
+  public static String asJsonString(final Object obj) {
+    try {
+      final ObjectMapper mapper = new ObjectMapper();
+      final String jsonContent = mapper.writeValueAsString(obj);
+      return jsonContent;
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
+  }
+
   @Before
   public void setUpInitialTestCases() {
     q1.setId(1);
@@ -45,6 +55,43 @@ public class ServiceSpecificQuestionServiceTest {
     q2.setTitle("How long do you need to clean a small room?");
     q2.setType("MINMAX");
   }
+
+  @Test
+  public void testCreateANewQuestion() throws Exception {
+
+    ServiceSpecificQuestion q3 = new ServiceSpecificQuestion();
+    q3.setId(3);
+    when(serviceSpecificQuestionService.existsById(3)).thenReturn(false);
+    mockMvc.perform(
+            post("/api/servicesSpecificQuestions/")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(asJsonString(q3)))
+                    .andExpect(status().isOk());
+  }
+
+  @Test
+  public void testRemoveAServiceQuestion() throws Exception {
+    doNothing().when(serviceSpecificQuestionService).deleteById(1);
+    mockMvc.perform(delete("/api/servicesSpecificQuestions/1"))
+            .andExpect(status().isOk());
+  }
+
+
+  @Test
+  public void testUpdateAServiceQuestion() throws Exception {
+    ServiceSpecificQuestion q1new = new ServiceSpecificQuestion();
+    q1new.setId(1);
+    q1new.setType("MULTIPLECHOICE");
+    q1new.setTitle("Chooes you pet(s)!");
+    when(serviceSpecificQuestionService.save(q1new)).thenReturn(q1new);
+    when(serviceSpecificQuestionService.findAllServiceSpecificQuestionById(1)).thenReturn(q1);
+    mockMvc.perform(
+            put("/api/servicesSpecificQuestions/1")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{ \"title\":\"Chooes you pet(s)!\", \"type\":\"MULTIPLECHOICE\", \"choice\":\"\" }"))
+            .andExpect(status().isOk());
+  }
+
 
   @Test
   public void testFindAllServiceQuestion() throws Exception {
