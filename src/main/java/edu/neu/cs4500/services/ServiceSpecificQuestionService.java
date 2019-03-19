@@ -1,9 +1,13 @@
 package edu.neu.cs4500.services;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +20,15 @@ import org.springframework.web.bind.annotation.RestController;
 import edu.neu.cs4500.models.PageInfo;
 import edu.neu.cs4500.models.ServiceSpecificAnswer;
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
+import edu.neu.cs4500.repositories.PagedServiceQuestionRepo;
 import edu.neu.cs4500.repositories.ServiceSpecificAnswerRepository;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 
 @RestController
 @CrossOrigin(origins = "*")
 public class ServiceSpecificQuestionService {
+  @Autowired
+  PagedServiceQuestionRepo pagedRepository;
   @Autowired
   ServiceSpecificQuestionRepository serviceSpecificQuestionRepository;
 
@@ -113,6 +120,20 @@ public class ServiceSpecificQuestionService {
     return allQuestion.subList(start, end);
   }
 
+  @GetMapping("api/servicesSpecificQuestions/paged/{num_item}/{page_num}")
+  public Page<ServiceSpecificQuestion> findServicesQuestionsByPaged(
+          @PathVariable("num_item") Integer num_item,
+          @PathVariable("page_num") Integer page_num) {
+    if(page_num == null) {
+      page_num = 0;
+    }
+    if(num_item == null) {
+      num_item = 10;
+    }
+    org.springframework.data.domain.Pageable p = PageRequest.of(page_num, num_item);
+    return pagedRepository.findAll(p);
+  }
+
 
   @PostMapping("api/servicesSpecificQuestions/filter")
   public List<ServiceSpecificQuestion> findServiceQuestionsByFilter(
@@ -133,6 +154,8 @@ public class ServiceSpecificQuestionService {
     }
     return questions;
   }
+
+
 
   // Admin add a question
   // TODO: NEED TO DISTINGUISH THE SERVICE LATER
