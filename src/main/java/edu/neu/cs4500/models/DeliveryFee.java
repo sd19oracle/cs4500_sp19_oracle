@@ -9,17 +9,22 @@ public class DeliveryFee {
 	private float fee;
 	private Frequency frequency;
 	private boolean flat;
-	private int progressiveRate;
+	private int progressiveRate; // Basic representation of a progressive rate. As of now, is only a multiplier onto the fee when calculating fees that change with distance travelled.
 
 	// when progressiveRate is 0, it is not a progressive fee 
 	public DeliveryFee(float fee, Frequency frequency, boolean flat, int progressiveRate) {
 		this.fee = fee;
 		this.frequency = frequency;
 		this.flat = flat;
+		this.progressiveRate = progressiveRate;
 	}
 
-	public float getFee() {
-		return fee;
+	public float getFee(int distance) {
+		float feeOut = fee;
+		if (progressiveRate > 0) {
+			feeOut = progressiveRate * distance * fee;
+		}
+		return feeOut;
 	}
 
 	public void setFee(float fee) {
