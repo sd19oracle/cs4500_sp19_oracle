@@ -9,8 +9,10 @@ public class DeliveryFee {
 	private float fee;
 	private Frequency frequency;
 	private boolean flat;
+	private int progressiveRate;
 
-	public DeliveryFee(float fee, Frequency frequency, boolean flat) {
+	// when progressiveRate is 0, it is not a progressive fee 
+	public DeliveryFee(float fee, Frequency frequency, boolean flat, int progressiveRate) {
 		this.fee = fee;
 		this.frequency = frequency;
 		this.flat = flat;
@@ -38,5 +40,13 @@ public class DeliveryFee {
 
 	public void setFlat(boolean flat) {
 		this.flat = flat;
+	}
+	
+	public int getPR() {
+		return this.progressiveRate;
+	}
+	
+	public void setPR(int pr) {
+		this.progressiveRate = pr;
 	}
 }

@@ -28,7 +28,7 @@ public class ServiceSpecificAnswerService {
   @Autowired
   UserRepository userRepository;
   // for Admin view all services' answers
-  @GetMapping("api/servicesSpecificAnswers")
+  @GetMapping("/api/servicesSpecificAnswers")
   public List<ServiceSpecificAnswer> findAllServiceSpecificAnswer() {
     return serviceSpecificAnswerRepository.findAllServiceSpecificAnswers();
   }
