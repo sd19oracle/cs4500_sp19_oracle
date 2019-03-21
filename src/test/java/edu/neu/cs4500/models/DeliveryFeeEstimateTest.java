@@ -23,12 +23,12 @@ public class DeliveryFeeEstimateTest {
 
 	List<DeliveryFee> fees = new ArrayList<>();
 
-	DeliveryFee fee1 = new DeliveryFee(20, Frequency.ONETIME, true);
-	DeliveryFee fee2 = new DeliveryFee(0.1f, Frequency.MONTHLY, false);
-	DeliveryFee fee3 = new DeliveryFee(0.2f, Frequency.WEEKDAY, false);
-	DeliveryFee fee4 = new DeliveryFee(10, Frequency.WEEKDAY, true);
-	DeliveryFee fee5 = new DeliveryFee(30, Frequency.WEEKEND, true);
-	DeliveryFee fee6 = new DeliveryFee(0.5f, Frequency.HOLIDAY, false);
+	DeliveryFee fee1 = new DeliveryFee(20, Frequency.ONETIME, true, 0);
+	DeliveryFee fee2 = new DeliveryFee(0.1f, Frequency.MONTHLY, false, 0);
+	DeliveryFee fee3 = new DeliveryFee(0.2f, Frequency.WEEKDAY, false, 0);
+	DeliveryFee fee4 = new DeliveryFee(10, Frequency.WEEKDAY, true, 0);
+	DeliveryFee fee5 = new DeliveryFee(30, Frequency.WEEKEND, true, 0);
+	DeliveryFee fee6 = new DeliveryFee(0.5f, Frequency.HOLIDAY, false, 0);
 
 
 	@BeforeEach
@@ -46,8 +46,8 @@ public class DeliveryFeeEstimateTest {
 		this.fees.add(this.fee2);
 		this.fees.add(this.fee3);
 		this.fees.add(this.fee4);
-		assertEquals(30, this.estimate1.getFees());
-		assertEquals(20, this.estimate2.getFees());
+		assertEquals(30, this.estimate1.getFees(0));
+		assertEquals(20, this.estimate2.getFees(0));
 	}
 
 	@Test
@@ -56,8 +56,8 @@ public class DeliveryFeeEstimateTest {
 		this.fees.add(this.fee2);
 		this.fees.add(this.fee3);
 		this.fees.add(this.fee4);
-		assertEquals(100 + 30, this.estimate1.getEstimate(new ArrayList<>()));
-		assertEquals(300 + 20, this.estimate2.getEstimate(new ArrayList<>()));
+		assertEquals(100 + 30, this.estimate1.getEstimate(new ArrayList<>(), 0));
+		assertEquals(300 + 20, this.estimate2.getEstimate(new ArrayList<>(), 0));
 	}
 
 	@Test
@@ -65,9 +65,9 @@ public class DeliveryFeeEstimateTest {
 		this.fees.add(this.fee1);
 		this.fees.add(this.fee4);
 		this.fees.add(this.fee5);
-		assertEquals(300 + 20, this.estimate2.getEstimate(new ArrayList<>()));
-		assertEquals(100 + 10, this.estimate1.getEstimate(new ArrayList<>()));
-		assertEquals(500 + 30, this.estimate3.getEstimate(new ArrayList<>()));
+		assertEquals(300 + 20, this.estimate2.getEstimate(new ArrayList<>(), 0));
+		assertEquals(100 + 10, this.estimate1.getEstimate(new ArrayList<>(), 0));
+		assertEquals(500 + 30, this.estimate3.getEstimate(new ArrayList<>(), 0));
 	}
 
 	@Test
@@ -77,10 +77,10 @@ public class DeliveryFeeEstimateTest {
 		this.fees.add(this.fee3);
 		this.fees.add(this.fee5);
 		this.fees.add(this.fee6);
-		assertEquals(100 + 20, this.estimate1.getEstimate(new ArrayList<>()));
-		assertEquals(300 + 20, this.estimate2.getEstimate(new ArrayList<>()));
-		assertEquals(500 + 30, this.estimate3.getEstimate(new ArrayList<>()));
-		assertEquals(1000 + 500, this.estimate4.getEstimate(new ArrayList<>()));
+		assertEquals(100 + 20, this.estimate1.getEstimate(new ArrayList<>(), 0));
+		assertEquals(300 + 20, this.estimate2.getEstimate(new ArrayList<>(), 0));
+		assertEquals(500 + 30, this.estimate3.getEstimate(new ArrayList<>(), 0));
+		assertEquals(1000 + 500, this.estimate4.getEstimate(new ArrayList<>(), 0));
 	}
 
 	@Test
@@ -88,7 +88,7 @@ public class DeliveryFeeEstimateTest {
 		this.fees.add(this.fee2);
 		this.fees.add(this.fee3);
 		this.fees.add(this.fee6);
-		assertEquals(100 + 20, this.estimate1.getEstimate(new ArrayList<>()));
-		assertEquals(1000 + 500, this.estimate4.getEstimate(new ArrayList<>()));
+		assertEquals(100 + 20, this.estimate1.getEstimate(new ArrayList<>(), 0));
+		assertEquals(1000 + 500, this.estimate4.getEstimate(new ArrayList<>(), 0));
 	}
 }
