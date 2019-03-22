@@ -41,7 +41,7 @@ public class FAQService {
 		@PathVariable("id") Integer id
 	) {
 		FrequentlyAskedQuestion findQuestion =
-			FAQRepository.findFrequentlyAskedQuestionById(id);
+			repository.findFrequentlyAskedQuestionById(id);
 		findQuestion.addFrequentlyAskedAnswer(anAnswer);
 		anAnswer.setFrequentlyAskedQuestion(findQuestion);
 		return findQuestion;
