@@ -43,7 +43,7 @@ public class FAQService {
 		FrequentlyAskedQuestion findQuestion =
 			FAQRepository.findFrequentlyAskedQuestionById(id);
 		findQuestion.addFrequentlyAskedAnswer(anAnswer);
-		anAnswer.setQuestion(findQuestion);
+		anAnswer.setFrequentlyAskedQuestion(findQuestion);
 		return findQuestion;
 	}
 }
