@@ -43,24 +43,24 @@ public class FAQAnswerService {
 	public FrequentlyAskedAnswer updateAnswer(
 			@PathVariable("id") Integer id,
 			@RequestBody FrequentlyAskedAnswer updatedAnswer) {
-		FrequentlyAskedAnswer findAnswer = FAQAnswerRepository.findFrequentlyAskedAnswerById(id);
+		FrequentlyAskedAnswer findAnswer = repository.findFrequentlyAskedAnswerById(id);
 		findAnswer.setAnswer(updatedAnswer.getAnswer());
-		return FAQAnswerRepository.save(findAnswer);
+		return repository.save(findAnswer);
 	}
 
 	// Delete an FAQAnswer
 	@DeleteMapping("api/faq-answers/{id}")
 	public void deleteAnswer(
 			@PathVariable("id") Integer id) {
-		FAQAnswerRepository.deleteById(id);
+		repository.deleteById(id);
 	}
 
 	// Remove an FAQAnswer (does not delete answer)
 	@PutMapping("api/faq-answers/{id}/removeAnswer")
 	public FrequentlyAskedAnswer removeAnswer(
 			@PathVariable("id") Integer id) {
-		FrequentlyAskedAnswer findAnswer = FAQAnswerRepository.findFrequentlyAskedAnswerById(id);
+		FrequentlyAskedAnswer findAnswer = repository.findFrequentlyAskedAnswerById(id);
 		findAnswer.deleteAnswer();
-		return FAQAnswerRepository.save(findAnswer);
+		return repository.save(findAnswer);
 	}
 }
