@@ -7,23 +7,60 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.neu.cs4500.models.PageInfo;
 import edu.neu.cs4500.models.FrequentlyAskedAnswer;
+import edu.neu.cs4500.models.FrequentlyAskedQuestion;
 import edu.neu.cs4500.repositories.FAQAnswerRepository;
+import edu.neu.cs4500.repositories.FAQRepository;
 
 @RestController
 @CrossOrigin(origins="*")
 public class FAQAnswerService {
 	@Autowired
 	FAQAnswerRepository repository;
-	@GetMapping("/api/faq-answers")
+
+	// Find all FAQ Answer
+	@GetMapping("api/faq-answers")
 	public List<FrequentlyAskedAnswer> findAllFrequentlyAskedQuestions() {
 		return repository.findAllFrequentlyAskedAnswers();
 	}
-	@GetMapping("/api/faq-answers/{id}")
+
+	// Find single FAQ Answer by the ID
+	@GetMapping("api/faq-answers/{id}")
 	public FrequentlyAskedAnswer findFrequentlyAskedQuestionById(
 			@PathVariable("id") Integer id) {
 		return repository.findFrequentlyAskedAnswerById(id);
+	}
+
+	// Update an FAQAnswer
+	@PutMapping("api/faq-answers/{id}")
+	public FrequentlyAskedAnswer updateAnswer(
+			@PathVariable("id") Integer id,
+			@RequestBody FrequentlyAskedAnswer updatedAnswer) {
+		FrequentlyAskedAnswer findAnswer = repository.findFrequentlyAskedAnswerById(id);
+		findAnswer.setAnswer(updatedAnswer.getAnswer());
+		return repository.save(findAnswer);
+	}
+
+	// Delete an FAQAnswer
+	@DeleteMapping("api/faq-answers/{id}")
+	public void deleteAnswer(
+			@PathVariable("id") Integer id) {
+		repository.deleteById(id);
+	}
+
+	// Remove an FAQAnswer (does not delete answer)
+	@PutMapping("api/faq-answers/{id}/removeAnswer")
+	public FrequentlyAskedAnswer removeAnswer(
+			@PathVariable("id") Integer id) {
+		FrequentlyAskedAnswer findAnswer = repository.findFrequentlyAskedAnswerById(id);
+		findAnswer.deleteAnswer();
+		return repository.save(findAnswer);
 	}
 }
