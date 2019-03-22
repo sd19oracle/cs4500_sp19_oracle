@@ -62,8 +62,8 @@ public class FAQService {
 		@RequestBody FrequentlyAskedAnswer anAnswer,
 		@PathVariable("id") Integer id
 	) {
-		FrequentlyAskedQuestion findQuestion =
-			repository.findFrequentlyAskedQuestionById(id);
+		FrequentlyAskedQuestion findQuestion = repository.findById(id)
+				.orElseThrow(() -> new IllegalArgumentException("No such question"));
 		findQuestion.addFrequentlyAskedAnswer(anAnswer);
 		anAnswer.setFrequentlyAskedQuestion(findQuestion);
 		return findQuestion;
