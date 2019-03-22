@@ -20,13 +20,43 @@ import edu.neu.cs4500.repositories.FAQRepository;
 public class FAQAnswerService {
 	@Autowired
 	FAQAnswerRepository repository;
-	@GetMapping("/api/faq-answers")
+
+	// Find all FAQ Answer
+	@GetMapping("api/faq-answers")
 	public List<FrequentlyAskedAnswer> findAllFrequentlyAskedQuestions() {
 		return repository.findAllFrequentlyAskedAnswers();
 	}
-	@GetMapping("/api/faq-answers/{id}")
+
+	// Find single FAQ Answer by the ID
+	@GetMapping("api/faq-answers/{id}")
 	public FrequentlyAskedAnswer findFrequentlyAskedQuestionById(
 			@PathVariable("id") Integer id) {
 		return repository.findFrequentlyAskedAnswerById(id);
+	}
+
+	// Update an FAQAnswer
+	@PutMapping("api/faq-answers/{id}")
+	public FrequentlyAskedAnswer updateAnswer(
+			@PathVariable("id") Integer id,
+			@RequestBody FrequentlyAskedAnswer updatedAnswer) {
+		FrequentlyAskedAnswer findAnswer = FAQAnswerRepository.findFrequentlyAskedAnswerById(id);
+		findAnswer.setAnswer(updatedAnswer.getAnswer());
+		return FAQAnswerRepository.save(findAnswer);
+	}
+
+	// Delete an FAQAnswer
+	@DeleteMapping("api/faq-answers/{id}")
+	public void deleteAnswer(
+			@PathVariable("id") Integer id) {
+		FAQAnswerRepository.deleteById(id);
+	}
+
+	// Remove an FAQAnswer (does not delete answer)
+	@PutMapping("api/faq-answers/{id}/removeAnswer");
+	public FrequentlyAskedAnswer removeAnswer(
+			@PathVariable("id") Integer id) {
+		FrequentlyAskedAnswer findAnswer = FAQAnswerRepository.findFrequentlyAskedAnswerById(id);
+		findAnswer.deleteAnswer();
+		return FAQAnswerRepository.save(findAnswer);
 	}
 }
