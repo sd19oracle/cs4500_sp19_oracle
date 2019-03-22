@@ -9,15 +9,22 @@ public class DeliveryFee {
 	private float fee;
 	private Frequency frequency;
 	private boolean flat;
+	private ProgressiveRate progRate; // This can be null to indicate this fee is not progressive
 
-	public DeliveryFee(float fee, Frequency frequency, boolean flat) {
+	// when progressiveRate is 0, it is not a progressive fee 
+	public DeliveryFee(float fee, Frequency frequency, boolean flat, ProgressiveRate progressiveRate) {
 		this.fee = fee;
 		this.frequency = frequency;
 		this.flat = flat;
+		this.progRate = progressiveRate;
 	}
 
-	public float getFee() {
-		return fee;
+	public float getFee(int distance) {
+		float feeOut = fee;
+		if (progRate != null) {
+			feeOut = (distance > progRate.getThreshold()) ? fee * (float) Math.ceil((double)(distance - progRate.getThreshold()) / (double) progRate.getRate()) : 0.0f;
+		}
+		return feeOut;
 	}
 
 	public void setFee(float fee) {
@@ -38,5 +45,13 @@ public class DeliveryFee {
 
 	public void setFlat(boolean flat) {
 		this.flat = flat;
+	}
+	
+	public ProgressiveRate getPR() {
+		return this.progRate;
+	}
+	
+	public void setPR(ProgressiveRate pr) {
+		this.progRate = pr;
 	}
 }
