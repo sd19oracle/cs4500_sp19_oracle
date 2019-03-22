@@ -9,8 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+import edu.neu.cs4500.models.PageInfo;
 import edu.neu.cs4500.models.FrequentlyAskedAnswer;
+import edu.neu.cs4500.models.FrequentlyAskedQuestion;
 import edu.neu.cs4500.repositories.FAQAnswerRepository;
+import edu.neu.cs4500.repositories.FAQRepository;
 
 @RestController
 @CrossOrigin(origins="*")

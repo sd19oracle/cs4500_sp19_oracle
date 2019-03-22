@@ -8,13 +8,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import edu.neu.cs4500.models.PageInfo
-import edu.neu.cs4500.models.FrequentlyAskedAnswer.java
-import edu.neu.cs4500.models.FrequentlyAskedQuestion.java
-
-import edu.neu.cs4500.repositories.FAQRepository.java
-import edu.neu.cs4500.repositories.FAQAnswerRepository.java
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
