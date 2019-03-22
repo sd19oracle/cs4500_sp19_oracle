@@ -25,6 +25,14 @@ public class FrequentlyAskedAnswer {
     private User user;
     @Transient
     private String question;
+    public FrequentlyAskedAnswer() {
+
+    }
+    public FrequentlyAskedAnswer(FrequentlyAskedQuestion faq, User u,  String a) {
+        this.frequentlyAskedQuestion = faq;
+	this.user = u;
+        this.answer = a;
+    }
     public String getQuestion() {
         return frequentlyAskedQuestion.getQuestion();
     }
@@ -54,5 +62,8 @@ public class FrequentlyAskedAnswer {
     }
     public void setAnswer(String answer) {
         this.answer = answer;
+    }
+    public void deleteAnswer() {
+        this.answer = "";
     }
 }
