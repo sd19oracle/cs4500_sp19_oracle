@@ -52,7 +52,7 @@ public class FAQAnswerService {
 	}
 
 	// Remove an FAQAnswer (does not delete answer)
-	@PutMapping("api/faq-answers/{id}/removeAnswer");
+	@PutMapping("api/faq-answers/{id}/removeAnswer")
 	public FrequentlyAskedAnswer removeAnswer(
 			@PathVariable("id") Integer id) {
 		FrequentlyAskedAnswer findAnswer = FAQAnswerRepository.findFrequentlyAskedAnswerById(id);
