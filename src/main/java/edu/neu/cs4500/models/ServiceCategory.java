@@ -19,6 +19,8 @@ public class ServiceCategory {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
+  private Integer popularity;
+  private String icon;
   private String serviceCategoryName;
 
   @ManyToMany
@@ -28,6 +30,7 @@ public class ServiceCategory {
     joinColumns=@JoinColumn(name="CATEGORY_ID", referencedColumnName="ID"),
     inverseJoinColumns=@JoinColumn(name="SERVICE_ID", referencedColumnName="ID")
   )
+
   private List<Service> services;
 
   public Integer getId() {
@@ -52,5 +55,26 @@ public class ServiceCategory {
 
   public void setServices(List<Service> services) {
     this.services = services;
+  }
+
+  public ServiceCategory(Integer id, String serviceCategoryName) {
+    this.id = id;
+    this.serviceCategoryName = serviceCategoryName;
+  }
+
+  public Integer getPopularity() {
+    return popularity;
+  }
+
+  public void setPopularity(Integer popularity) {
+    this.popularity = popularity;
+  }
+
+  public String getIcon() {
+    return icon;
+  }
+
+  public void setIcon(String icon) {
+    this.icon = icon;
   }
 }
