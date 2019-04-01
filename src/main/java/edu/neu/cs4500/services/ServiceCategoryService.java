@@ -2,6 +2,7 @@ package edu.neu.cs4500.services;
 
 import java.util.List;
 
+import edu.neu.cs4500.models.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,31 +18,41 @@ import edu.neu.cs4500.repositories.ServiceCategoryRepository;
 @RestController
 public class ServiceCategoryService {
     @Autowired
-    ServiceCategoryRepository serviceRepository;
+    ServiceCategoryRepository serviceCategoryRepository;
+
     @GetMapping("/api/categories")
     public List<ServiceCategory> findAllServiceCategories() {
-        return serviceRepository.findAllServiceCategories();
+        return serviceCategoryRepository.findAllServiceCategories();
     }
+
     @GetMapping("/api/categories/{serviceCategoryId}")
     public ServiceCategory findServiceCategoryById(
             @PathVariable("serviceCategoryId") Integer id) {
-        return serviceRepository.findServiceCategoryById(id);
+        return serviceCategoryRepository.findServiceCategoryById(id);
     }
+
     @PostMapping("/api/categories")
     public ServiceCategory createServiceCategory(@RequestBody ServiceCategory serviceCategory) {
-        return serviceRepository.save(serviceCategory);
+        return serviceCategoryRepository.save(serviceCategory);
     }
+
     @PutMapping("/api/categories/{serviceCategoryId}")
     public ServiceCategory updateServiceCategory(
             @PathVariable("serviceCategoryId") Integer id,
             @RequestBody ServiceCategory serviceUpdates) {
-        ServiceCategory serviceCategory = serviceRepository.findServiceCategoryById(id);
+        ServiceCategory serviceCategory = serviceCategoryRepository.findServiceCategoryById(id);
         serviceCategory.setServiceCategoryName(serviceUpdates.getServiceCategoryName());
-        return serviceRepository.save(serviceCategory);
+        return serviceCategoryRepository.save(serviceCategory);
     }
+
     @DeleteMapping("/api/categories/{serviceCategoryId}")
     public void deleteServiceCategory(
             @PathVariable("serviceCategoryId") Integer id) {
-        serviceRepository.deleteById(id);
+        serviceCategoryRepository.deleteById(id);
+    }
+
+    @GetMapping("/api/categories/{serviceCategoryId}/list")
+    public List<Service> findAllServiceByCategoryId(@PathVariable("serviceCategoryId") Integer serviceCategoryId) {
+        return serviceCategoryRepository.findServiceCategoryById(serviceCategoryId).getServices();
     }
 }
