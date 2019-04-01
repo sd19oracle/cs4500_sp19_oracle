@@ -62,6 +62,9 @@ public class ServiceCategory {
     this.serviceCategoryName = serviceCategoryName;
   }
 
+  public ServiceCategory() {
+  }
+
   public Integer getPopularity() {
     return popularity;
   }
