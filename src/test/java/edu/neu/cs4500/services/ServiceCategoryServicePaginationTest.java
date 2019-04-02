@@ -84,17 +84,12 @@ public class ServiceCategoryServicePaginationTest {
         Page<ServiceCategory> pagesContent = new PageImpl<>(categories, pageable, categories.size());
         when(pagedServiceCategoryRepository.findAll(pageable)).thenReturn(pagesContent);
 
-        this.mockmvc.perform(get("/api/categories/paged")
-                .param("pageNum", "0")
-                .param("ipp", "5"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.content", hasSize(6)))
-                .andExpect(jsonPath("$.content[0].id", is(1)))
+        this.mockmvc.perform(get("/api/categories/paged").param("pageNum", "0").param("ipp", "5"))
+                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.content", hasSize(6))).andExpect(jsonPath("$.content[0].id", is(1)))
                 .andExpect(jsonPath("$.content[5].id", is(6)))
                 .andExpect(jsonPath("$.content.[*].id", containsInAnyOrder(1, 2, 3, 4, 5, 6)))
-                .andExpect(jsonPath("$.totalElements", is(6)))
-                .andExpect(jsonPath("$.totalPages", is(2)));
+                .andExpect(jsonPath("$.totalElements", is(6))).andExpect(jsonPath("$.totalPages", is(2)));
         verify(pagedServiceCategoryRepository, times(1)).findAll(pageable);
         verifyNoMoreInteractions(pagedServiceCategoryRepository);
     }
@@ -106,40 +101,62 @@ public class ServiceCategoryServicePaginationTest {
         Page<ServiceCategory> pagesContent = new PageImpl<>(categories, pageable, categories.size());
         when(pagedServiceCategoryRepository.findAll(pageable)).thenReturn((pagesContent));
 
-        this.mockmvc.perform(get("/api/categories/paged")
-                .param("pageNum", "0")
-                .param("ipp", "5"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.content", hasSize(0)))
-                .andExpect(jsonPath("$.totalElements", is(0)))
+        this.mockmvc.perform(get("/api/categories/paged").param("pageNum", "0").param("ipp", "5"))
+                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.content", hasSize(0))).andExpect(jsonPath("$.totalElements", is(0)))
                 .andExpect(jsonPath("$.totalPages", is(0)));
         verify(pagedServiceCategoryRepository, times(1)).findAll(pageable);
         verifyNoMoreInteractions(pagedServiceCategoryRepository);
     }
 
     @Test
-    public void changePage() throws Exception {
+    public void getSecondPage() throws Exception {
         List<ServiceCategory> categories = Arrays.asList(c1, c2, c3, c4);
         Pageable pageable = PageRequest.of(1, 2);
         Page<ServiceCategory> pagesContent = new PageImpl<>(categories, pageable, categories.size());
         when(pagedServiceCategoryRepository.findAll(pageable)).thenReturn(pagesContent);
 
-        this.mockmvc.perform(get("/api/categories/paged")
-                .param("pageNum", "1")
-                .param("ipp", "2"))
-                .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-                .andExpect(jsonPath("$.content", hasSize(4)))
-                .andExpect(jsonPath("$.content[0].id", is(1)))
+        this.mockmvc.perform(get("/api/categories/paged").param("pageNum", "1").param("ipp", "2"))
+                .andExpect(status().isOk()).andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.content", hasSize(4))).andExpect(jsonPath("$.content[0].id", is(1)))
                 .andExpect(jsonPath("$.content[1].id", is(2)))
-                .andExpect(jsonPath("$.content[*].id", containsInAnyOrder(1,2,3,4)))
-                .andExpect(jsonPath("$.totalElements", is(4)))
-                .andExpect(jsonPath("$.totalPages", is(2)));
+                .andExpect(jsonPath("$.content[*].id", containsInAnyOrder(1, 2, 3, 4)))
+                .andExpect(jsonPath("$.totalElements", is(4))).andExpect(jsonPath("$.totalPages", is(2)));
 
         verify(pagedServiceCategoryRepository, times(1)).findAll(pageable);
-        verifyNoMoreInteractions((pagedServiceCategoryRepository));
+        verifyNoMoreInteractions(pagedServiceCategoryRepository);
+    }
 
+    @Test
+    public void changePage() throws Exception {
+        List<ServiceCategory> categories = Arrays.asList(c1, c2, c3, c4, c5);
+        Pageable pageable0 = PageRequest.of(0, 2);
+        Pageable pageable1 = PageRequest.of(0, 4);
+        Page<ServiceCategory> page0 = new PageImpl<>(categories, pageable0, categories.size());
+        Page<ServiceCategory> page1 = new PageImpl<>(categories, pageable1, categories.size());
+        when(pagedServiceCategoryRepository.findAll(pageable0)).thenReturn(page0);
+        when(pagedServiceCategoryRepository.findAll(pageable1)).thenReturn(page1);
+
+        this.mockmvc.perform(get("/api/categories/paged").param("paneNum", "0").param("ipp", "2"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.content", hasSize(5)))
+                .andExpect(jsonPath("$.content[*].id", containsInAnyOrder(1, 2, 3, 4, 5)))
+                .andExpect(jsonPath("$.totalElements", is(5)))
+                .andExpect(jsonPath("$.totalPages", is(3)));
+
+        
+        this.mockmvc.perform(get("/api/categories/paged").param("paneNum", "0").param("ipp", "4"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+                .andExpect(jsonPath("$.content", hasSize(5)))
+                .andExpect(jsonPath("$.content[*].id", containsInAnyOrder(1, 2, 3, 4, 5)))
+                .andExpect(jsonPath("$.totalElements", is(5)))
+                .andExpect(jsonPath("$.totalPages", is(2)));
+
+        verify(pagedServiceCategoryRepository, times(1)).findAll(pageable0);
+        verify(pagedServiceCategoryRepository, times(1)).findAll(pageable1);
+        verifyNoMoreInteractions(pagedServiceCategoryRepository);
 
     }
 
