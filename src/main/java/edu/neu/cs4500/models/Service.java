@@ -30,6 +30,7 @@ public class Service {
 	private List<User> providers;
 
 	@ManyToMany(mappedBy = "services")
+	@JsonIgnore
 	private List<ServiceCategory> serviceCategories;
 
 	public Integer getId() {
