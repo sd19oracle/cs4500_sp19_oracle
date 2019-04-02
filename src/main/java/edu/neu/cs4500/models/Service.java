@@ -18,6 +18,7 @@ public class Service {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String serviceName;
+	private Integer popularity;
 	@OneToMany(mappedBy="service")
 	private List<ServiceSpecificQuestion> questions;
 	@ManyToMany
@@ -44,6 +45,14 @@ public class Service {
 	}
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+
+	public Integer getPopularity() {
+		return popularity;
+	}
+
+	public void setPopularity(Integer popularity) {
+		this.popularity = popularity;
 	}
 
 	public List<ServiceSpecificQuestion> getQuestions() {
