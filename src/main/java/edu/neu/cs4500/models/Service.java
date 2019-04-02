@@ -12,76 +12,88 @@ import java.util.List;
 
 
 @Entity
-@Table(name="services")
+@Table(name = "services")
 public class Service {
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer id;
-	private String serviceName;
-	private Integer popularity;
-	@OneToMany(mappedBy="service")
-	private List<ServiceSpecificQuestion> questions;
-	@ManyToMany
-	@JsonIgnore
-	@JoinTable(
-		name="PROVIDERS_SERVICES",
-		joinColumns=@JoinColumn(name="SERVICE_ID", referencedColumnName="ID"),
-		inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
-	)
-	private List<User> providers;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
+  private String serviceName;
+  private Integer popularity;
+  private String thumbnail;
+  @OneToMany(mappedBy = "service")
+  private List<ServiceSpecificQuestion> questions;
+  @ManyToMany
+  @JsonIgnore
+  @JoinTable(
+          name = "PROVIDERS_SERVICES",
+          joinColumns = @JoinColumn(name = "SERVICE_ID", referencedColumnName = "ID"),
+          inverseJoinColumns = @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
+  )
+  private List<User> providers;
 
-	@ManyToMany(mappedBy = "services")
-	@JsonIgnore
-	private List<ServiceCategory> serviceCategories;
+  @ManyToMany(mappedBy = "services")
+  @JsonIgnore
+  private List<ServiceCategory> serviceCategories;
 
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	public String getServiceName() {
-		return serviceName;
-	}
-	public void setServiceName(String serviceName) {
-		this.serviceName = serviceName;
-	}
+  public Integer getId() {
+    return id;
+  }
 
-	public Integer getPopularity() {
-		return popularity;
-	}
+  public void setId(Integer id) {
+    this.id = id;
+  }
 
-	public void setPopularity(Integer popularity) {
-		this.popularity = popularity;
-	}
+  public String getServiceName() {
+    return serviceName;
+  }
 
-	public List<ServiceSpecificQuestion> getQuestions() {
-		return questions;
-	}
+  public void setServiceName(String serviceName) {
+    this.serviceName = serviceName;
+  }
 
-	public void setQuestions(List<ServiceSpecificQuestion> questions) {
-		this.questions = questions;
-	}
+  public Integer getPopularity() {
+    return popularity;
+  }
 
-	public void addQuestion(ServiceSpecificQuestion oneQuestion) {
-		if (!questions.contains(oneQuestion)) {
-			questions.add(oneQuestion);
-		}
-	}
-	
-	public List<User> getProviders() {
-		return providers;
-	}
+  public void setPopularity(Integer popularity) {
+    this.popularity = popularity;
+  }
 
-	public void setProviders(List<User> providers) {
-		this.providers = providers;
-	}
+  public String getThumbnail() {
+    return thumbnail;
+  }
 
-	public List<ServiceCategory> getServiceCategories() {
-		return serviceCategories;
-	}
+  public void setThumbnail(String thumbnail) {
+    this.thumbnail = thumbnail;
+  }
 
-	public void setServiceCategories(List<ServiceCategory> serviceCategories) {
-		this.serviceCategories = serviceCategories;
-	}
+  public List<ServiceSpecificQuestion> getQuestions() {
+    return questions;
+  }
+
+  public void setQuestions(List<ServiceSpecificQuestion> questions) {
+    this.questions = questions;
+  }
+
+  public void addQuestion(ServiceSpecificQuestion oneQuestion) {
+    if (!questions.contains(oneQuestion)) {
+      questions.add(oneQuestion);
+    }
+  }
+
+  public List<User> getProviders() {
+    return providers;
+  }
+
+  public void setProviders(List<User> providers) {
+    this.providers = providers;
+  }
+
+  public List<ServiceCategory> getServiceCategories() {
+    return serviceCategories;
+  }
+
+  public void setServiceCategories(List<ServiceCategory> serviceCategories) {
+    this.serviceCategories = serviceCategories;
+  }
 }
