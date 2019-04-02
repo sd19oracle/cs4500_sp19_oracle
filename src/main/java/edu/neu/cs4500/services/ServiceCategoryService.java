@@ -3,14 +3,12 @@ package edu.neu.cs4500.services;
 import java.util.List;
 
 import edu.neu.cs4500.models.Service;
+import edu.neu.cs4500.repositories.PagedServiceCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import edu.neu.cs4500.models.ServiceCategory;
 import edu.neu.cs4500.repositories.ServiceCategoryRepository;
@@ -19,6 +17,9 @@ import edu.neu.cs4500.repositories.ServiceCategoryRepository;
 public class ServiceCategoryService {
     @Autowired
     ServiceCategoryRepository serviceCategoryRepository;
+
+    @Autowired
+    PagedServiceCategoryRepository pagedServiceCategoryRepository;
 
     @GetMapping("/api/categories")
     public List<ServiceCategory> findAllServiceCategories() {
@@ -54,5 +55,19 @@ public class ServiceCategoryService {
     @GetMapping("/api/categories/{serviceCategoryId}/list")
     public List<Service> findAllServiceByCategoryId(@PathVariable("serviceCategoryId") Integer serviceCategoryId) {
         return serviceCategoryRepository.findServiceCategoryById(serviceCategoryId).getServices();
+    }
+
+    @GetMapping("/api/categories/paged")
+    public Page<ServiceCategory> findAllServiceCategoriesPaged(
+            @RequestParam(name="pageNum", required = false) Integer pageNum,
+            @RequestParam(name="ipp", required = false) Integer itemsPerPage) {
+     if (pageNum == null) {
+         pageNum = 0;
+     }
+     if (itemsPerPage == null) {
+         itemsPerPage = 10;
+     }
+     Pageable p = PageRequest.of(pageNum, itemsPerPage);
+     return pagedServiceCategoryRepository.findAll(p);
     }
 }
