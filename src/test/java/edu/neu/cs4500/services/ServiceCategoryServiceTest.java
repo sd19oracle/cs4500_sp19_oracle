@@ -3,6 +3,7 @@ package edu.neu.cs4500.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.neu.cs4500.models.Service;
 import edu.neu.cs4500.models.ServiceCategory;
+import edu.neu.cs4500.repositories.PagedServiceCategoryRepository;
 import edu.neu.cs4500.repositories.ServiceCategoryRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +38,9 @@ public class ServiceCategoryServiceTest {
 
     @MockBean
     private ServiceCategoryRepository serviceCategoryRepository;
+
+    @MockBean
+    private PagedServiceCategoryRepository pagedServiceCategoryRepository;
 
     ServiceCategory c1 = new ServiceCategory();
     ServiceCategory c2 = new ServiceCategory();
