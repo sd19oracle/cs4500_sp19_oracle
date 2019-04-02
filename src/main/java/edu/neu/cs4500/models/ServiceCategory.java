@@ -24,13 +24,11 @@ public class ServiceCategory {
   private String serviceCategoryName;
 
   @ManyToMany
-  @JsonIgnore
   @JoinTable(
     name="CATEGORIES_SERVICES",
     joinColumns=@JoinColumn(name="CATEGORY_ID", referencedColumnName="ID"),
     inverseJoinColumns=@JoinColumn(name="SERVICE_ID", referencedColumnName="ID")
   )
-
   private List<Service> services;
 
   public Integer getId() {
