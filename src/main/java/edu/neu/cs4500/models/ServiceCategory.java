@@ -25,11 +25,19 @@ public class ServiceCategory {
 
   @ManyToMany
   @JoinTable(
-    name="CATEGORIES_SERVICES",
-    joinColumns=@JoinColumn(name="CATEGORY_ID", referencedColumnName="ID"),
-    inverseJoinColumns=@JoinColumn(name="SERVICE_ID", referencedColumnName="ID")
+          name = "CATEGORIES_SERVICES",
+          joinColumns = @JoinColumn(name = "CATEGORY_ID", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(name = "SERVICE_ID", referencedColumnName = "id")
   )
   private List<Service> services;
+
+  public ServiceCategory() {
+  }
+
+  public ServiceCategory(Integer id, String serviceCategoryName) {
+    this.id = id;
+    this.serviceCategoryName = serviceCategoryName;
+  }
 
   public Integer getId() {
     return id;
@@ -53,14 +61,6 @@ public class ServiceCategory {
 
   public void setServices(List<Service> services) {
     this.services = services;
-  }
-
-  public ServiceCategory(Integer id, String serviceCategoryName) {
-    this.id = id;
-    this.serviceCategoryName = serviceCategoryName;
-  }
-
-  public ServiceCategory() {
   }
 
   public Integer getPopularity() {
