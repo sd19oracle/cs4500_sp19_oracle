@@ -44,4 +44,10 @@ public class ServiceService {
 			@PathVariable("serviceId") Integer id) {
 		serviceRepository.deleteById(id);
 	}
+	@GetMapping("api/services/category/{categoryId}/limit/{size}")
+	public List<Service> findPopularServicesByCategory(
+					@PathVariable("categoryId") Integer categoryId,
+					@PathVariable("size") Integer size) {
+		return serviceRepository.findPopularServicesByCategory(categoryId, size);
+	}
 }
