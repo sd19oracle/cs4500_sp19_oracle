@@ -1,9 +1,10 @@
 package edu.neu.cs4500.services;
 
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
+import java.util.function.Function;
 
-import edu.neu.cs4500.repositories.PagedFAQRepository;
+import edu.neu.cs4500.repositories.FAQRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.data.domain.Page;
@@ -14,22 +15,27 @@ import org.springframework.web.bind.annotation.*;
 
 import edu.neu.cs4500.models.FrequentlyAskedQuestion;
 import edu.neu.cs4500.models.FrequentlyAskedAnswer;
-import edu.neu.cs4500.repositories.FAQRepository;
-import edu.neu.cs4500.repositories.FAQAnswerRepository;
 
 @RestController
 @CrossOrigin(origins="*")
 public class FAQService {
 
 	@Autowired
-	PagedFAQRepository pagedRepository;
-
-	@Autowired
 	FAQRepository repository;
 
 	@GetMapping("/api/faqs")
-	public List<FrequentlyAskedQuestion> findAllFrequentlyAskedQuestions() {
-		return (List<FrequentlyAskedQuestion>) repository.findAll();
+	public Page<FrequentlyAskedQuestion> findAllFrequentlyAskedQuestions(
+			@RequestParam(name="page", defaultValue = "0", required=false) Integer page,
+			@RequestParam(name="count", required=false) Integer count,
+			@RequestParam(name="title", defaultValue = "", required=false) String title,
+			@RequestParam(name="question", defaultValue = "", required=false) String question
+	) {
+
+		question = "%" + question + "%";
+		title = "%" + title + "%";
+		Pageable p = Optional.ofNullable(count).map(c -> (Pageable) PageRequest.of(page, c)).orElse(Pageable.unpaged());
+		return repository.filterFAQsPaged(title, question, p);
+
 	}
 
 	@GetMapping("/api/faqs/{id}")
@@ -40,19 +46,16 @@ public class FAQService {
 
 	@GetMapping("/api/faqs/paged")
 	public Page<FrequentlyAskedQuestion> findAllFAQsPaged(
-			@RequestParam(name="page", required=false) Integer page,
+			@RequestParam(name="page", defaultValue = "0", required=false) Integer page,
 			@RequestParam(name="count", required=false) Integer count
 	) {
 
-		if(page == null) {
-			page = 0;
-		}
 		if(count == null) {
 			count = 10;
 		}
-		
+
 		Pageable p = PageRequest.of(page, count);
-		return pagedRepository.findAll(p);
+		return repository.findAll(p);
 	}
 
 	@GetMapping("/api/faqs/filtered")
@@ -62,12 +65,12 @@ public class FAQService {
 	) {
 		if (title == null) title = "";
 		if (question == null) question = "";
-		
+
 		question = "%" + question + "%";
 		title = "%" + title + "%";
-		return pagedRepository.filterFAQs(title, question);
+		return repository.filterFAQs(title, question);
 	}
-	
+
 
 	// Adds an answer to a specific question
         //   NOTE: Do not add ability to add answer without question
