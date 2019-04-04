@@ -1,6 +1,7 @@
 package edu.neu.cs4500.services;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 import edu.neu.cs4500.repositories.PagedFAQRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,10 +50,24 @@ public class FAQService {
 		if(count == null) {
 			count = 10;
 		}
-
+		
 		Pageable p = PageRequest.of(page, count);
 		return pagedRepository.findAll(p);
 	}
+
+	@GetMapping("/api/faqs/filtered")
+	public List<FrequentlyAskedQuestion> filterFAQs(
+			@RequestParam(name="title", required=false) String title,
+			@RequestParam(name="question", required=false) String question
+	) {
+		if (title == null) title = "";
+		if (question == null) question = "";
+		
+		question = "%" + question + "%";
+		title = "%" + title + "%";
+		return pagedRepository.filterFAQs(title, question);
+	}
+	
 
 	// Adds an answer to a specific question
         //   NOTE: Do not add ability to add answer without question
