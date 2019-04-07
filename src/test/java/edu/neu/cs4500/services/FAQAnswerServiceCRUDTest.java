@@ -135,7 +135,7 @@ public class FAQAnswerServiceCRUDTest {
         this.mockmvc.perform(
                 put("/api/faq-answers/21")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"serviceCategoryName": \"Fancy Plumbing\", \"popularity\": 200, \"icon\": \"1a\"}"))
+                .content("{\"serviceCategoryName\": \"Fancy Plumbing\", \"popularity\": 200, \"icon\": \"1a\"}"))
                 .andExpect(status().isOk());
     }
 
