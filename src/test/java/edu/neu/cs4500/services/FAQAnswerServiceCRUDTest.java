@@ -71,7 +71,7 @@ public class FAQAnswerServiceCRUDTest {
 	q1.setQuestion("How many employees do you have?");
 	q1.setTitle("Number of Employees");
 	q2.setQuestion("How long have you been in business?");
-	q2.setrrTitle("Length of Business");
+	q2.setTitle("Length of Business");
 	q3.setQuestion("How many clients do you currently have?");
 	q3.setTitle("Number of Clients");
 	q4.setQuestion("Do you handle X situations?");
@@ -100,7 +100,7 @@ public class FAQAnswerServiceCRUDTest {
     @Test
     public void testFindAllFAQAnswers() throws Exception {
         List<FrequentlyAskedAnswer> answers = Arrays.asList(a1, a2, a3, a4);
-        when(faqAnswerRepository.findAllFrequentlyAskedAnswer())
+        when(faqAnswerRepository.findAllFrequentlyAskedAnswers())
                 .thenReturn(answers);
         this.mockmvc.perform(get("/api/faq-answers"))
                 .andDo(print())
@@ -114,7 +114,7 @@ public class FAQAnswerServiceCRUDTest {
     @Test
     public void testFindFAQAnswerById() throws Exception {
         List<FrequentlyAskedAnswer> answers = Arrays.asList(a1, a2, a3, a4);
-        when(faqAnswerRepository.findFrequentlyAskedQuestionById(21))
+        when(faqAnswerRepository.findFrequentlyAskedAnswerById(21))
                 .thenReturn(a1);
 
         this.mockmvc.perform(get("/api/faq-answers/21"))
@@ -130,12 +130,12 @@ public class FAQAnswerServiceCRUDTest {
         a1_update.setId(21);
         a1_update.setAnswer("15 Employees.");
         when(faqAnswerRepository.save(a1_update)).thenReturn(a1_update);
-        when(faqAnswerRepository.findFrequentlyAskedQuestionById(21)).thenReturn(a1);
+        when(faqAnswerRepository.findFrequentlyAskedAnswerById(21)).thenReturn(a1);
 
         this.mockmvc.perform(
                 put("/api/faq-answers/21")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\"serviceCategoryName\": \"Fancy Plumbing\", \"popularity\": 200, \"icon\": \"1a\"}"))
+                .content("{\"serviceCategoryName": \"Fancy Plumbing\", \"popularity\": 200, \"icon\": \"1a\"}"))
                 .andExpect(status().isOk());
     }
 
@@ -144,11 +144,11 @@ public class FAQAnswerServiceCRUDTest {
     public void testRemoveFrequentlyAskedAnswer() throws Exception {
 	a1.deleteAnswer();
 	when(faqAnswerRepository.save(a1)).thenReturn(a1);
-	when(faqAnswerRepository.findFrequentlyAskedQuestionById(21)).thenReturn(a1);
+	when(faqAnswerRepository.findFrequentlyAskedAnswerById(21)).thenReturn(a1);
 
         this.mockmvc.perform(put("/api/categories/21/removeAnswer")
 		.contentType(MediaType.APPLICATION_JSON)
-		.content())
+                .content("{\"serviceCategoryName": \"Fancy Plumbing\", \"popularity\": 200, \"icon\": \"1a\"}"))
                 .andExpect(status().isOk());
     }
 
