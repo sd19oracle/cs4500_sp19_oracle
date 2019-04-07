@@ -142,14 +142,9 @@ public class FAQAnswerServiceCRUDTest {
 
     @Test
     public void testRemoveFrequentlyAskedAnswer() throws Exception {
-	a1.deleteAnswer();
-	when(faqAnswerRepository.save(a1)).thenReturn(a1);
-	when(faqAnswerRepository.findFrequentlyAskedAnswerById(21)).thenReturn(a1);
-
-        this.mockmvc.perform(put("/api/categories/21/removeAnswer")
-		.contentType(MediaType.APPLICATION_JSON)
-                .content("{\"serviceCategoryName": \"Fancy Plumbing\", \"popularity\": 200, \"icon\": \"1a\"}"))
-                .andExpect(status().isOk());
+	doNothing().when(faqAnswerRepository).deleteById(21);
+	this.mockmvc.perform(delete("/api/faq-answers/21"))
+		.andExpect(status().isOk());
     }
 
 }
