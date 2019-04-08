@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import edu.neu.cs4500.repositories.FAQAnswerRepository;
 import edu.neu.cs4500.repositories.FAQRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,6 +23,9 @@ public class FAQService {
 
 	@Autowired
 	FAQRepository repository;
+
+	@Autowired
+	FAQAnswerRepository answerRepository;
 
 	@GetMapping("/api/faqs")
 	public Page<FrequentlyAskedQuestion> findAllFrequentlyAskedQuestions(
@@ -76,7 +80,7 @@ public class FAQService {
         //   NOTE: Do not add ability to add answer without question
         //         Answer can only be added when their is a question
         @PostMapping("api/faqs/{id}/addAnswer")
-        public FrequentlyAskedQuestion addAnswertoQuestion(
+        public FrequentlyAskedAnswer addAnswertoQuestion(
 		@RequestBody FrequentlyAskedAnswer anAnswer,
 		@PathVariable("id") Integer id
 	) {
@@ -84,6 +88,6 @@ public class FAQService {
 				.orElseThrow(() -> new IllegalArgumentException("No such question"));
 		findQuestion.addFrequentlyAskedAnswer(anAnswer);
 		anAnswer.setFrequentlyAskedQuestion(findQuestion);
-		return findQuestion;
+		return this.answerRepository.save(anAnswer);
 	}
 }
