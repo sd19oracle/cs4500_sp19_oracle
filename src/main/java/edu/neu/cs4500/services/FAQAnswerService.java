@@ -1,23 +1,11 @@
 package edu.neu.cs4500.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import edu.neu.cs4500.models.PageInfo;
 import edu.neu.cs4500.models.FrequentlyAskedAnswer;
-import edu.neu.cs4500.models.FrequentlyAskedQuestion;
 import edu.neu.cs4500.repositories.FAQAnswerRepository;
-import edu.neu.cs4500.repositories.FAQRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin(origins="*")
@@ -53,14 +41,5 @@ public class FAQAnswerService {
 	public void deleteAnswer(
 			@PathVariable("id") Integer id) {
 		repository.deleteById(id);
-	}
-
-	// Remove an FAQAnswer (does not delete answer)
-	@PutMapping("api/faq-answers/{id}/removeAnswer")
-	public FrequentlyAskedAnswer removeAnswer(
-			@PathVariable("id") Integer id) {
-		FrequentlyAskedAnswer findAnswer = repository.findFrequentlyAskedAnswerById(id);
-		findAnswer.deleteAnswer();
-		return repository.save(findAnswer);
 	}
 }
