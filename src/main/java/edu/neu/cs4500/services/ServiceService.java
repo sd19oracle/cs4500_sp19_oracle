@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.neu.cs4500.models.Service;
 import edu.neu.cs4500.repositories.ServiceRepository;
@@ -26,7 +27,7 @@ public class ServiceService {
 
 	// Returns all services in alphabetical order
 	@GetMapping("/api/services/alphabetically")
-	public List<Service> findAllService() {
+	public List<Service> findAllServicesAlphabetically() {
 		return serviceRepository.findAllServicesAlphabetically();
 	}
 

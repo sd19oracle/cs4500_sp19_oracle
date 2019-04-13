@@ -15,7 +15,7 @@ import edu.neu.cs4500.repositories.ServiceCategoryRepository;
 
 @RestController
 public class ServiceCategoryService {
-    @Autowire
+    @Autowired
     ServiceCategoryRepository serviceCategoryRepository;
 
     @Autowired
@@ -29,7 +29,7 @@ public class ServiceCategoryService {
 
     // Returns all service categories alphabetically
     @GetMapping("/api/categories/alphabetically")
-    public List<ServiceCategory> findAllServiceCategories() {
+    public List<ServiceCategory> findAllServiceCategoriesAlphabetically() {
 	    return serviceCategoryRepository.findAllServiceCategoriesAlphabetically();
     }
 
