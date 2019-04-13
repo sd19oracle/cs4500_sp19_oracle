@@ -21,9 +21,16 @@ public class ServiceCategoryService {
     @Autowired
     PagedServiceCategoryRepository pagedServiceCategoryRepository;
 
+    // Returns all service categories by popularity, descending
     @GetMapping("/api/categories")
     public List<ServiceCategory> findAllServiceCategories() {
         return serviceCategoryRepository.findAllServiceCategories();
+    }
+
+    // Returns all service categories alphabetically
+    @GetMapping("/api/categories/alphabetically")
+    public List<ServiceCategory> findAllServiceCategories() {
+	    return serviceCategoryRepository.findAllServiceCategoriesAlphabetically();
     }
 
     @GetMapping("/api/categories/{serviceCategoryId}")

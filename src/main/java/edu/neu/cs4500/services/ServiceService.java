@@ -18,9 +18,15 @@ import edu.neu.cs4500.repositories.ServiceRepository;
 public class ServiceService {
 	@Autowired
 	ServiceRepository serviceRepository;
+	// Returns all services in list order
 	@GetMapping("/api/services")
 	public List<Service> findAllService() {
 		return serviceRepository.findAllServices();
+	}
+	// Returns all services in alphabetical order
+	@GetMapping("/api/services/alphabetically")
+	public List<Service> findAllService() {
+		return serviceRepository.findAllServicesAlphabetically();
 	}
 	@GetMapping("/api/services/{serviceId}")
 	public Service findServiceById(
