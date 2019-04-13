@@ -28,4 +28,7 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
 
   @Query(value = "SELECT service FROM Service service ORDER BY service")
   public List<Service> findAllServicesAlphabetically();
+
+  @Query(value = "SELECT service FROM Service service WHERE service.serviceName LIKE :serviceName")
+  public List<Service> filterServices(@Param("serviceName") String serviceName);
 }
