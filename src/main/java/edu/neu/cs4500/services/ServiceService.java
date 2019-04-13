@@ -23,20 +23,24 @@ public class ServiceService {
 	public List<Service> findAllService() {
 		return serviceRepository.findAllServices();
 	}
+
 	// Returns all services in alphabetical order
 	@GetMapping("/api/services/alphabetically")
 	public List<Service> findAllService() {
 		return serviceRepository.findAllServicesAlphabetically();
 	}
+
 	@GetMapping("/api/services/{serviceId}")
 	public Service findServiceById(
 			@PathVariable("serviceId") Integer id) {
 		return serviceRepository.findServiceById(id);
 	}
+
 	@PostMapping("/api/services")
 	public Service createService(@RequestBody Service service) {
 		return serviceRepository.save(service);
 	}
+
 	@PutMapping("/api/services/{serviceId}")
 	public Service updateService(
 			@PathVariable("serviceId") Integer id,
@@ -45,15 +49,24 @@ public class ServiceService {
 		service.setServiceName(serviceUpdates.getServiceName());
 		return serviceRepository.save(service);
 	}
+
 	@DeleteMapping("/api/services/{serviceId}")
 	public void deleteService(
 			@PathVariable("serviceId") Integer id) {
 		serviceRepository.deleteById(id);
 	}
+
 	@GetMapping("api/services/category/{categoryId}/limit/{size}")
 	public List<Service> findPopularServicesByCategory(
 					@PathVariable("categoryId") Integer categoryId,
 					@PathVariable("size") Integer size) {
 		return serviceRepository.findPopularServicesByCategory(categoryId, size);
+	}
+
+	@GetMapping("api/services/filtered")
+	public List<Service> filterServices(@RequestParam(name="serviceName", required =false) String serviceName) {
+		if (serviceName == null) serviceName = "";
+		serviceName = "%" + serviceName + "%";
+		return serviceRepository.filterServices(serviceName);
 	}
 }
