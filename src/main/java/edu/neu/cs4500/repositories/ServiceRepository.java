@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import edu.neu.cs4500.models.Service;
 
-public interface ServiceRepository extends CrudRepository<Service, Integer> {
+public interface ServiceRepository extends JpaRepository<Service, Integer> {
   @Query(value = "SELECT service FROM Service service")
   public List<Service> findAllServices();
 
@@ -25,4 +25,7 @@ public interface ServiceRepository extends CrudRepository<Service, Integer> {
                                                              Integer categoryId,
                                                      @Param("size")
                                                              Integer size);
+
+  @Query(value = "SELECT service FROM Service service ORDER BY service")
+  public List<Service> findAllServicesAlphabetically();
 }
