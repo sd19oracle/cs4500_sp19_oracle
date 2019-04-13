@@ -15,7 +15,7 @@ import edu.neu.cs4500.repositories.ServiceCategoryRepository;
 
 @RestController
 public class ServiceCategoryService {
-    @Autowired
+    @Autowire
     ServiceCategoryRepository serviceCategoryRepository;
 
     @Autowired
@@ -81,7 +81,7 @@ public class ServiceCategoryService {
     @GetMapping("/api/categories/filtered")
     public List<ServiceCategory> filterServiceCategories(
 	    @RequestParam(name="serviceCategoryName", required=false) String serviceCategoryName) {
-        if (serviceCategoryName == null) serviceCategoryName == "";
+        if (serviceCategoryName == null) serviceCategoryName = "";
 	serviceCategoryName = "%" + serviceCategoryName + "%";
 	return serviceCategoryRepository.filterServiceCategories(serviceCategoryName);	
     }
