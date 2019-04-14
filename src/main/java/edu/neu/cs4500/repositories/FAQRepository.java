@@ -16,7 +16,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface FAQRepository extends JpaRepository<FrequentlyAskedQuestion, Integer> {
 	@Query("SELECT faq FROM FrequentlyAskedQuestion faq WHERE faq.title LIKE :title AND faq.question LIKE :question")
-    public List<FrequentlyAskedQuestion> filterFAQs(
+        public List<FrequentlyAskedQuestion> filterFAQs(
             @Param("title") String title,
             @Param("question") String question);
 
