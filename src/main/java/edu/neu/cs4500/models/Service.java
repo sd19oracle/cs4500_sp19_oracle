@@ -18,6 +18,7 @@ public class Service {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String serviceName;
+	private String pictureURL;
 	@OneToMany(mappedBy="service")
 	private List<ServiceSpecificQuestion> questions;
 	@ManyToMany
@@ -38,11 +39,19 @@ public class Service {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+	
 	public String getServiceName() {
 		return serviceName;
 	}
 	public void setServiceName(String serviceName) {
 		this.serviceName = serviceName;
+	}
+	
+	public String getPictureURL() {
+		return this.pictureURL;
+	}
+	public void setPictureURL(String pictureURL) {
+		this.pictureURL = pictureURL;
 	}
 
 	public List<ServiceSpecificQuestion> getQuestions() {
