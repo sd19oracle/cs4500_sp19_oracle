@@ -18,38 +18,44 @@ import edu.neu.cs4500.repositories.ServiceRepository;
 @RestController
 @CrossOrigin(origins = "*")
 public class ServiceService {
-	@Autowired
-	ServiceRepository serviceRepository;
-	@GetMapping("/api/services")
-	public List<Service> findAllService() {
-		return serviceRepository.findAllServices();
-	}
-	@GetMapping("/api/services/{serviceId}")
-	public Service findServiceById(
-			@PathVariable("serviceId") Integer id) {
-		return serviceRepository.findServiceById(id);
-	}
-	@PostMapping("/api/services")
-	public Service createService(@RequestBody Service service) {
-		return serviceRepository.save(service);
-	}
-	@PutMapping("/api/services/{serviceId}")
-	public Service updateService(
-			@PathVariable("serviceId") Integer id,
-			@RequestBody Service serviceUpdates) {
-		Service service = serviceRepository.findServiceById(id);
-		service.setServiceName(serviceUpdates.getServiceName());
-		return serviceRepository.save(service);
-	}
-	@DeleteMapping("/api/services/{serviceId}")
-	public void deleteService(
-			@PathVariable("serviceId") Integer id) {
-		serviceRepository.deleteById(id);
-	}
-	@GetMapping("api/services/category/{categoryId}/limit/{size}")
-	public List<Service> findPopularServicesByCategory(
-					@PathVariable("categoryId") Integer categoryId,
-					@PathVariable("size") Integer size) {
-		return serviceRepository.findPopularServicesByCategory(categoryId, size);
-	}
+  @Autowired
+  ServiceRepository serviceRepository;
+
+  @GetMapping("/api/services")
+  public List<Service> findAllService() {
+    return serviceRepository.findAllServices();
+  }
+
+  @GetMapping("/api/services/{serviceId}")
+  public Service findServiceById(
+          @PathVariable("serviceId") Integer id) {
+    return serviceRepository.findServiceById(id);
+  }
+
+  @GetMapping("api/services/category/{categoryId}/limit/{size}")
+  public List<Service> findPopularServicesByCategory(
+          @PathVariable("categoryId") Integer categoryId,
+          @PathVariable("size") Integer size) {
+    return serviceRepository.findPopularServicesByCategory(categoryId, size);
+  }
+
+  @PostMapping("/api/services")
+  public Service createService(@RequestBody Service service) {
+    return serviceRepository.save(service);
+  }
+
+  @PutMapping("/api/services/{serviceId}")
+  public Service updateService(
+          @PathVariable("serviceId") Integer id,
+          @RequestBody Service serviceUpdates) {
+    Service service = serviceRepository.findServiceById(id);
+    service.setServiceName(serviceUpdates.getServiceName());
+    return serviceRepository.save(service);
+  }
+
+  @DeleteMapping("/api/services/{serviceId}")
+  public void deleteService(
+          @PathVariable("serviceId") Integer id) {
+    serviceRepository.deleteById(id);
+  }
 }
