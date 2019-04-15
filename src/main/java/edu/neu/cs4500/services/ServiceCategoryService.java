@@ -21,9 +21,16 @@ public class ServiceCategoryService {
     @Autowired
     PagedServiceCategoryRepository pagedServiceCategoryRepository;
 
+    // Returns all service categories by popularity, descending
     @GetMapping("/api/categories")
     public List<ServiceCategory> findAllServiceCategories() {
         return serviceCategoryRepository.findAllServiceCategories();
+    }
+
+    // Returns all service categories alphabetically
+    @GetMapping("/api/categories/alphabetically")
+    public List<ServiceCategory> findAllServiceCategoriesAlphabetically() {
+	    return serviceCategoryRepository.findAllServiceCategoriesAlphabetically();
     }
 
     @GetMapping("/api/categories/{serviceCategoryId}")
@@ -69,5 +76,13 @@ public class ServiceCategoryService {
      }
      Pageable p = PageRequest.of(pageNum, itemsPerPage);
      return pagedServiceCategoryRepository.findAll(p);
+    }
+
+    @GetMapping("/api/categories/filtered")
+    public List<ServiceCategory> filterServiceCategories(
+	    @RequestParam(name="serviceCategoryName", required=false) String serviceCategoryName) {
+        if (serviceCategoryName == null) serviceCategoryName = "";
+	serviceCategoryName = "%" + serviceCategoryName + "%";
+	return serviceCategoryRepository.filterServiceCategories(serviceCategoryName);	
     }
 }
