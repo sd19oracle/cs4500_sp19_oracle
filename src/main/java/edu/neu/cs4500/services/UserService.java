@@ -43,30 +43,31 @@ public class UserService {
   }
 
   @GetMapping("/api/users/providers/zip/{providerZip}")
-  public List<User> findProvidersByZipCode(@PathVariable("providerZip") Integer providerZip) {
+  public List<User> findProvidersByZipCode(@PathVariable("providerZip") String providerZip) {
     List<User> allProviders = userRepository.findAllProviders();
 
     List<User> result = new ArrayList<>();
     // sorting the address
-    Map<Integer, Integer> map_distance = new HashMap<>();
-    Map<Integer, User> map_users = new HashMap<>();
+    Map<String, Integer> map_distance = new HashMap<>();
+    Map<String, User> map_users = new HashMap<>();
     for (User user: allProviders) {
-      Integer zip_code = user.getZipCode();
-      if (zip_code != null) {
-        Integer distance = Math.abs(zip_code - providerZip);
-        map_distance.put(zip_code, distance);
+      String get_zip_code = user.getZipCode();
+      if (get_zip_code != null) {
+        Integer zip_code = Integer.parseInt(user.getZipCode());
+        Integer distance = Math.abs(zip_code - Integer.parseInt(providerZip));
+        map_distance.put(get_zip_code, distance);
       }
-      map_users.put(zip_code, user);
+      map_users.put(get_zip_code, user);
     }
 
     // Create a list from elements of HashMap
-    List<Map.Entry<Integer, Integer> > list =
+    List<Map.Entry<String, Integer> > list =
             new LinkedList<>(map_distance.entrySet());
 
     // Sort the list
-    Collections.sort(list, new Comparator<Map.Entry<Integer, Integer> >() {
-      public int compare(Map.Entry<Integer, Integer> o1,
-                         Map.Entry<Integer, Integer> o2)
+    Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+      public int compare(Map.Entry<String, Integer> o1,
+                         Map.Entry<String, Integer> o2)
       {
         return (o1.getValue()).compareTo(o2.getValue());
       }
@@ -74,12 +75,9 @@ public class UserService {
 
     // put data from sorted list to a new list in reversed order
     // cause we want to higher grade providers
-    List<Integer> sorted_zipcode = new ArrayList<>();
-    for (Map.Entry<Integer, Integer> aa : list) {
-      sorted_zipcode.add(0, aa.getKey());
-    }
-    for (Integer zip: sorted_zipcode) {
-      result.add(map_users.get(zip));
+    List<String> sorted_zipCode = new ArrayList<>();
+    for (Map.Entry<String, Integer> aa : list) {
+      result.add(map_users.get(aa.getKey()));
     }
     return result;
   }
@@ -87,7 +85,7 @@ public class UserService {
   @GetMapping("/api/users/providers/{providerName}/{providerZip}")
   public List<User> findProvidersByNameAndZipCode(
           @PathVariable("providerName") String providerName,
-          @PathVariable("providerZip") Integer providerZip
+          @PathVariable("providerZip") String providerZip
   ) {
     List<User> temp;
     if (providerName == null) {
@@ -99,24 +97,24 @@ public class UserService {
     List<User> result = new ArrayList<>();
     // sorting the address
     if (providerZip != null) {
-      Map<Integer, Integer> map_distance = new HashMap<>();
-      Map<Integer, User> map_users = new HashMap<>();
+      Map<String, Integer> map_distance = new HashMap<>();
+      Map<String, User> map_users = new HashMap<>();
       for (User user: temp) {
-        Integer zip_code = user.getZipCode();
+        String zip_code = user.getZipCode();
         if (zip_code != null) {
-          Integer distance = Math.abs(zip_code - providerZip);
+          Integer distance = Math.abs(Integer.parseInt(zip_code) - Integer.parseInt(providerZip));
           map_distance.put(zip_code, distance);
         }
         map_users.put(zip_code, user);
       }
       // Create a list from elements of HashMap
-      List<Map.Entry<Integer, Integer> > list =
+      List<Map.Entry<String, Integer> > list =
               new LinkedList<>(map_distance.entrySet());
 
       // Sort the list
-      Collections.sort(list, new Comparator<Map.Entry<Integer, Integer> >() {
-        public int compare(Map.Entry<Integer, Integer> o1,
-                           Map.Entry<Integer, Integer> o2)
+      Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+        public int compare(Map.Entry<String, Integer> o1,
+                           Map.Entry<String, Integer> o2)
         {
           return (o1.getValue()).compareTo(o2.getValue());
         }
@@ -124,12 +122,9 @@ public class UserService {
 
       // put data from sorted list to a new list in reversed order
       // cause we want to higher grade providers
-      List<Integer> sorted_zipcode = new ArrayList<>();
-      for (Map.Entry<Integer, Integer> aa : list) {
-        sorted_zipcode.add(0, aa.getKey());
-      }
-      for (Integer zip: sorted_zipcode) {
-        result.add(map_users.get(zip));
+      List<String> sorted_zipcode = new ArrayList<>();
+      for (Map.Entry<String, Integer> aa : list) {
+        result.add(map_users.get(aa.getKey()));
       }
     } else {
       return temp;

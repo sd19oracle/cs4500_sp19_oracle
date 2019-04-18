@@ -25,7 +25,7 @@ public class User {
   private String firstName;
   private String lastName;
   private String role;
-  private Integer zipCode;
+  private String zipCode;
   @OneToMany(mappedBy = "user")
   private List<ServiceSpecificAnswer> answers;
 
@@ -35,7 +35,7 @@ public class User {
   }
 
   public User(Integer id, String username, String password, String firstName, String lastName,
-              Integer zipCode) {
+              String zipCode) {
     this.id = id;
     this.username = username;
     this.password = password;
@@ -44,10 +44,10 @@ public class User {
     this.zipCode = zipCode;
   }
 
-  public Integer getZipCode() {
+  public String getZipCode() {
     return this.zipCode;
   }
-  public void setZipCode(Integer zipCode) {
+  public void setZipCode(String zipCode) {
     this.zipCode = zipCode;
   }
 
