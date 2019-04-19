@@ -18,6 +18,10 @@ public interface ServiceCategoryRepository extends JpaRepository<ServiceCategory
 	@Query(value="SELECT serviceCategory FROM ServiceCategory serviceCategory ORDER BY serviceCategory")
 	public List<ServiceCategory> findAllServiceCategoriesAlphabetically();
 
-	@Query(value="SELECT serviceCategory FROM ServiceCategory serviceCategory WHERE serviceCategory.serviceCategoryName LIKE :serviceCategoryName")
+	@Query(value=
+			"SELECT serviceCategory " +
+			"FROM ServiceCategory serviceCategory " +
+			"WHERE serviceCategoryName LIKE :serviceCategoryName " +
+			"ORDER BY serviceCategory.serviceCategoryName")
 	public List<ServiceCategory> filterServiceCategories(@Param("serviceCategoryName") String serviceCategoryName);
 }
