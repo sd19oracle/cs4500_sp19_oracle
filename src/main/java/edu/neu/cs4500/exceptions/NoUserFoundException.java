@@ -1,4 +1,4 @@
-package edu.neu.edu.exceptions;
+package edu.neu.cs4500.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

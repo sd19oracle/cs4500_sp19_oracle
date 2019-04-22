@@ -10,6 +10,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
+import edu.neu.cs4500.exceptions.NoUserFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.UserRepository;
-import edu.neu.edu.exceptions.NoUserFoundException;
 
 /**
  * Created by Michael Goodnow on 2019-01-23.
@@ -138,7 +138,7 @@ public class UserService {
 
     return result;
   }
-  
+
   @PostMapping("/api/login")
   public User login(@RequestBody User creds, HttpSession session) {
 	  for (User user : userRepository.findAll()) {
@@ -150,13 +150,13 @@ public class UserService {
 	  }
 	  throw new NoUserFoundException();
   }
-  
+
   @PostMapping("/api/logout")
   public void logout(HttpSession session) {
 	  session.invalidate();
   }
-  
-  @GetMapping("/api/currentUser") 
+
+  @GetMapping("/api/currentUser")
   public User getCurrentUser(HttpSession session) {
 	  return (User) session.getAttribute("currentUser");
   }
