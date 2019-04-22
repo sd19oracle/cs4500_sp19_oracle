@@ -40,11 +40,11 @@ public class ServiceSearchTest {
   @BeforeEach
   public void setUp() {
     provider1.setId(1);
-    provider1.setUsername("John");
+    provider1.setEmail("John");
     provider2.setId(2);
-    provider2.setUsername("Joe");
+    provider2.setEmail("Joe");
     provider3.setId(3);
-    provider3.setUsername("Jose");
+    provider3.setEmail("Jose");
 
     a1q1.setAnswer("FALSE");
     a1q1.setUser(provider1);
