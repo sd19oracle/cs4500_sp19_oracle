@@ -155,6 +155,11 @@ public class UserService {
   public void logout(HttpSession session) {
 	  session.invalidate();
   }
+  
+  @GetMapping("/api/currentUser") 
+  public User getCurrentUser(HttpSession session) {
+	  return (User) session.getAttribute("currentUser");
+  }
 }
 
 
