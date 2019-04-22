@@ -29,4 +29,9 @@ public class UserService {
 			@PathVariable("userId") Integer userId) {
 		return userRepository.findById(userId).get();
 	}
+	
+	@PostMapping("/api/login")
+	public User login(@RequestBody User credentials, HttpSession session) {
+		
+	}
 }
