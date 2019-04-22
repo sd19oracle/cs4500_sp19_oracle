@@ -44,14 +44,6 @@ public class User {
     this.zipCode = zipCode;
   }
 
-  public String getZipCode() {
-    return this.zipCode;
-  }
-  public void setZipCode(String zipCode) {
-    this.zipCode = zipCode;
-  }
-
-
   public Integer getId() {
     return id;
   }
@@ -121,6 +113,14 @@ public class User {
   public void setServices(List<Service> services) {
     this.services = services;
   }
+
+  public String getZipCode() {
+    return zipCode;
+  }
+
+  public void setZipCode(String zipCode) {
+    this.zipCode = zipCode;
+  } 
 
   @Override
   public boolean equals(Object user) {
