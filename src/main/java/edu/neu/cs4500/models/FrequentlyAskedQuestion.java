@@ -43,4 +43,8 @@ public class FrequentlyAskedQuestion {
     public void setQuestion(String question) {
         this.question = question;
     }
+
+    public void addFrequentlyAskedAnswer(FrequentlyAskedAnswer ans) {
+        this.answers.add(ans);
+    }
 }

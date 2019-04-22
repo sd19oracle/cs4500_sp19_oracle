@@ -25,8 +25,9 @@ public class Estimate {
 
     }
 
-    public float getEstimate(List<SubscriptionDiscount> discounts) {
-        return this.basePrice + this.getFees() - this.getDiscount(discounts);
+    // distance affects the progressive fees
+    public float getEstimate(List<SubscriptionDiscount> discounts, int distance) {
+        return this.basePrice + this.getFees(distance) - this.getDiscount(discounts);
     }
 
     public float getBasePrice() {
@@ -69,7 +70,8 @@ public class Estimate {
         return accumulateDiscount;
     }
 
-    public float getFees() {
+    // distance affects the progressive fees
+    public float getFees(int distance) {
     	float acc = 0f;
 
     	List<DeliveryFee> applicableFees = this.fees
@@ -79,9 +81,9 @@ public class Estimate {
 
     	for (DeliveryFee fee : applicableFees) {
     		if (fee.isFlat()) {
-    			acc += fee.getFee();
+    			acc += fee.getFee(distance);
 			} else {
-    			acc += this.basePrice * fee.getFee();
+    			acc += this.basePrice * fee.getFee(distance);
 			}
 		}
     	return acc;

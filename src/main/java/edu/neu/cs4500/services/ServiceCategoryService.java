@@ -2,46 +2,81 @@ package edu.neu.cs4500.services;
 
 import java.util.List;
 
+import edu.neu.cs4500.models.Service;
+import edu.neu.cs4500.repositories.PagedServiceCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
 
 import edu.neu.cs4500.models.ServiceCategory;
 import edu.neu.cs4500.repositories.ServiceCategoryRepository;
 
 @RestController
+@CrossOrigin("*")
 public class ServiceCategoryService {
     @Autowired
-    ServiceCategoryRepository serviceRepository;
+    ServiceCategoryRepository serviceCategoryRepository;
+
+    @Autowired
+    PagedServiceCategoryRepository pagedServiceCategoryRepository;
+
+    // Returns all service categories by popularity, descending
     @GetMapping("/api/categories")
     public List<ServiceCategory> findAllServiceCategories() {
-        return serviceRepository.findAllServiceCategories();
+        return serviceCategoryRepository.findAllServiceCategories();
     }
+
     @GetMapping("/api/categories/{serviceCategoryId}")
     public ServiceCategory findServiceCategoryById(
             @PathVariable("serviceCategoryId") Integer id) {
-        return serviceRepository.findServiceCategoryById(id);
+        return serviceCategoryRepository.findServiceCategoryById(id);
     }
+
     @PostMapping("/api/categories")
     public ServiceCategory createServiceCategory(@RequestBody ServiceCategory serviceCategory) {
-        return serviceRepository.save(serviceCategory);
+        return serviceCategoryRepository.save(serviceCategory);
     }
+
     @PutMapping("/api/categories/{serviceCategoryId}")
     public ServiceCategory updateServiceCategory(
             @PathVariable("serviceCategoryId") Integer id,
             @RequestBody ServiceCategory serviceUpdates) {
-        ServiceCategory serviceCategory = serviceRepository.findServiceCategoryById(id);
+        ServiceCategory serviceCategory = serviceCategoryRepository.findServiceCategoryById(id);
         serviceCategory.setServiceCategoryName(serviceUpdates.getServiceCategoryName());
-        return serviceRepository.save(serviceCategory);
+        return serviceCategoryRepository.save(serviceCategory);
     }
+
     @DeleteMapping("/api/categories/{serviceCategoryId}")
     public void deleteServiceCategory(
             @PathVariable("serviceCategoryId") Integer id) {
-        serviceRepository.deleteById(id);
+        serviceCategoryRepository.deleteById(id);
+    }
+
+    @GetMapping("/api/categories/{serviceCategoryId}/list")
+    public List<Service> findAllServiceByCategoryId(@PathVariable("serviceCategoryId") Integer serviceCategoryId) {
+        return serviceCategoryRepository.findServiceCategoryById(serviceCategoryId).getServices();
+    }
+
+    @GetMapping("/api/categories/paged")
+    public Page<ServiceCategory> findAllServiceCategoriesPaged(
+            @RequestParam(name="pageNum", required = false) Integer pageNum,
+            @RequestParam(name="ipp", required = false) Integer itemsPerPage) {
+     if (pageNum == null) {
+         pageNum = 0;
+     }
+     if (itemsPerPage == null) {
+         itemsPerPage = 10;
+     }
+     Pageable p = PageRequest.of(pageNum, itemsPerPage);
+     return pagedServiceCategoryRepository.findAll(p);
+    }
+
+    @GetMapping("/api/categories/filtered")
+    public List<ServiceCategory> filterServiceCategories(
+	    @RequestParam(name="nameFilter", required=false, defaultValue = "") String serviceCategoryName) {
+	serviceCategoryName = "%" + serviceCategoryName + "%";
+	return serviceCategoryRepository.filterServiceCategories(serviceCategoryName);
     }
 }

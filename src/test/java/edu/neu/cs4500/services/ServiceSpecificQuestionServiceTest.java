@@ -16,6 +16,7 @@ import java.util.List;
 
 
 import edu.neu.cs4500.models.ServiceSpecificQuestion;
+import edu.neu.cs4500.repositories.PagedServiceQuestionRepo;
 import edu.neu.cs4500.repositories.ServiceSpecificQuestionRepository;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -33,6 +34,8 @@ public class ServiceSpecificQuestionServiceTest {
   private MockMvc mockMvc;
   @MockBean
   private ServiceSpecificQuestionRepository serviceSpecificQuestionService;
+  @MockBean
+  private PagedServiceQuestionRepo pagedServiceQuestionRepo;
   ServiceSpecificQuestion q1 = new ServiceSpecificQuestion();
   ServiceSpecificQuestion q2 = new ServiceSpecificQuestion();
   ServiceSpecificQuestion q3 = new ServiceSpecificQuestion();
