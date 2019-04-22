@@ -150,6 +150,11 @@ public class UserService {
 	  
 	  return null;
   }
+  
+  @PostMapping("/api/logout")
+  public void logout(HttpSession session) {
+	  session.invalidate();
+  }
 }
 
 
