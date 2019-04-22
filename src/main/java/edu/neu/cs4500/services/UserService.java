@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import edu.neu.cs4500.repositories.UserRepository;
 
-import edu.neu.cs4500.services.DuplicateEmailException;
+import edu.neu.cs4500.exceptions.DuplicateEmailException;
 
 import java.util.ArrayList;
 import java.util.Collections;
