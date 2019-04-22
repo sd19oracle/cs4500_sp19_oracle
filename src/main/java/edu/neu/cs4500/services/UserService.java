@@ -1,13 +1,5 @@
 package edu.neu.cs4500.services;
 
-import edu.neu.cs4500.models.User;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
-
-import edu.neu.cs4500.repositories.UserRepository;
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -15,6 +7,19 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.neu.cs4500.models.User;
+import edu.neu.cs4500.repositories.UserRepository;
 
 /**
  * Created by Michael Goodnow on 2019-01-23.
@@ -132,4 +137,27 @@ public class UserService {
 
     return result;
   }
+  
+  @PostMapping("/api/login")
+  public User login(@RequestBody User creds, HttpSession session) {
+	  for (User user : userRepository.findAll()) {
+		  if (user.getUsername().equals(creds.getUsername())
+		      && user.getPassword().equals(creds.getPassword())) {
+			  session.setAttribute("currentUser", user);
+			  return user;
+		  }
+	  }
+	  
+	  return null;
+  }
 }
+
+
+
+
+
+
+
+
+
+
