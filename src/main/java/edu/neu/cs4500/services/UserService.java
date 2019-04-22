@@ -20,13 +20,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import edu.neu.cs4500.models.User;
 import edu.neu.cs4500.repositories.UserRepository;
+import edu.neu.edu.exceptions.NoUserFoundException;
 
 /**
  * Created by Michael Goodnow on 2019-01-23.
  */
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins={"https://cs4500-sp19-client-oracle.herokuapp.com", "http://localhost:3000"}, allowCredentials = "true")
 public class UserService {
   @Autowired
   UserRepository userRepository;
@@ -147,8 +148,7 @@ public class UserService {
 			  return user;
 		  }
 	  }
-	  
-	  return null;
+	  throw new NoUserFoundException();
   }
   
   @PostMapping("/api/logout")
