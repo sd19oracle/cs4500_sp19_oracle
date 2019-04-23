@@ -1,16 +1,11 @@
 pipeline {
     stages {
-        stage('Example stage 1') {
-            environment {
-                source credentials('db-vars')
-            }
+        stage("Build") {
             steps {
-                echo $DBSCHEMA 
-            }
-        }
-        stage('Example stage 2') {
-            steps {
-                // 
+                 sh '''
+                 source credentials('db-vars')
+                 mvn test
+                 '''
             }
         }
     }
