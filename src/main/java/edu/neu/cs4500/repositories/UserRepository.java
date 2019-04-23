@@ -16,7 +16,7 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 	@Query(value="SELECT user FROM User user WHERE user.email=:email")
 	public User findByEmail(@Param("email") String email);
 	@Query(value="SELECT * from users where users.role = 'provider' and (users.email LIKE CONCAT('%',:email,'%') " +
-					"or users.firstName LIKE CONCAT('%',:email,'%') or users.lastName LIKE CONCAT('%',:email,'%'))", nativeQuery = true)
+					"or users.first_name LIKE CONCAT('%',:email,'%') or users.last_name LIKE CONCAT('%',:email,'%'))", nativeQuery = true)
 	public List<User> findAllProvidersNameMatch(@Param("email") String email);
 	@Query(value="SELECT * from users where users.role = 'provider'", nativeQuery = true)
 	public List<User> findAllProviders();
