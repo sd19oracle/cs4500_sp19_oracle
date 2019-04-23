@@ -10,12 +10,12 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
-public class ServiceSpecificQuestionServiceSmokeTest {
-    @Autowired
-    private ServiceSpecificQuestionService controller;
+public class FAQServiceSmokeTest {
+	@Autowired
+	private FAQService controller;
 
-    @Test
-    public void contextLoads() throws Exception {
-        assertThat(controller).isNotNull();
-    }
+	@Test
+	public void contextLoads() throws Exception {
+		assertThat(controller).isNotNull();
+	}
 }
