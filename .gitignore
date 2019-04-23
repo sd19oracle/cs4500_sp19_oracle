@@ -2,6 +2,8 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 .vscode/
+.env
+env.sh
 
 ### STS ###
 .apt_generated
