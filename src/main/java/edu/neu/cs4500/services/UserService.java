@@ -9,8 +9,6 @@ import edu.neu.cs4500.repositories.UserRepository;
 
 import edu.neu.cs4500.exceptions.DuplicateEmailException;
 
-=======
->>>>>>> master
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
