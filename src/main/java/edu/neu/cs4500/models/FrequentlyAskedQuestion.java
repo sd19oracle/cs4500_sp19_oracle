@@ -15,10 +15,14 @@ public class FrequentlyAskedQuestion {
     @OneToMany(mappedBy = "frequentlyAskedQuestion")
     private List<FrequentlyAskedAnswer> answers;
 
-    public FrequentlyAskedQuestion(String title, String question) {
+    public FrequentlyAskedQuestion(Integer id, String title, String question) {
+        this.id = id;
         this.title = title;
         this.question = question;
         this.answers = new ArrayList<>();
+    }
+
+    public FrequentlyAskedQuestion() {
     }
 
     public List<FrequentlyAskedAnswer> getAnswers() {
