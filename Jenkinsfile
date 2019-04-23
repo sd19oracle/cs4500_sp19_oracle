@@ -7,7 +7,7 @@ pipeline {
             }
             steps {
                  sh '''
-                 echo $ENV > hello.txt
+                 source $ENV
                  mvn test
                  '''
             }
