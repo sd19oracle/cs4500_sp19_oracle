@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import edu.neu.cs4500.repositories.UserRepository;
 
+import edu.neu.cs4500.exceptions.DuplicateEmailException;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -16,32 +17,50 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
+import edu.neu.cs4500.exceptions.NoUserFoundException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import edu.neu.cs4500.models.User;
+import edu.neu.cs4500.repositories.UserRepository;
+
 /**
  * Created by Michael Goodnow on 2019-01-23.
  */
 
 @RestController
-@CrossOrigin(origins="*")
+@CrossOrigin(origins={"https://cs4500-sp19-client-oracle.herokuapp.com", "http://localhost:3000", "*"}, allowCredentials = "true")
 public class UserService {
   @Autowired
   UserRepository userRepository;
 
+  // Find all Users
   @GetMapping("/api/users")
   public List<User> findAllUser() {
     return (List<User>) userRepository.findAll();
   }
 
+  // Find User by ID
   @GetMapping("/api/users/{userId}")
   public User findUserById(
           @PathVariable("userId") Integer userId) {
     return userRepository.findById(userId).get();
   }
 
+  // Find a Provider by name
   @GetMapping("/api/users/providers/name/{providerName}")
   public List<User> findProvidersByName(@PathVariable("providerName") String providerName) {
     return userRepository.findAllProvidersNameMatch(providerName);
   }
 
+  // Find a provider by zipcode
   @GetMapping("/api/users/providers/zip/{providerZip}")
   public List<User> findProvidersByZipCode(@PathVariable("providerZip") String providerZip) {
     List<User> allProviders = userRepository.findAllProviders();
@@ -82,6 +101,7 @@ public class UserService {
     return result;
   }
 
+  // Find Porvider by name and zipcode
   @GetMapping("/api/users/providers/{providerName}/{providerZip}")
   public List<User> findProvidersByNameAndZipCode(
           @PathVariable("providerName") String providerName,
@@ -132,4 +152,89 @@ public class UserService {
 
     return result;
   }
+
+  // Update a User
+  @PutMapping("api/users/{id}")
+  public User updateUser(@PathVariable("id") Integer id, @RequestBody User updatedUser) {
+    User findUser = userRepository.findUserById(id);
+    if (updatedUser.getId() != null) {
+      findUser.setId(updatedUser.getId());
+    }
+    if (updatedUser.getEmail() != null) {
+      findUser.setEmail(updatedUser.getEmail());
+    }
+    if (updatedUser.getPassword() != null) {
+      findUser.setPassword(updatedUser.getPassword());
+    }
+    if (updatedUser.getFirstName() != null) {
+      findUser.setFirstName(updatedUser.getFirstName());
+    }
+    if (updatedUser.getLastName() != null) {
+      findUser.setLastName(updatedUser.getLastName());
+    }
+    if (updatedUser.getRole() != null) {
+      findUser.setRole(updatedUser.getRole());
+    }
+    if (updatedUser.getAnswers() != null) {
+      findUser.setAnswers(updatedUser.getAnswers());
+    }
+    if (updatedUser.getServices() != null) {
+      findUser.setServices(updatedUser.getServices());
+    }
+    if (updatedUser.getZipCode() != null) {
+      findUser.setZipCode(updatedUser.getZipCode());
+    }
+    return userRepository.save(findUser);
+  }
+
+  // Delete a User
+  @DeleteMapping("api/users/{id}")
+  public void deleteOneAnswer(@PathVariable("id") Integer id) {
+    userRepository.deleteById(id);
+  }
+
+  // Create a User
+  @PostMapping("api/users")
+  public User createUser(@RequestBody User newUser) {
+    User checkEmail = userRepository.findByEmail(newUser.getEmail());
+    if (checkEmail != null) {
+      throw new DuplicateEmailException();
+    }
+    else {
+      return userRepository.save(newUser);
+    }
+  }
+
+  @PostMapping("/api/login")
+  public User login(@RequestBody User creds, HttpSession session) {
+	  for (User user : userRepository.findAll()) {
+		  if (user.getEmail().equals(creds.getEmail())
+		      && user.getPassword().equals(creds.getPassword())) {
+			  session.setAttribute("currentUser", user);
+			  return user;
+		  }
+	  }
+	  throw new NoUserFoundException();
+  }
+
+  @PostMapping("/api/logout")
+  public void logout(HttpSession session) {
+	  session.invalidate();
+  }
+
+  @GetMapping("/api/currentUser")
+  public User getCurrentUser(HttpSession session) {
+	  return (User) session.getAttribute("currentUser");
+  }
+
 }
+
+
+
+
+
+
+
+
+
+

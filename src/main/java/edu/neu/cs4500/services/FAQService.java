@@ -59,7 +59,8 @@ public class FAQService {
 		}
 
 		Pageable p = PageRequest.of(page, count);
-		return repository.findAll(p);
+		Page<FrequentlyAskedQuestion> questionPage = repository.findAll(p);
+		return questionPage;
 	}
 
 	@GetMapping("/api/faqs/filtered")

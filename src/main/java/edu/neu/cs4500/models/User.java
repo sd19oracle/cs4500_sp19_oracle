@@ -20,7 +20,7 @@ public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer id;
-  private String username;
+  private String email;
   private String password;
   private String firstName;
   private String lastName;
@@ -34,23 +34,15 @@ public class User {
   public User() {
   }
 
-  public User(Integer id, String username, String password, String firstName, String lastName,
+  public User(Integer id, String email, String password, String firstName, String lastName,
               String zipCode) {
     this.id = id;
-    this.username = username;
+    this.email = email;
     this.password = password;
     this.firstName = firstName;
     this.lastName = lastName;
     this.zipCode = zipCode;
   }
-
-  public String getZipCode() {
-    return this.zipCode;
-  }
-  public void setZipCode(String zipCode) {
-    this.zipCode = zipCode;
-  }
-
 
   public Integer getId() {
     return id;
@@ -60,12 +52,12 @@ public class User {
     this.id = id;
   }
 
-  public String getUsername() {
-    return username;
+  public String getEmail() {
+    return email;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setEmail(String email) {
+    this.email = email;
   }
 
   public String getPassword() {
@@ -121,6 +113,14 @@ public class User {
   public void setServices(List<Service> services) {
     this.services = services;
   }
+
+  public String getZipCode() {
+    return zipCode;
+  }
+
+  public void setZipCode(String zipCode) {
+    this.zipCode = zipCode;
+  } 
 
   @Override
   public boolean equals(Object user) {

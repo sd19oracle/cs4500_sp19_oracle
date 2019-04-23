@@ -32,4 +32,14 @@ public interface ServiceRepository extends JpaRepository<Service, Integer> {
 
   @Query(value = "SELECT service FROM Service service WHERE service.serviceName LIKE :serviceName")
   public List<Service> filterServices(@Param("serviceName") String serviceName);
+
+  @Query(value = "SELECT * " +
+          "FROM services " +
+          "JOIN categories_services cs on (services.id = cs.service_id)" +
+          "WHERE category_id = :category_id " +
+          "AND service_name LIKE :service_name " +
+          "ORDER BY service_name", nativeQuery = true)
+  List<Service> filterServicesNameCategory(
+          @Param("service_name") String nameFilter,
+          @Param("category_id") Integer categoryId);
 }
