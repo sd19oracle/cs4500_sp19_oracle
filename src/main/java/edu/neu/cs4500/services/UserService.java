@@ -175,12 +175,12 @@ public class UserService {
 
   // Delete a User
   @DeleteMapping("api/users/{id}")
-  public void deleteOneAnser(@PathVariable("id") Integer id) {
+  public void deleteOneAnswer(@PathVariable("id") Integer id) {
     userRepository.deleteById(id);
   }
 
   // Create a User
-  @PostMapping("api/users/{id}")
+  @PostMapping("api/users/")
   public User createUser(@PathVariable("id") Integer id, @RequestBody User newUser) {
     User checkEmail = userRepository.findByEmail(newUser.getEmail());
     if (checkEmail != null) {
