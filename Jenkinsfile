@@ -8,7 +8,7 @@ pipeline {
             steps {
                  sh '''
                  source $ENV
-                 mvn test
+                 mvn clean test
                  '''
             }
         }
