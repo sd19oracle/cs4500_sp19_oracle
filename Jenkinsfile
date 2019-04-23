@@ -2,9 +2,12 @@ pipeline {
     agent any
     stages {
         stage("Build") {
+            environment {
+                ENV = credentials('db-vars')
+            }
             steps {
                  sh '''
-                 source credentials('db-vars')
+                 echo $ENV
                  mvn test
                  '''
             }
