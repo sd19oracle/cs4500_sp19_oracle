@@ -36,7 +36,7 @@ import edu.neu.cs4500.repositories.UserRepository;
  */
 
 @RestController
-@CrossOrigin(origins={"https://cs4500-sp19-client-oracle.herokuapp.com", "http://localhost:3000"}, allowCredentials = "true")
+@CrossOrigin(origins={"https://cs4500-sp19-client-oracle.herokuapp.com", "http://localhost:3000", "*"}, allowCredentials = "true")
 public class UserService {
   @Autowired
   UserRepository userRepository;
@@ -152,7 +152,7 @@ public class UserService {
 
     return result;
   }
-  
+
   // Update a User
   @PutMapping("api/users/{id}")
   public User updateUser(@PathVariable("id") Integer id, @RequestBody User updatedUser) {
@@ -194,8 +194,8 @@ public class UserService {
   }
 
   // Create a User
-  @PostMapping("api/users/")
-  public User createUser(@PathVariable("id") Integer id, @RequestBody User newUser) {
+  @PostMapping("api/users")
+  public User createUser(@RequestBody User newUser) {
     User checkEmail = userRepository.findByEmail(newUser.getEmail());
     if (checkEmail != null) {
       throw new DuplicateEmailException();
@@ -203,7 +203,7 @@ public class UserService {
     else {
       return userRepository.save(newUser);
     }
-  }  
+  }
 
   @PostMapping("/api/login")
   public User login(@RequestBody User creds, HttpSession session) {
