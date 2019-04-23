@@ -3,9 +3,9 @@ package edu.neu.cs4500.services;
 import edu.neu.cs4500.models.ServiceCategory;
 import edu.neu.cs4500.repositories.PagedServiceCategoryRepository;
 import edu.neu.cs4500.repositories.ServiceCategoryRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -14,7 +14,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(ServiceCategoryService.class)
 public class ServiceCategoryServicePaginationTest {
 
@@ -49,7 +49,7 @@ public class ServiceCategoryServicePaginationTest {
     ServiceCategory c5 = new ServiceCategory();
     ServiceCategory c6 = new ServiceCategory();
 
-    @Before
+    @BeforeEach
     public void setupTestCases() {
         c1.setId(1);
         c1.setServiceCategoryName("Plumbing");
@@ -145,7 +145,7 @@ public class ServiceCategoryServicePaginationTest {
                 .andExpect(jsonPath("$.totalElements", is(5)))
                 .andExpect(jsonPath("$.totalPages", is(3)));
 
-        
+
         this.mockmvc.perform(get("/api/categories/paged").param("paneNum", "0").param("ipp", "4"))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))

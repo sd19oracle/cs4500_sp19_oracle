@@ -1,34 +1,26 @@
 package edu.neu.cs4500.services;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import edu.neu.cs4500.models.PageInfo;
+import edu.neu.cs4500.models.ServiceSpecificQuestion;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
 import java.util.List;
 
-import edu.neu.cs4500.models.PageInfo;
-import edu.neu.cs4500.models.ServiceSpecificQuestion;
-
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.when;
+import static org.hamcrest.Matchers.*;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(ServiceSpecificQuestionService.class)
 public class ServiceSpecificQuestionServicePaginationTest {
   @Autowired
@@ -42,7 +34,7 @@ public class ServiceSpecificQuestionServicePaginationTest {
   ServiceSpecificQuestion q5 = new ServiceSpecificQuestion();
   ServiceSpecificQuestion q6 = new ServiceSpecificQuestion();
 
-  @Before
+  @BeforeEach
   public void setUpInitialTestCases() {
     q1.setId(1);
     q1.setTitle("How many rooms do you need to clean?");

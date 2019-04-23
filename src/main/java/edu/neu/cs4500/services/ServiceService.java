@@ -67,9 +67,16 @@ public class ServiceService {
 	}
 
 	@GetMapping("api/services/filtered")
-	public List<Service> filterServices(@RequestParam(name="serviceName", required =false) String serviceName) {
+	public List<Service> filterServices(@RequestParam(name="serviceName", required = false) String serviceName) {
 		if (serviceName == null) serviceName = "";
 		serviceName = "%" + serviceName + "%";
 		return serviceRepository.filterServices(serviceName);
+	}
+
+	@GetMapping("api/category/{categoryId}/services/filtered")
+	public List<Service> filterServicesForCategory(@PathVariable("categoryId") Integer categoryId,
+			@RequestParam(name="nameFilter", required = false, defaultValue = "") String nameFilter) {
+		nameFilter = "%" + nameFilter + "%";
+		return serviceRepository.filterServicesNameCategory(nameFilter, categoryId);
 	}
 }

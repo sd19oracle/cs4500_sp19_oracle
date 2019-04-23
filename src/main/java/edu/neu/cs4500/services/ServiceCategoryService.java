@@ -14,6 +14,7 @@ import edu.neu.cs4500.models.ServiceCategory;
 import edu.neu.cs4500.repositories.ServiceCategoryRepository;
 
 @RestController
+@CrossOrigin("*")
 public class ServiceCategoryService {
     @Autowired
     ServiceCategoryRepository serviceCategoryRepository;
@@ -25,12 +26,6 @@ public class ServiceCategoryService {
     @GetMapping("/api/categories")
     public List<ServiceCategory> findAllServiceCategories() {
         return serviceCategoryRepository.findAllServiceCategories();
-    }
-
-    // Returns all service categories alphabetically
-    @GetMapping("/api/categories/alphabetically")
-    public List<ServiceCategory> findAllServiceCategoriesAlphabetically() {
-	    return serviceCategoryRepository.findAllServiceCategoriesAlphabetically();
     }
 
     @GetMapping("/api/categories/{serviceCategoryId}")
@@ -80,9 +75,8 @@ public class ServiceCategoryService {
 
     @GetMapping("/api/categories/filtered")
     public List<ServiceCategory> filterServiceCategories(
-	    @RequestParam(name="serviceCategoryName", required=false) String serviceCategoryName) {
-        if (serviceCategoryName == null) serviceCategoryName = "";
+	    @RequestParam(name="nameFilter", required=false, defaultValue = "") String serviceCategoryName) {
 	serviceCategoryName = "%" + serviceCategoryName + "%";
-	return serviceCategoryRepository.filterServiceCategories(serviceCategoryName);	
+	return serviceCategoryRepository.filterServiceCategories(serviceCategoryName);
     }
 }
