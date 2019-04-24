@@ -197,7 +197,7 @@ public class UserService {
   public User login(@RequestBody User creds, HttpSession session) {
     Optional<User> findUser = userRepository.matchCredentials(creds.getEmail(), creds.getPassword());
     User user = findUser.orElseThrow(NoUserFoundException::new);
-    session.setAttribute("currentUser", user);
+    session.setAttribute("currentUser", user.getId());
     return user;
   }
 
@@ -208,8 +208,9 @@ public class UserService {
 
   @GetMapping("/api/currentUser")
   public User getCurrentUser(HttpSession session) {
-    User currentUser = (User) session.getAttribute("currentUser");
-    return currentUser;
+    Optional<User> findUser = userRepository.findById((int)session.getAttribute("currentUser"));
+    User user = findUser.orElse(null);
+    return user;
   }
 
 }
