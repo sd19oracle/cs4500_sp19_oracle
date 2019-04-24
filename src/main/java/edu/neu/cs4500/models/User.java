@@ -26,11 +26,16 @@ public class User {
   private String lastName;
   private String role;
   private String zipCode;
+  private String dob;
+  private String street;
+  private String city;
+  private String state;
   @OneToMany(mappedBy = "user")
   private List<ServiceSpecificAnswer> answers;
 
   @ManyToMany(mappedBy = "providers")
   private List<Service> services;
+
   public User() {
   }
 
@@ -105,7 +110,7 @@ public class User {
       this.answers.add(answer);
     }
   }
-  
+
   public List<Service> getServices() {
     return services;
   }
@@ -120,7 +125,39 @@ public class User {
 
   public void setZipCode(String zipCode) {
     this.zipCode = zipCode;
-  } 
+  }
+
+  public String getDob() {
+    return dob;
+  }
+
+  public void setDob(String dob) {
+    this.dob = dob;
+  }
+
+  public String getStreet() {
+    return street;
+  }
+
+  public void setStreet(String street) {
+    this.street = street;
+  }
+
+  public String getCity() {
+    return city;
+  }
+
+  public void setCity(String city) {
+    this.city = city;
+  }
+
+  public String getState() {
+    return state;
+  }
+
+  public void setState(String state) {
+    this.state = state;
+  }
 
   @Override
   public boolean equals(Object user) {
@@ -130,7 +167,7 @@ public class User {
     if (!(user instanceof User)) {
       return false;
     }
-    User tempUser = (User)user;
+    User tempUser = (User) user;
     return tempUser.getId().equals(this.id);
   }
 
