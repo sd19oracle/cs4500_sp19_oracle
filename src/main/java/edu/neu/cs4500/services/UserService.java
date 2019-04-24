@@ -1,42 +1,21 @@
 package edu.neu.cs4500.services;
 
+import edu.neu.cs4500.exceptions.DuplicateEmailException;
+import edu.neu.cs4500.exceptions.NoUserFoundException;
 import edu.neu.cs4500.models.User;
-
+import edu.neu.cs4500.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import edu.neu.cs4500.repositories.UserRepository;
-
-import edu.neu.cs4500.exceptions.DuplicateEmailException;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpSession;
-
-import edu.neu.cs4500.exceptions.NoUserFoundException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import edu.neu.cs4500.models.User;
-import edu.neu.cs4500.repositories.UserRepository;
+import java.util.*;
 
 /**
  * Created by Michael Goodnow on 2019-01-23.
  */
 
 @RestController
-@CrossOrigin(origins={"https://cs4500-sp19-client-oracle.herokuapp.com", "http://localhost:3000", "*"}, allowCredentials = "true")
+@CrossOrigin(origins = {"https://cs4500-sp19-client-oracle.herokuapp.com", "http://localhost:3000", "*"}, allowCredentials = "true")
 public class UserService {
   @Autowired
   UserRepository userRepository;
@@ -50,7 +29,7 @@ public class UserService {
   // Find User by ID
   @GetMapping("/api/users/{userId}")
   public User findUserById(
-          @PathVariable("userId") Integer userId) {
+      @PathVariable("userId") Integer userId) {
     return userRepository.findById(userId).get();
   }
 
@@ -69,7 +48,7 @@ public class UserService {
     // sorting the address
     Map<String, Integer> map_distance = new HashMap<>();
     Map<String, User> map_users = new HashMap<>();
-    for (User user: allProviders) {
+    for (User user : allProviders) {
       String get_zip_code = user.getZipCode();
       if (get_zip_code != null) {
         Integer zip_code = Integer.parseInt(user.getZipCode());
@@ -80,14 +59,13 @@ public class UserService {
     }
 
     // Create a list from elements of HashMap
-    List<Map.Entry<String, Integer> > list =
-            new LinkedList<>(map_distance.entrySet());
+    List<Map.Entry<String, Integer>> list =
+        new LinkedList<>(map_distance.entrySet());
 
     // Sort the list
-    Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+    Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
       public int compare(Map.Entry<String, Integer> o1,
-                         Map.Entry<String, Integer> o2)
-      {
+                         Map.Entry<String, Integer> o2) {
         return (o1.getValue()).compareTo(o2.getValue());
       }
     });
@@ -104,8 +82,8 @@ public class UserService {
   // Find Porvider by name and zipcode
   @GetMapping("/api/users/providers/{providerName}/{providerZip}")
   public List<User> findProvidersByNameAndZipCode(
-          @PathVariable("providerName") String providerName,
-          @PathVariable("providerZip") String providerZip
+      @PathVariable("providerName") String providerName,
+      @PathVariable("providerZip") String providerZip
   ) {
     List<User> temp;
     if (providerName == null) {
@@ -119,7 +97,7 @@ public class UserService {
     if (providerZip != null) {
       Map<String, Integer> map_distance = new HashMap<>();
       Map<String, User> map_users = new HashMap<>();
-      for (User user: temp) {
+      for (User user : temp) {
         String zip_code = user.getZipCode();
         if (zip_code != null) {
           Integer distance = Math.abs(Integer.parseInt(zip_code) - Integer.parseInt(providerZip));
@@ -128,14 +106,13 @@ public class UserService {
         map_users.put(zip_code, user);
       }
       // Create a list from elements of HashMap
-      List<Map.Entry<String, Integer> > list =
-              new LinkedList<>(map_distance.entrySet());
+      List<Map.Entry<String, Integer>> list =
+          new LinkedList<>(map_distance.entrySet());
 
       // Sort the list
-      Collections.sort(list, new Comparator<Map.Entry<String, Integer> >() {
+      Collections.sort(list, new Comparator<Map.Entry<String, Integer>>() {
         public int compare(Map.Entry<String, Integer> o1,
-                           Map.Entry<String, Integer> o2)
-        {
+                           Map.Entry<String, Integer> o2) {
           return (o1.getValue()).compareTo(o2.getValue());
         }
       });
@@ -199,32 +176,28 @@ public class UserService {
     User checkEmail = userRepository.findByEmail(newUser.getEmail());
     if (checkEmail != null) {
       throw new DuplicateEmailException();
-    }
-    else {
+    } else {
       return userRepository.save(newUser);
     }
   }
 
   @PostMapping("/api/login")
   public User login(@RequestBody User creds, HttpSession session) {
-	  for (User user : userRepository.findAll()) {
-		  if (user.getEmail().equals(creds.getEmail())
-		      && user.getPassword().equals(creds.getPassword())) {
-			  session.setAttribute("currentUser", user);
-			  return user;
-		  }
-	  }
-	  throw new NoUserFoundException();
+    Optional<User> findUser = userRepository.matchCredentials(creds.getEmail(), creds.getPassword());
+    User user = findUser.orElseThrow(NoUserFoundException::new);
+    session.setAttribute("currentUser", user);
+    return user;
   }
 
   @PostMapping("/api/logout")
   public void logout(HttpSession session) {
-	  session.invalidate();
+    session.invalidate();
   }
 
   @GetMapping("/api/currentUser")
   public User getCurrentUser(HttpSession session) {
-	  return (User) session.getAttribute("currentUser");
+    User currentUser = (User) session.getAttribute("currentUser");
+    return currentUser;
   }
 
 }
