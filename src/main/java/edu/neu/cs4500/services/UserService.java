@@ -208,9 +208,13 @@ public class UserService {
 
   @GetMapping("/api/currentUser")
   public User getCurrentUser(HttpSession session) {
-    Optional<User> findUser = userRepository.findById((int)session.getAttribute("currentUser"));
-    User user = findUser.orElse(null);
-    return user;
+    Object attr = session.getAttribute("currentUser");
+    if (attr != null) {
+      Optional<User> findUser = userRepository.findById((Integer) attr);
+      User user = findUser.orElse(null);
+      return user;
+    }
+    return null;
   }
 
 }
