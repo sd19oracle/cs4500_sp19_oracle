@@ -26,6 +26,10 @@ public class User {
   private String lastName;
   private String role;
   private String zipCode;
+  private String dob;
+  private String street;
+  private String city;
+  private String state;
   @OneToMany(mappedBy = "user")
   private List<ServiceSpecificAnswer> answers;
 
