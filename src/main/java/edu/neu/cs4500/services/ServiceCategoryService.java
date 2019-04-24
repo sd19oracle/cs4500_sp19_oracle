@@ -44,6 +44,7 @@ public class ServiceCategoryService {
             @PathVariable("serviceCategoryId") Integer id,
             @RequestBody ServiceCategory serviceUpdates) {
         ServiceCategory serviceCategory = serviceCategoryRepository.findServiceCategoryById(id);
+        serviceCategory.setPopularity(serviceUpdates.getPopularity());
         serviceCategory.setServiceCategoryName(serviceUpdates.getServiceCategoryName());
         return serviceCategoryRepository.save(serviceCategory);
     }
