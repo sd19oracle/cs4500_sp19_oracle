@@ -184,6 +184,18 @@ public class UserService {
     if (updatedUser.getZipCode() != null) {
       findUser.setZipCode(updatedUser.getZipCode());
     }
+    if (updatedUser.getDob() != null) {
+      findUser.setDob(updatedUser.getDob());
+    }
+    if (updatedUser.getStreet() != null) {
+      findUser.setStreet(updatedUser.getStreet());
+    }
+    if (updatedUser.getCity() != null) {
+      findUser.setCity(updatedUser.getCity());
+    }
+    if (updatedUser.getState() != null) {
+      findUser.setState(updatedUser.getState());
+    }
     return userRepository.save(findUser);
   }
 
